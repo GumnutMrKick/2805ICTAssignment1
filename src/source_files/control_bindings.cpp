@@ -1,8 +1,11 @@
+// esential includes
+#include <stdio.h>
+#include <iostream>
+#include <SDL.h>
+using namespace std;
+
 // include self
 #include "../header_files/control_bindings.h"
-
-// std namespace 
-using namespace std;
 
 // constructor
 Control_bindings :: Control_bindings (const char* up, const char* left,
@@ -30,4 +33,4 @@ const char * Control_bindings :: SDLToCommand (const char * keycode) {
 }
         
 // deconstructor    
-Control_bindings :: ~Control_bindings(){}
+Control_bindings :: ~Control_bindings () {}

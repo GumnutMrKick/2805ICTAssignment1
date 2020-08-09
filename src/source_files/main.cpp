@@ -1,12 +1,15 @@
+// include my stuff
+// import key bindings file
+#include "../header_files/control_bindings.h"
+// import game
+#include "../header_files/game.h"
+
 // import esentials 
 #include <stdio.h>
 #include <iostream>
 
 // import SDL
 #include <SDL.h>
-
-// import key bindings file
-#include "../header_files/control_bindings.h"
 
 // SDL main naming error fix
 #define SDL_MAIN_HANDLED

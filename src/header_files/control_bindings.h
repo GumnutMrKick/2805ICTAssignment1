@@ -15,14 +15,14 @@ class Control_bindings {
     public:
     
         // constructor
-        Control_bindings(const char* up, const char* left,
+        Control_bindings (const char* up, const char* left,
                             const char* down, const char* right);
         
         // SDL keycode to code command
         const char * SDLToCommand (const char * keycode);
         
         // deconstructor    
-        ~Control_bindings();
+        ~Control_bindings ();
 
 };
 
