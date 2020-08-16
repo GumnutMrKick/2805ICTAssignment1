@@ -48,28 +48,35 @@ int main(int argc, char *argv[]) {
     Control_bindings bindings = Control_bindings(up, left, down, right);
     
     // test key bindings
-    cout << "testing key bindings" << endl;
+    cout << "---------- testing key bindings ----------" << endl;
     cout << "expected : recieved" << endl;
     cout << "up : " << bindings.SDLToCommand(up) << endl;
     cout << "left : " << bindings.SDLToCommand(left) << endl;
     cout << "down : " << bindings.SDLToCommand(down) << endl;
     cout << "right : " << bindings.SDLToCommand(right) << endl;
 
-    // -------------------- game settings --------------------
+    // -------------------- game settings / creation --------------------
 
     // these are the settings that will be parsed through to
     // the main game loop
     // if I have time I'll go back and add a config file that
     // can loaded in to get the users desired control bindings
 
+
+    Game *game = new Game("Pacman", 20, 20, 800, 800, false);
+
     // -------------------- game loop creation and running --------------------
 
+	while (game->isRunning()) {
 
+		game->handleGameEvents();
+		game->update();
+		game->renderScreen();
+	
+    }
 
-
-    
-    
-    return 1;
+	game->~Game();
+    return 0;
 
 }
 

@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_ncWrwNoUEeqoGNppjXVe8w" name="Milestone 1">
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_ncWrwNoUEeqoGNppjXVe8w" name="Milestone_1">
   <packageImport xmi:type="uml:PackageImport" xmi:id="_nhKTQNoUEeqoGNppjXVe8w">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_Sf0GcNt_EeqoGNppjXVe8w" name="User"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_UfpQMNt_EeqoGNppjXVe8w" name="Pacman game">
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_Zw3SMNt_EeqoGNppjXVe8w" name="adjust setting"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_dm_2QNt_EeqoGNppjXVe8w" name="adjust map type"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_i6lPwNt_EeqoGNppjXVe8w" name="adjust control bindings"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_xQKOMNt_EeqoGNppjXVe8w" name="play game"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_1Bt0QNt_EeqoGNppjXVe8w" name="user interface object"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_5sorQNt_EeqoGNppjXVe8w" name="&lt;use>" client="_1Bt0QNt_EeqoGNppjXVe8w" supplier="_i6lPwNt_EeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_CqzgINuAEeqoGNppjXVe8w" name="AI"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_HjftYNuAEeqoGNppjXVe8w" name="entity"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_JNSVsNuAEeqoGNppjXVe8w" name="sprite renderer"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_OpjxINuAEeqoGNppjXVe8w" name="collision detection"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_VoLwINuAEeqoGNppjXVe8w" name="pacman"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_XyGqANuAEeqoGNppjXVe8w" name="ghosts"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_Z7ibsNuAEeqoGNppjXVe8w" name="&lt;use>" client="_VoLwINuAEeqoGNppjXVe8w" supplier="_1Bt0QNt_EeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_dq63gNuAEeqoGNppjXVe8w" name="&lt;include>" client="_xQKOMNt_EeqoGNppjXVe8w" supplier="_VoLwINuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_fp00MNuAEeqoGNppjXVe8w" name="&lt;include>" client="_xQKOMNt_EeqoGNppjXVe8w" supplier="_XyGqANuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_kBgmINuAEeqoGNppjXVe8w" name="&lt;extends>" client="_XyGqANuAEeqoGNppjXVe8w" supplier="_CqzgINuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_neDlgNuAEeqoGNppjXVe8w" name="&lt;extends>" client="_HjftYNuAEeqoGNppjXVe8w" supplier="_JNSVsNuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_qZifMNuAEeqoGNppjXVe8w" name="&lt;extends>" client="_HjftYNuAEeqoGNppjXVe8w" supplier="_OpjxINuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_u3KhENuAEeqoGNppjXVe8w" name="Walls"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_zvzD8NuAEeqoGNppjXVe8w" name="&lt;includes>" client="_xQKOMNt_EeqoGNppjXVe8w" supplier="_u3KhENuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_7FrFUNuAEeqoGNppjXVe8w" name="&lt;extends>" client="_XyGqANuAEeqoGNppjXVe8w" supplier="_HjftYNuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_EfCBYNuBEeqoGNppjXVe8w" name="&lt;extends>" client="_u3KhENuAEeqoGNppjXVe8w" supplier="_HjftYNuAEeqoGNppjXVe8w"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_OiUEMNuBEeqoGNppjXVe8w" name="&lt;extends>" client="_VoLwINuAEeqoGNppjXVe8w" supplier="_HjftYNuAEeqoGNppjXVe8w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_rAZgUNt_EeqoGNppjXVe8w" memberEnd="_rAcjoNt_EeqoGNppjXVe8w _rAdxwNt_EeqoGNppjXVe8w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_rAbVgNt_EeqoGNppjXVe8w" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_rAb8kNt_EeqoGNppjXVe8w" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_rAcjoNt_EeqoGNppjXVe8w" name="adjust control bindings" type="_i6lPwNt_EeqoGNppjXVe8w" association="_rAZgUNt_EeqoGNppjXVe8w"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_rAdxwNt_EeqoGNppjXVe8w" name="user" type="_Sf0GcNt_EeqoGNppjXVe8w" association="_rAZgUNt_EeqoGNppjXVe8w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_suZ6QNt_EeqoGNppjXVe8w" memberEnd="_suahUtt_EeqoGNppjXVe8w _suahU9t_EeqoGNppjXVe8w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_suahUNt_EeqoGNppjXVe8w" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_suahUdt_EeqoGNppjXVe8w" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_suahUtt_EeqoGNppjXVe8w" name="adjust map type" type="_dm_2QNt_EeqoGNppjXVe8w" association="_suZ6QNt_EeqoGNppjXVe8w"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_suahU9t_EeqoGNppjXVe8w" type="_rAZgUNt_EeqoGNppjXVe8w" association="_suZ6QNt_EeqoGNppjXVe8w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_t0_u4Nt_EeqoGNppjXVe8w" memberEnd="_t1AV8tt_EeqoGNppjXVe8w _t1AV89t_EeqoGNppjXVe8w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_t1AV8Nt_EeqoGNppjXVe8w" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_t1AV8dt_EeqoGNppjXVe8w" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_t1AV8tt_EeqoGNppjXVe8w" name="adjust setting" type="_Zw3SMNt_EeqoGNppjXVe8w" association="_t0_u4Nt_EeqoGNppjXVe8w"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_t1AV89t_EeqoGNppjXVe8w" type="_rAZgUNt_EeqoGNppjXVe8w" association="_t0_u4Nt_EeqoGNppjXVe8w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_-H2SUNt_EeqoGNppjXVe8w" memberEnd="_-H25Ydt_EeqoGNppjXVe8w _-H25Ytt_EeqoGNppjXVe8w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-H2SUdt_EeqoGNppjXVe8w" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-H25YNt_EeqoGNppjXVe8w" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_-H25Ydt_EeqoGNppjXVe8w" name="play game" type="_xQKOMNt_EeqoGNppjXVe8w" association="_-H2SUNt_EeqoGNppjXVe8w"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_-H25Ytt_EeqoGNppjXVe8w" type="_rAZgUNt_EeqoGNppjXVe8w" association="_-H2SUNt_EeqoGNppjXVe8w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_5T1XcNuEEeqoGNppjXVe8w" name="Pellet Acquisition" node="_JCYT8NuFEeqoGNppjXVe8w _MedZQNuFEeqoGNppjXVe8w _SWp7sNuFEeqoGNppjXVe8w _aItiwNuFEeqoGNppjXVe8w _sixDQNuFEeqoGNppjXVe8w _waoFoNuFEeqoGNppjXVe8w _ydMaUNuFEeqoGNppjXVe8w _3cxSsNuFEeqoGNppjXVe8w">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_kUGYsNuFEeqoGNppjXVe8w" target="_MedZQNuFEeqoGNppjXVe8w" source="_JCYT8NuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_lTc84NuFEeqoGNppjXVe8w" target="_SWp7sNuFEeqoGNppjXVe8w" source="_MedZQNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_msGK0NuFEeqoGNppjXVe8w" target="_aItiwNuFEeqoGNppjXVe8w" source="_SWp7sNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_qekW4NuFEeqoGNppjXVe8w" target="_MedZQNuFEeqoGNppjXVe8w" source="_aItiwNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_7BevkNuFEeqoGNppjXVe8w" target="_sixDQNuFEeqoGNppjXVe8w" source="_aItiwNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_8VswgNuFEeqoGNppjXVe8w" target="_MedZQNuFEeqoGNppjXVe8w" source="_waoFoNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_AS4-0NuGEeqoGNppjXVe8w" target="_3cxSsNuFEeqoGNppjXVe8w" source="_waoFoNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_DADIoNuGEeqoGNppjXVe8w" target="_ydMaUNuFEeqoGNppjXVe8w" source="_sixDQNuFEeqoGNppjXVe8w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_D0SB8NuGEeqoGNppjXVe8w" target="_waoFoNuFEeqoGNppjXVe8w" source="_ydMaUNuFEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_JCYT8NuFEeqoGNppjXVe8w" name="Game starts" outgoing="_kUGYsNuFEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_MedZQNuFEeqoGNppjXVe8w" name="player moves" incoming="_kUGYsNuFEeqoGNppjXVe8w _qekW4NuFEeqoGNppjXVe8w _8VswgNuFEeqoGNppjXVe8w" outgoing="_lTc84NuFEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_SWp7sNuFEeqoGNppjXVe8w" name="touching pellet?" incoming="_lTc84NuFEeqoGNppjXVe8w" outgoing="_msGK0NuFEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_aItiwNuFEeqoGNppjXVe8w" name="yes/no" incoming="_msGK0NuFEeqoGNppjXVe8w" outgoing="_qekW4NuFEeqoGNppjXVe8w _7BevkNuFEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_sixDQNuFEeqoGNppjXVe8w" name="add to score" incoming="_7BevkNuFEeqoGNppjXVe8w" outgoing="_DADIoNuGEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_waoFoNuFEeqoGNppjXVe8w" name="yes/no" incoming="_D0SB8NuGEeqoGNppjXVe8w" outgoing="_8VswgNuFEeqoGNppjXVe8w _AS4-0NuGEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_ydMaUNuFEeqoGNppjXVe8w" name="was last pellet?" incoming="_DADIoNuGEeqoGNppjXVe8w" outgoing="_D0SB8NuGEeqoGNppjXVe8w"/>
+    <node xmi:type="uml:FlowFinalNode" xmi:id="_3cxSsNuFEeqoGNppjXVe8w" name="end level" incoming="_AS4-0NuGEeqoGNppjXVe8w"/>
+  </packagedElement>
 </uml:Model>

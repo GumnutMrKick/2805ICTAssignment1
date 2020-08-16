@@ -1,3 +1,7 @@
+// include my stuff
+// import key bindings file
+#include "../header_files/control_bindings.h"
+
 // esential includes
 #include <iostream>
 #include <SDL.h>
@@ -24,16 +28,37 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos,
     SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 0);
     
     // -------------------- errors? --------------------
+    cout << "---------- testing game intialisation ----------" << endl;
     cout << "window : " << ((this->window) ? "OK" : "error") << endl;
     cout << "renderer : " << ((this->renderer) ? "OK" : "error") << endl;
 
+    this->running = true;
+
 }
 
-void Game::handleGameEvent(const char* event) {
+void Game::handleGameEvents() {  //const char* event) {
+
+    SDL_Event event;
+
+	SDL_PollEvent(&event);
+
+	switch (event.type) {
+	
+        case SDL_QUIT :
+            this->running = false;
+            break;
+	
+        default:
+		    break;
+	
+    }
 
 }
         
 void Game::update () {
+
+    this->cntr++;
+    cout << this->cntr << endl;
 
 }
         
@@ -47,6 +72,8 @@ void Game::renderScreen () {
     SDL_RenderPresent(this->renderer);
 
 }
+
+bool Game::isRunning() {return this->running;}
 
 void Game::gameLoop(){
 
