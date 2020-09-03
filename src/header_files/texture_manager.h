@@ -15,12 +15,12 @@ using namespace std;
 const int sprite_count = 123;
 
 // square sprite sheet properties
-const int square_sprite_sheet_width = ;
-const int square_sprite_sheet_height = ;
+const int square_sprite_sheet_width = 254;
+const int square_sprite_sheet_height = 152;
 
 // square sprite sheet properties
-const int square_sprite_sheet_width = ;
-const int square_sprite_sheet_height = ;
+const int square_sprite_sheet_width = 254;
+const int square_sprite_sheet_height = 152;
 
 
 SDL_Rect *genSquareSheetSprite (const int x, const int y);
@@ -41,6 +41,22 @@ SDL_Rect *genSquareSheetSprite (const int x, const int y) {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class TextureManager {
 
     private:
@@ -53,11 +69,35 @@ class TextureManager {
     public:
     
         // constructor
-        Game (const char* window_title, const int x_pos, const int y_pos,
-                const int width, const int height, const bool fullscreen_bool);
+        TextureManager (bool is_square);
         
-        // is used to handle game events
+        void addRenderTask (const int id, const int x, const int y);
+
+        
+
+        void renderTasks ();
+
+
+
+
+
+
+
+
+
+                // is used to handle game events
         void handleGameEvents();  //const char* event);
+
+
+
+
+
+
+
+
+
+
+
 
         // updates game logic
         void update ();
@@ -70,8 +110,24 @@ class TextureManager {
         void gameLoop();
         
         // deconstructor    
-        ~Game ();
+        ~TextureManager ();
 
 };
+
+// constructor
+TextureManager::TextureManager (bool is_square, ) {
+
+    // grab the sprites from the sprite sheet
+
+
+}
+
+TextureManager::addRenderTask (const int id, const int x, const int y) {
+            
+}
+
+TextureManager::~TextureManager () {
+
+}
 
 #endif
