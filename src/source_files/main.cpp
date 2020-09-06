@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     // can loaded in to get the users desired control bindings
 
 
-    Game *game = new Game("Pacman", 20, 20, 800, 800, false);
+    Game *game = new Game("Pacman", 20, 20, 800, 800, false, true);
 
     // -------------------- game loop creation and running --------------------
 

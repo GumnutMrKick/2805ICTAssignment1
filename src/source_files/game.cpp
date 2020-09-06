@@ -1,6 +1,7 @@
 // include my stuff
 // import key bindings file
 #include "../header_files/control_bindings.h"
+#include "../header_files/display_manager.h"
 
 // esential includes
 #include <iostream>
@@ -11,26 +12,16 @@ using namespace std;
 #include "../header_files/game.h"
 
 // constructor
-Game::Game (const char* window_title, const int x_pos, const int y_pos,
-        const int width, const int height, const bool fullscreen_bool) {
-    // initialiseation of game window and other required content
-
-    int flags = 0;
-    if(fullscreen_bool) flags = SDL_WINDOW_FULLSCREEN;
-
-    // -------------------- initialisation --------------------
-
-    // game window initialisation
-    this->window = SDL_CreateWindow(window_title, x_pos, y_pos, width, height, flags);
+Game::Game (const char* window_title, const int x_pos, const int y_pos, const int width,
+    const int height, const bool fullscreen_bool, const bool is_square) {
     
-    // renderer initialisation
-    this->renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 0);
-    
+    // initialiseation
+
+    // texture managaer initialisation
+    this->display_manager = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
+
     // -------------------- errors? --------------------
-    cout << "---------- testing game intialisation ----------" << endl;
-    cout << "window : " << ((this->window) ? "OK" : "error") << endl;
-    cout << "renderer : " << ((this->renderer) ? "OK" : "error") << endl;
+    cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
 
     this->running = true;
 
@@ -58,18 +49,24 @@ void Game::handleGameEvents() {  //const char* event) {
 void Game::update () {
 
     this->cntr++;
-    cout << this->cntr << endl;
+    // cout << this->cntr << endl;
+
+    this->display_manager->addRenderTask(1, this->cntr, 200);
+    this->display_manager->addRenderTask(4, 500, 500);
+
+
+    if (this->cntr > 799) {
+
+        cntr = 0;
+
+    }
 
 }
         
 // updates the render displayed on the screen
 void Game::renderScreen () {
 
-    // clear the current render
-    SDL_RenderClear(this->renderer);
-
-    // render current state
-    SDL_RenderPresent(this->renderer);
+    this->display_manager->updateScreen();
 
 }
 
@@ -83,9 +80,6 @@ void Game::gameLoop(){
 Game::~Game () {
     // clean memory of the game
 
-    SDL_DestroyWindow(this->window);
-    SDL_DestroyRenderer(this->renderer);
-    SDL_Quit();
-    cout << "game successfully closed" << endl;
+    this->display_manager->~DisplayManager();
 
 }
