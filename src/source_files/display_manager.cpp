@@ -11,6 +11,9 @@ using namespace std;
 // include self
 #include "../header_files/display_manager.h"
 
+// generate display manager's static instance indicator
+DisplayManager *DisplayManager::instance = 0;
+
 // generates a valid sprite clipping
 SDL_Rect genSquareSheetSprite (const int x, const int y, const int height, const int width) {
 
@@ -266,6 +269,14 @@ DisplayManager::DisplayManager (const char* window_title, const int x_pos, const
     // run the appropriate initialisation
     (is_square) ? this->squareInitialisation() : this->hexagonInitialisation();
 
+}
+
+DisplayManager *DisplayManager::getInstance (const char* window_title, const int x_pos, const int y_pos, const int width,
+    const int height, const bool fullscreen_bool, const bool is_square) {
+
+    if (!instance) instance = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
+    return instance;
+            
 }
 
 // adds a render task to the queue

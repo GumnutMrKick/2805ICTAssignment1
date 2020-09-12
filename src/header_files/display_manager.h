@@ -72,12 +72,18 @@ class DisplayManager {
 
         int renderTask(const SDL_Rect* sprite, const SDL_Rect* location);
 
-    public:
-    
         // constructor
         DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square);
-        
+            const int height, const bool fullscreen_bool, const bool is_square);
+
+    public:
+
+        // instance holder for static singleton class
+        static DisplayManager *instance;
+
+        static DisplayManager *getInstance(const char* window_title = "", const int x_pos = 0, const int y_pos = 0, const int width = 0,
+            const int height = 0, const bool fullscreen_bool = false, const bool is_square = true);
+
         // adds a render task to the queue
         void addRenderTask (const int id, const int x, const int y);
 

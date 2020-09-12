@@ -19,6 +19,13 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
+    // variables for capping the frame rate
+    const int FPS = 60;
+    const int frame_delay = 1000 / FPS;
+
+    Uint32 frame_start;
+    int time_used;
+    
     // -------------------- SDL initialisation --------------------
 
     // check that SDL is installed correctly and
@@ -69,10 +76,22 @@ int main(int argc, char *argv[]) {
 
 	while (game->isRunning()) {
 
+        // record frame start
+        frame_start = SDL_GetTicks();
+
 		game->handleGameEvents();
 		game->update();
 		game->renderScreen();
+    
+        // record the time spent
+        time_used = SDL_GetTicks() - frame_start;
 	
+        if (frame_delay > time_used) {
+
+            SDL_Delay(frame_delay - time_used);
+
+        }
+
     }
 
 	game->~Game();

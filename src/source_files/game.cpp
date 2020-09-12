@@ -18,7 +18,7 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos, const in
     // initialiseation
 
     // texture managaer initialisation
-    this->display_manager = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
+    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;

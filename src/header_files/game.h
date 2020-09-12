@@ -1,6 +1,7 @@
 // include my stuff
 // import key bindings file
 #include "../header_files/control_bindings.h"
+// import display manager file
 #include "../header_files/display_manager.h"
 
 // esential includes
