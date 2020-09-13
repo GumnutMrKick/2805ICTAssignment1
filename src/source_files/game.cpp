@@ -1,7 +1,10 @@
 // include my stuff
 // import key bindings file
 #include "../header_files/control_bindings.h"
+// import display manager file
 #include "../header_files/display_manager.h"
+// import play space file
+#include "../header_files/play_space.h"
 
 // esential includes
 #include <iostream>
@@ -13,12 +16,15 @@ using namespace std;
 
 // constructor
 Game::Game (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square) {
+    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
+    const int segments_tall) {
     
     // initialiseation
 
     // texture managaer initialisation
-    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
+    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square, segments_wide, segments_tall);
+
+    this->play_space = new PlaySpace();
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
@@ -53,7 +59,7 @@ void Game::update () {
 
     this->display_manager->addRenderTask(1, this->cntr, 200);
     this->display_manager->addRenderTask(4, 500, 500);
-
+    this->play_space->test();
 
     if (this->cntr > 799) {
 

@@ -73,7 +73,6 @@ bool DisplayManager::openFile (const string path) {
 // initialises the the square version of the display
 void DisplayManager::squareInitialisation () {
 
-    // specify the texture clippings
     // text
 
         this->sprite_locations[0] = genSquareSheetSprite(0, 0); // a
@@ -134,91 +133,96 @@ void DisplayManager::squareInitialisation () {
         this->sprite_locations[52] = genSquareSheetSprite(12, 4); // internal bottom left wall
         this->sprite_locations[53] = genSquareSheetSprite(12, 3); // internal top left wall
         this->sprite_locations[54] = genSquareSheetSprite(11, 4); // internal horizontal wall
-        this->sprite_locations[55] = genSquareSheetSprite(13, 5); // internal vertical wall
+        this->sprite_locations[55] = genSquareSheetSprite(13, 7); // internal vertical wall
         this->sprite_locations[56] = genSquareSheetSprite(0, 8); // internal horizontal door
         this->sprite_locations[57] = genSquareSheetSprite(2, 8); // internal end cap wall
+        this->sprite_locations[58] = genSquareSheetSprite(3, 8); // blank space
+        this->sprite_locations[59] = genSquareSheetSprite(3, 8); // ghost respawn
+
+    // pick-ups
+
+        this->sprite_locations[60] = genSquareSheetSprite(8, 1); // pellet
+        this->sprite_locations[61] = genSquareSheetSprite(10, 4); // power pellet
 
     // ghosts
 
         // blinky
 
-            this->sprite_locations[58] = genSquareSheetSprite(4, 4); // blinky up 1
-            this->sprite_locations[59] = genSquareSheetSprite(5, 4); // blinky up 2
-            this->sprite_locations[60] = genSquareSheetSprite(0, 4); // blinky right 1
-            this->sprite_locations[61] = genSquareSheetSprite(1, 4); // blinky right 2
-            this->sprite_locations[62] = genSquareSheetSprite(6, 4); // blinky down 1
-            this->sprite_locations[63] = genSquareSheetSprite(7, 4); // blinky down 2
-            this->sprite_locations[64] = genSquareSheetSprite(2, 4); // blinky left 1
-            this->sprite_locations[65] = genSquareSheetSprite(3, 4); // blinky left 2
+            this->sprite_locations[62] = genSquareSheetSprite(4, 4); // blinky up 1
+            this->sprite_locations[63] = genSquareSheetSprite(5, 4); // blinky up 2
+            this->sprite_locations[64] = genSquareSheetSprite(0, 4); // blinky right 1
+            this->sprite_locations[65] = genSquareSheetSprite(1, 4); // blinky right 2
+            this->sprite_locations[66] = genSquareSheetSprite(6, 4); // blinky down 1
+            this->sprite_locations[67] = genSquareSheetSprite(7, 4); // blinky down 2
+            this->sprite_locations[68] = genSquareSheetSprite(2, 4); // blinky left 1
+            this->sprite_locations[69] = genSquareSheetSprite(3, 4); // blinky left 2
 
         // pinky
-            this->sprite_locations[66] = genSquareSheetSprite(4, 5); // pinky up 1
-            this->sprite_locations[67] = genSquareSheetSprite(5, 5); // pinky up 2
-            this->sprite_locations[68] = genSquareSheetSprite(0, 5); // pinky right 1
-            this->sprite_locations[69] = genSquareSheetSprite(1, 5); // pinky right 2
-            this->sprite_locations[70] = genSquareSheetSprite(6, 5); // pinky down 1
-            this->sprite_locations[71] = genSquareSheetSprite(7, 5); // pinky down 2
-            this->sprite_locations[72] = genSquareSheetSprite(2, 5); // pinky left 1
-            this->sprite_locations[73] = genSquareSheetSprite(3, 5); // pinky left 2
+            this->sprite_locations[70] = genSquareSheetSprite(4, 5); // pinky up 1
+            this->sprite_locations[71] = genSquareSheetSprite(5, 5); // pinky up 2
+            this->sprite_locations[72] = genSquareSheetSprite(0, 5); // pinky right 1
+            this->sprite_locations[73] = genSquareSheetSprite(1, 5); // pinky right 2
+            this->sprite_locations[74] = genSquareSheetSprite(6, 5); // pinky down 1
+            this->sprite_locations[75] = genSquareSheetSprite(7, 5); // pinky down 2
+            this->sprite_locations[76] = genSquareSheetSprite(2, 5); // pinky left 1
+            this->sprite_locations[77] = genSquareSheetSprite(3, 5); // pinky left 2
 
         // inky
-            this->sprite_locations[74] = genSquareSheetSprite(4, 6); // inky up 1
-            this->sprite_locations[75] = genSquareSheetSprite(5, 6); // inky up 2
-            this->sprite_locations[76] = genSquareSheetSprite(0, 6); // inky right 1
-            this->sprite_locations[77] = genSquareSheetSprite(1, 6); // inky right 2
-            this->sprite_locations[78] = genSquareSheetSprite(6, 6); // inky down 1
-            this->sprite_locations[79] = genSquareSheetSprite(7, 6); // inky down 2
-            this->sprite_locations[80] = genSquareSheetSprite(2, 6); // inky left 1
-            this->sprite_locations[81] = genSquareSheetSprite(3, 6); // inky left 2
+            this->sprite_locations[78] = genSquareSheetSprite(4, 6); // inky up 1
+            this->sprite_locations[79] = genSquareSheetSprite(5, 6); // inky up 2
+            this->sprite_locations[80] = genSquareSheetSprite(0, 6); // inky right 1
+            this->sprite_locations[81] = genSquareSheetSprite(1, 6); // inky right 2
+            this->sprite_locations[82] = genSquareSheetSprite(6, 6); // inky down 1
+            this->sprite_locations[83] = genSquareSheetSprite(7, 6); // inky down 2
+            this->sprite_locations[84] = genSquareSheetSprite(2, 6); // inky left 1
+            this->sprite_locations[85] = genSquareSheetSprite(3, 6); // inky left 2
 
         // clyde
-            this->sprite_locations[82] = genSquareSheetSprite(4, 7); // clyde up 1
-            this->sprite_locations[83] = genSquareSheetSprite(5, 7); // clyde up 2
-            this->sprite_locations[84] = genSquareSheetSprite(0, 7); // clyde right 1
-            this->sprite_locations[85] = genSquareSheetSprite(1, 7); // clyde right 2
-            this->sprite_locations[86] = genSquareSheetSprite(6, 7); // clyde down 1
-            this->sprite_locations[87] = genSquareSheetSprite(7, 7); // clyde down 2
-            this->sprite_locations[88] = genSquareSheetSprite(2, 7); // clyde left 1
-            this->sprite_locations[89] = genSquareSheetSprite(3, 7); // clyde left 2
+            this->sprite_locations[86] = genSquareSheetSprite(4, 7); // clyde up 1
+            this->sprite_locations[87] = genSquareSheetSprite(5, 7); // clyde up 2
+            this->sprite_locations[88] = genSquareSheetSprite(0, 7); // clyde right 1
+            this->sprite_locations[89] = genSquareSheetSprite(1, 7); // clyde right 2
+            this->sprite_locations[90] = genSquareSheetSprite(6, 7); // clyde down 1
+            this->sprite_locations[91] = genSquareSheetSprite(7, 7); // clyde down 2
+            this->sprite_locations[92] = genSquareSheetSprite(2, 7); // clyde left 1
+            this->sprite_locations[93] = genSquareSheetSprite(3, 7); // clyde left 2
 
         // scared
 
-            this->sprite_locations[90] = genSquareSheetSprite(8, 4); // scared 1
-            this->sprite_locations[91] = genSquareSheetSprite(8, 7); // scared 2
-            this->sprite_locations[92] = genSquareSheetSprite(8, 5); // scared 3
-            this->sprite_locations[93] = genSquareSheetSprite(8, 6); // scared 4
+            this->sprite_locations[94] = genSquareSheetSprite(8, 4); // scared 1
+            this->sprite_locations[95] = genSquareSheetSprite(8, 7); // scared 2
+            this->sprite_locations[96] = genSquareSheetSprite(8, 5); // scared 3
+            this->sprite_locations[97] = genSquareSheetSprite(8, 6); // scared 4
 
         // dead
 
-            this->sprite_locations[94] = genSquareSheetSprite(11, 7); // dead up
-            this->sprite_locations[95] = genSquareSheetSprite(9, 6); // dead right
-            this->sprite_locations[96] = genSquareSheetSprite(12, 6); // dead down
-            this->sprite_locations[97] = genSquareSheetSprite(10, 6); // dead left
+            this->sprite_locations[98] = genSquareSheetSprite(11, 7); // dead up
+            this->sprite_locations[99] = genSquareSheetSprite(9, 6); // dead right
+            this->sprite_locations[100] = genSquareSheetSprite(12, 6); // dead down
+            this->sprite_locations[101] = genSquareSheetSprite(10, 6); // dead left
 
     // player
 
-        this->sprite_locations[98] = genSquareSheetSprite(8, 3); // pacman stopped
-        this->sprite_locations[99] = genSquareSheetSprite(0, 3); // pacman up
-        this->sprite_locations[100] = genSquareSheetSprite(1, 3); // pacman up open
-        this->sprite_locations[101] = genSquareSheetSprite(3, 3); // pacman right
-        this->sprite_locations[102] = genSquareSheetSprite(2, 3); // pacman right open
-        this->sprite_locations[103] = genSquareSheetSprite(5, 3); // pacman down
-        this->sprite_locations[104] = genSquareSheetSprite(4, 3); // pacman down open
-        this->sprite_locations[105] = genSquareSheetSprite(6, 3); // pacman left
-        this->sprite_locations[106] = genSquareSheetSprite(7, 3); // pacman left open
-        this->sprite_locations[107] = genSquareSheetSprite(14, 3); // pacman pop
-        this->sprite_locations[108] = genSquareSheetSprite(14, 4); // pacman explode 1
-        this->sprite_locations[109] = genSquareSheetSprite(14, 5); // pacman explode 2
-        this->sprite_locations[110] = genSquareSheetSprite(14, 6); // pacman explode 3
-        this->sprite_locations[111] = genSquareSheetSprite(14, 7); // pacman explode 4
+        this->sprite_locations[102] = genSquareSheetSprite(8, 3); // pacman stopped
+        this->sprite_locations[103] = genSquareSheetSprite(0, 3); // pacman up
+        this->sprite_locations[104] = genSquareSheetSprite(1, 3); // pacman up open
+        this->sprite_locations[105] = genSquareSheetSprite(3, 3); // pacman right
+        this->sprite_locations[106] = genSquareSheetSprite(2, 3); // pacman right open
+        this->sprite_locations[107] = genSquareSheetSprite(5, 3); // pacman down
+        this->sprite_locations[108] = genSquareSheetSprite(4, 3); // pacman down open
+        this->sprite_locations[109] = genSquareSheetSprite(6, 3); // pacman left
+        this->sprite_locations[110] = genSquareSheetSprite(7, 3); // pacman left open
+        this->sprite_locations[111] = genSquareSheetSprite(14, 3); // pacman pop
+        this->sprite_locations[112] = genSquareSheetSprite(14, 4); // pacman explode 1
+        this->sprite_locations[113] = genSquareSheetSprite(14, 5); // pacman explode 2
+        this->sprite_locations[114] = genSquareSheetSprite(14, 6); // pacman explode 3
+        this->sprite_locations[115] = genSquareSheetSprite(14, 7); // pacman explode 4
 
     // misc
-
-        this->sprite_locations[112] = genSquareSheetSprite(8, 1); // pellet
-        this->sprite_locations[111] = genSquareSheetSprite(10, 4); // power pellet
-        this->sprite_locations[111] = genSquareSheetSprite(9, 6); // ??? 1
-        this->sprite_locations[111] = genSquareSheetSprite(10, 6); // ??? 2
-        this->sprite_locations[111] = genSquareSheetSprite(7, 2); // debug texture
+        
+        this->sprite_locations[116] = genSquareSheetSprite(9, 6); // ??? 1
+        this->sprite_locations[117] = genSquareSheetSprite(10, 6); // ??? 2
+        this->sprite_locations[118] = genSquareSheetSprite(7, 2); // debug texture
 
 }
 
@@ -238,7 +242,7 @@ int DisplayManager::renderTask(const SDL_Rect* sprite, const SDL_Rect* location)
 
 // constructor
 DisplayManager::DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square) {
+    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide, const int segments_tall) {
 
     // initialiseation of game window and other required content
     int flags = 0;
@@ -272,9 +276,9 @@ DisplayManager::DisplayManager (const char* window_title, const int x_pos, const
 }
 
 DisplayManager *DisplayManager::getInstance (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square) {
+    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide, const int segments_tall) {
 
-    if (!instance) instance = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square);
+    if (!instance) instance = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square, segments_wide, segments_tall);
     return instance;
             
 }

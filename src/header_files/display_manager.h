@@ -74,7 +74,8 @@ class DisplayManager {
 
         // constructor
         DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int width,
-            const int height, const bool fullscreen_bool, const bool is_square);
+            const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
+            const int segments_tall);
 
     public:
 
@@ -82,7 +83,8 @@ class DisplayManager {
         static DisplayManager *instance;
 
         static DisplayManager *getInstance(const char* window_title = "", const int x_pos = 0, const int y_pos = 0, const int width = 0,
-            const int height = 0, const bool fullscreen_bool = false, const bool is_square = true);
+            const int height = 0, const bool fullscreen_bool = false, const bool is_square = true, const int segments_wide = 0,
+            const int segments_tall = 0);
 
         // adds a render task to the queue
         void addRenderTask (const int id, const int x, const int y);

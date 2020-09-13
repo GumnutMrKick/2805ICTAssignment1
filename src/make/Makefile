@@ -23,7 +23,7 @@ COMPILER_FLAGS = -std=c++17 $(INCLUDE_FLAGS) $(LIBARY_FLAGS) $(LINKER_FLAGS)
 OBJECT_COMPILERFLAGS = -c $(COMPILER_FLAGS)
 
 # object files
-OBJECT_FILES = main.o control_bindings.o game.o display_manager.o
+OBJECT_FILES = main.o control_bindings.o game.o display_manager.o play_space.o
 
 output: $(OBJECT_FILES)
 	$(CC) $(OBJECT_FILES) $(COMPILER_FLAGS) -o "..\..\out\test_S5132483_Pacman"
@@ -40,6 +40,9 @@ game.o: $(SRC_FOLDER)\game.cpp
 
 display_manager.o: $(SRC_FOLDER)\display_manager.cpp
 	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\display_manager.cpp"
+
+play_space.o: $(SRC_FOLDER)\play_space.cpp
+	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\play_space.cpp"
 
 clean:
 	rm *.o
