@@ -137,7 +137,46 @@ void InfoBarManager::updateInfoBar (const int state, const int score) {
 // prepares the class properties to render the info
 void InfoBarManager::renderInfoBar () {
 
-    string score_str = 
+    // turn the score into a string
+    string score_str_front = "score ", score_str_back = to_string(this->player_score), score_str;
 
+    // pad the start of the score with zeros until the
+    // number is seven digits long
+    for (int x = 0; x < (7 - score_str_back.length()); x++) {
+
+        score_str_front = score_str_front + "0";
+
+    }
+
+    // assemble the score string
+    score_str = score_str_front + score_str_back;
+    // get it's sprite ids
+    int* score_ids = this->stringToSpriteIds(score_str);
+
+    // get state ids
+    int* state_ids = this->stringToSpriteIds(this->state);
+
+    // get namco id
+    int namco_ids[1] = {37};
+
+    int* infos[] = {
+                        score_ids,
+                        state_ids,
+                        namco_ids
+                    };
+
+    int lengths[] = {
+                        score_str.length(),
+                        this->state.length(),
+                        1
+                    };
+
+    int starts[] = {
+                        this->calculateStartPoint("left", score_str.length()),
+                        this->calculateStartPoint("center", this->state.length()),
+                        this->calculateStartPoint("right", 7)
+                    };
+
+    this->renderInformation(infos, lengths, starts, 3);
 
 }
