@@ -23,7 +23,7 @@ COMPILER_FLAGS = -std=c++17 $(INCLUDE_FLAGS) $(LIBARY_FLAGS) $(LINKER_FLAGS)
 OBJECT_COMPILERFLAGS = -c $(COMPILER_FLAGS)
 
 # object files
-OBJECT_FILES = main.o control_bindings.o game.o display_manager.o play_space.o
+OBJECT_FILES = main.o control_bindings.o game.o display_manager.o play_space.o entity_manager.o animation_handler.o info_bar_manager.o
 
 output: $(OBJECT_FILES)
 	$(CC) $(OBJECT_FILES) $(COMPILER_FLAGS) -o "..\..\out\test_S5132483_Pacman"
@@ -44,5 +44,14 @@ display_manager.o: $(SRC_FOLDER)\display_manager.cpp
 play_space.o: $(SRC_FOLDER)\play_space.cpp
 	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\play_space.cpp"
 
+entity_manager.o: $(SRC_FOLDER)\entity_manager.cpp
+	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\entity_manager.cpp"
+	
+animation_handler.o: $(SRC_FOLDER)\animation_handler.cpp
+	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\animation_handler.cpp"
+
+info_bar_manager.o: $(SRC_FOLDER)\info_bar_manager.cpp
+	$(CC) $(OBJECT_COMPILERFLAGS) "$(SRC_FOLDER)\info_bar_manager.cpp"
+
 clean:
-	rm *.o
+	rm *.o output

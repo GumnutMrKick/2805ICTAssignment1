@@ -335,8 +335,6 @@ void DisplayManager::updateScreen () {
 DisplayManager::~DisplayManager () {
 
     // clean memory of the game
-
-    delete this->sprite_locations;
     SDL_DestroyWindow(this->window);
     SDL_DestroyRenderer(this->renderer);
     SDL_Quit();

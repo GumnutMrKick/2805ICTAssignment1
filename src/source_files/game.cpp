@@ -13,21 +13,29 @@ using namespace std;
 
 // include self
 #include "../header_files/game.h"
+// import entity manager file
+#include "../header_files/entity_manager.h"
+// import info bar manager file
+#include "../header_files/info_bar_manager.h"
 
 // constructor
 Game::Game (const char* window_title, const int x_pos, const int y_pos, const int width,
     const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
     const int segments_tall) {
     
-    // initialiseation
-
+    // initialisation
     // texture managaer initialisation
     this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square, segments_wide, segments_tall);
-
-    this->play_space = new PlaySpace();
+    // play space initialisation
+    this->play_space = play_space->getInstance(is_square, segments_wide, segments_tall);
+    // entity manager initialisation
+    this->entity_manager = new EntityManager(0);
+    // info bar manager initialisation
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
+    cout << "entity manager : " << ((this->entity_manager) ? "OK" : "error") << endl;
+    cout << "info bar manager : " << ((true) ? "OK" : "error") << endl;
 
     this->running = true;
 
@@ -59,7 +67,6 @@ void Game::update () {
 
     this->display_manager->addRenderTask(1, this->cntr, 200);
     this->display_manager->addRenderTask(4, 500, 500);
-    this->play_space->test();
 
     if (this->cntr > 799) {
 

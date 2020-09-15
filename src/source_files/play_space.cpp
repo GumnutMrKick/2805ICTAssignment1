@@ -4,7 +4,7 @@
 #include <ctime>
 
 // include my stuff
-// import key bindings file
+// import display manager file
 #include "../header_files/display_manager.h"
 
 using namespace std;
@@ -185,19 +185,6 @@ int checkForPellet (const int x, const int y) {
 
 // checks for a wall at x, y and returns the result
 bool isWall (const int x, const int y) {
-
-
-
-}
-
-// constructor
-PlaySpace::PlaySpace(const bool is_square, const int segments_wide, const int segments_tall) {
-
-    
-
-}
-
-PlaySpace *PlaySpace::getInstance(const bool is_square, const int segments_wide, const int segments_tall) {
 
 
 
