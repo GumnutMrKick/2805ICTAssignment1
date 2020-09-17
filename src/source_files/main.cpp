@@ -41,6 +41,18 @@ class FileInput {
 
         }
 
+        int getIntConfig () {
+
+            return stoi(this->returnNewConfig());
+
+        }
+
+        bool getBoolConfig () {
+
+            return (this->returnNewConfig() == "true") ? true : false;
+
+        }
+
         ~FileInput () {
 
             config_file.close();
@@ -54,22 +66,19 @@ int main(int argc, char *argv[]) {
     // -------------------- file config input --------------------
 
     // things to be gathered from the config file
-    char* up;
-    char* left;
-    char* down;
-    char* right;
+    string up;
+    string left;
+    string down;
+    string right;
     
     int FPS;
 
-    char* title;
+    string title;
     int x_pos;
     int y_pos;
-    int width;
-    int height;
-    bool fullscreen;
-    bool square;
     int segments_wide;
     int segments_tall;
+    int gamemode;
 
     // gain input from the file
     FileInput *config = new FileInput();    
@@ -80,20 +89,20 @@ int main(int argc, char *argv[]) {
         cout << "config successfully gotten from the config file" << endl;
         
         // copy out the configs
-        strcpy(up, config->returnNewConfig().c_str());
-        strcpy(left, config->returnNewConfig().c_str());
-        strcpy(down, config->returnNewConfig().c_str());
-        strcpy(right, config->returnNewConfig().c_str());
-        FPS = stoi(config->returnNewConfig());
-        strcpy(title, config->returnNewConfig().c_str());
-        x_pos = stoi(config->returnNewConfig());
-        y_pos = stoi(config->returnNewConfig());
-        width = stoi(config->returnNewConfig());
-        height = stoi(config->returnNewConfig());
-        fullscreen = (config->returnNewConfig() == "true") ? true : false;
-        square = (config->returnNewConfig() == "true") ? true : false;
-        segments_wide = stoi(config->returnNewConfig());
-        segments_tall = stoi(config->returnNewConfig());
+        up = config->returnNewConfig();
+        left = config->returnNewConfig();
+        down = config->returnNewConfig();
+        right = config->returnNewConfig();
+
+        FPS = config->getIntConfig();
+        title = config->returnNewConfig();
+        x_pos = config->getIntConfig();
+        y_pos = config->getIntConfig();
+
+        segments_wide = config->getIntConfig();
+        segments_tall = config->getIntConfig();
+
+        gamemode = config->getIntConfig();
 
     // otherwise give error msg and assign defualt values
     } else {
@@ -104,16 +113,33 @@ int main(int argc, char *argv[]) {
         left = "SDLK_LEFT";
         down = "SDLK_DOWN";
         right = "SLDK_RIGHT";
+
         FPS = 60;
         title = "Pacman";
-        x_pos = 20;
-        y_pos = 20;
-        width = 800;
-        height = 800;
-        fullscreen = false;
-        square = true;
+        x_pos = 0;
+        y_pos = 0;
+
+        segments_wide = 3;
+        segments_tall = 3;
+
+        gamemode = 0;
 
     }
+
+    cout << "loaded variables: " << endl;
+
+    cout << "up: " << up << endl;
+    cout << "left: " << left << endl;
+    cout << "down: " << down << endl;
+    cout << "right: " << right << endl;
+    cout << "FPS: " << FPS << endl;
+    cout << "title: " << title << endl;
+    cout << "x_pos: " << x_pos << endl;
+    cout << "y_pos: " << y_pos << endl;
+    cout << "segments_wide: " << segments_wide << endl;
+    cout << "segments_tall: " << segments_tall << endl;
+    cout << "gamemode: " << gamemode << endl;
+
 
     // variables for capping the frame rate
     const int frame_delay = 1000 / FPS;
@@ -138,15 +164,15 @@ int main(int argc, char *argv[]) {
 
     // -------------------- key bindings --------------------
     // create key binder
-    Control_bindings bindings = Control_bindings(up, left, down, right);
+    Control_bindings bindings = Control_bindings(up.c_str(), left.c_str(), down.c_str(), right.c_str());
     
     // test key bindings
     cout << "---------- testing key bindings ----------" << endl;
     cout << "expected : recieved" << endl;
-    cout << "up : " << bindings.SDLToCommand(up) << endl;
-    cout << "left : " << bindings.SDLToCommand(left) << endl;
-    cout << "down : " << bindings.SDLToCommand(down) << endl;
-    cout << "right : " << bindings.SDLToCommand(right) << endl;
+    cout << "up : " << bindings.SDLToCommand(up.c_str()) << endl;
+    cout << "left : " << bindings.SDLToCommand(left.c_str()) << endl;
+    cout << "down : " << bindings.SDLToCommand(down.c_str()) << endl;
+    cout << "right : " << bindings.SDLToCommand(right.c_str()) << endl;
 
     // -------------------- game settings / creation --------------------
 
@@ -156,7 +182,7 @@ int main(int argc, char *argv[]) {
     // can loaded in to get the users desired control bindings
 
 
-    Game *game = new Game(title, x_pos, y_pos, width, height, fullscreen, square, 0,0);
+    Game *game = new Game(title.c_str(), x_pos, y_pos, gamemode, segments_wide, segments_tall);
 
     // -------------------- game loop creation and running --------------------
 

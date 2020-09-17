@@ -57,12 +57,12 @@ bool DisplayManager::openFile (const string path) {
 	
     }
 
-    // create texture from surface
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, loaded_sheet);
+    // create sprite_sheet from surface
+    this->sprite_sheet = SDL_CreateTextureFromSurface(this->renderer, loaded_sheet);
 
-    if( this->texture == NULL ) {
+    if( this->sprite_sheet == NULL ) {
 
-        cout << "unable to create texture";
+        cout << "unable to create sprite_sheet";
     
     }
 
@@ -236,22 +236,23 @@ void DisplayManager::hexagonInitialisation () {
 int DisplayManager::renderTask(const SDL_Rect* sprite, const SDL_Rect* location) {
 
 	//Render to screen
-	return SDL_RenderCopy( this->renderer, this->texture, sprite, location);
+	return SDL_RenderCopy( this->renderer, this->sprite_sheet, sprite, location);
 
 }
 
 // constructor
-DisplayManager::DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide, const int segments_tall) {
+DisplayManager::DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
+    const int segments_wide, const int segments_tall) {
 
     // initialiseation of game window and other required content
-    int flags = 0;
-    if(fullscreen_bool) flags = SDL_WINDOW_FULLSCREEN;
+    int flags = SDL_WINDOW_FULLSCREEN;
 
     // -------------------- initialisation --------------------
 
+    cout << "hello width " << ((segments_wide * 13) * 16) << " tall " << ((segments_tall * 11) * 16);
+
     // game window initialisation
-    this->window = SDL_CreateWindow(window_title, x_pos, y_pos, width, height, flags);
+    this->window = SDL_CreateWindow(window_title, x_pos, y_pos, ((segments_wide * 13) * 16), ((segments_tall * 11) * 16), flags);
     
     // renderer initialisation
     this->renderer = SDL_CreateRenderer(window, -1, 0);
@@ -266,19 +267,19 @@ DisplayManager::DisplayManager (const char* window_title, const int x_pos, const
 
     string path;
 
-    path = (is_square) ? square_sprite_sheet_file_path : hexagon_sprite_sheet_file_path;
+    path = (gamemode == 0 || gamemode == 3) ? square_sprite_sheet_file_path : hexagon_sprite_sheet_file_path;
 
     this->openFile(path);
 
     // run the appropriate initialisation
-    (is_square) ? this->squareInitialisation() : this->hexagonInitialisation();
+    (gamemode == 0 || gamemode == 3) ? this->squareInitialisation() : this->hexagonInitialisation();
 
 }
 
-DisplayManager *DisplayManager::getInstance (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide, const int segments_tall) {
+DisplayManager *DisplayManager::getInstance (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
+    const int segments_wide, const int segments_tall) {
 
-    if (!instance) instance = new DisplayManager(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square, segments_wide, segments_tall);
+    if (!instance) instance = new DisplayManager(window_title, x_pos, y_pos, gamemode, segments_wide, segments_tall);
     return instance;
             
 }

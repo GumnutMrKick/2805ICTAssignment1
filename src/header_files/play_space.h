@@ -17,7 +17,7 @@ class GameBlock {
     private:
 
         // properties
-        static DisplayManager *display_manager;
+        DisplayManager *display_manager;
         char* type;
         int id, x, y;
 
@@ -44,11 +44,8 @@ class PlaySpace {
 
         GameBlock **game_board;
 
-        // display manager instance
-        DisplayManager *display_manager = nullptr; 
-
         // constructor
-        PlaySpace (const bool is_square, const int segments_wide, const int segments_tall);
+        PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
         // plugs the exits on the outskirts of the board
         void plugSquareBoardLeaks ();
@@ -68,7 +65,7 @@ class PlaySpace {
         static PlaySpace *instance;
 
         // gets the static instance of the singleton class
-        static PlaySpace *getInstance (const bool is_square, const int segments_wide, const int segments_tall);
+        static PlaySpace *getInstance (const int gamemode, const int segments_wide, const int segments_tall);
 
         // triggers all the game blocks to add themselves to the render queue
         void renderPlaySpace ();

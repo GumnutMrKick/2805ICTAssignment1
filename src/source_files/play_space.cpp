@@ -126,7 +126,7 @@ bool checkIf (const char *str) {
 }
 
 // constructor
-PlaySpace::PlaySpace (const bool is_square, const int segments_wide, const int segments_tall) {
+PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int segments_tall) {
 
     // texture managaer initialisation
     this->display_manager = display_manager->getInstance();
@@ -162,7 +162,7 @@ void PlaySpace::hexagonInitialisation () {
 }
 
 // gets the static instance of the singleton class
-PlaySpace *PlaySpace::getInstance (const bool is_square, const int segments_wide, const int segments_tall) {
+PlaySpace *PlaySpace::getInstance (const int gamemode, const int segments_wide, const int segments_tall) {
 
 
 

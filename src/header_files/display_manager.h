@@ -17,13 +17,9 @@ const int sprite_count = 123;
 
 // square sprite sheet properties
 const string square_sprite_sheet_file_path = "rescource_files/square_sprite_sheet.png";
-const int square_sprite_sheet_width = 254;
-const int square_sprite_sheet_height = 152;
 
 // hexagon sprite sheet properties
 const string hexagon_sprite_sheet_file_path = "rescource_files/hexagon_sprite_sheet.png";
-const int hexagon_sprite_sheet_width = 254;
-const int hexagon_sprite_sheet_height = 152;
 
 // render task data structure
 struct RenderTask {
@@ -40,21 +36,19 @@ SDL_Rect genSquareSheetSprite (const int x, const int y, const int height = 0, c
 RenderTask generateRenderTask(const int id, const int x, const int y);
 
 
-// a class that manages the texture display for the game
+// a class that manages the sprite_sheet display for the game
 class DisplayManager {
 
     private:
 
         // properties
         // general information
-        SDL_Texture *sprite_sheet = nullptr;
-        SDL_Rect sprite_locations[sprite_count];
-
         // stack
         stack <RenderTask> render_stack;
 
-        // texture holder
-        SDL_Texture* texture = nullptr;
+        // sprite_sheet holder
+        SDL_Texture* sprite_sheet = nullptr;
+        SDL_Rect sprite_locations[sprite_count];
         
         // window holder
         SDL_Window *window = nullptr;
@@ -73,18 +67,16 @@ class DisplayManager {
         int renderTask(const SDL_Rect* sprite, const SDL_Rect* location);
 
         // constructor
-        DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int width,
-            const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
-            const int segments_tall);
+        DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
+            const int segments_wide, const int segments_tall);
 
     public:
 
         // instance holder for static singleton class
         static DisplayManager *instance;
 
-        static DisplayManager *getInstance(const char* window_title = "", const int x_pos = 0, const int y_pos = 0, const int width = 0,
-            const int height = 0, const bool fullscreen_bool = false, const bool is_square = true, const int segments_wide = 0,
-            const int segments_tall = 0);
+        static DisplayManager *getInstance(const char* window_title = "", const int x_pos = 0, const int y_pos = 0, const int gamemode = 0,
+            const int segments_wide = 0, const int segments_tall = 0);
 
         // adds a render task to the queue
         void addRenderTask (const int id, const int x, const int y);

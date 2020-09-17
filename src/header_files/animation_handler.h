@@ -47,7 +47,7 @@ class Animation {
         // display manager
         DisplayManager *display_manager;
         // loop holder - 1 : start, 2 : current position
-        pair <struct AnimationNode *,struct AnimationNode *> animation_loop;
+        pair <AnimationNode *, AnimationNode *> animation_loop;
 
         // adds a sprite to the loop
         void addSprite (const int sprite_id);

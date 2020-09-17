@@ -19,6 +19,10 @@ using namespace std;
 #ifndef game_H
 #define game_H
 
+int info_bar_addition = 1;
+
+int cntr = 0;
+
 class Game {
 
     private:
@@ -27,15 +31,17 @@ class Game {
         DisplayManager *display_manager = nullptr;
         PlaySpace *play_space = nullptr;
         EntityManager *entity_manager = nullptr;
+        InfoBarManager *info_bar = nullptr;
+        Control_bindings *bindings_manager = nullptr;
         bool running = false;
-        int cntr = 0;
-
+        int score = 0;
+        string state;
+       
     public:
     
         // constructor
-        Game (const char* window_title, const int x_pos, const int y_pos, const int width,
-            const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
-            const int segments_tall);
+        Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
+            const int segments_wide, const int segments_tall);
         
         // is used to handle game events
         void handleGameEvents();  //const char* event);
@@ -46,9 +52,7 @@ class Game {
         // updates the render displayed on the screen
         void renderScreen ();
         
-        bool isRunning();
-
-        void gameLoop();
+        bool isRunning ();
         
         // deconstructor    
         ~Game ();

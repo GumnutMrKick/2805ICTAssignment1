@@ -1,0 +1,24 @@
+// up
+SDLK_UP
+// left
+SDLK_LEFT
+// down
+SDLK_DOWN
+// right
+SLDK_RIGHT
+// fps
+60
+// title
+Pacman
+// x_pos
+20
+// y_pos
+20
+// width
+3
+// height
+3
+// fullscreen
+false
+// square?
+true

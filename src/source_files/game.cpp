@@ -5,6 +5,8 @@
 #include "../header_files/display_manager.h"
 // import play space file
 #include "../header_files/play_space.h"
+// import info bar manager file
+#include "../header_files/info_bar_manager.h"
 
 // esential includes
 #include <iostream>
@@ -19,18 +21,18 @@ using namespace std;
 #include "../header_files/info_bar_manager.h"
 
 // constructor
-Game::Game (const char* window_title, const int x_pos, const int y_pos, const int width,
-    const int height, const bool fullscreen_bool, const bool is_square, const int segments_wide,
-    const int segments_tall) {
+Game::Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
+    const int segments_wide, const int segments_tall) {
     
     // initialisation
     // texture managaer initialisation
-    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, width, height, fullscreen_bool, is_square, segments_wide, segments_tall);
+    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + this->info_bar_addition));
     // play space initialisation
-    this->play_space = play_space->getInstance(is_square, segments_wide, segments_tall);
+    this->play_space = play_space->getInstance(gamemode, segments_wide, segments_tall);
     // entity manager initialisation
     this->entity_manager = new EntityManager(0);
     // info bar manager initialisation
+    this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((info_bar_addition * 16)));
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
@@ -62,17 +64,21 @@ void Game::handleGameEvents() {  //const char* event) {
         
 void Game::update () {
 
-    this->cntr++;
+    cntr++;
     // cout << this->cntr << endl;
 
-    this->display_manager->addRenderTask(1, this->cntr, 200);
+    this->display_manager->addRenderTask(1, cntr, 200);
     this->display_manager->addRenderTask(4, 500, 500);
 
-    if (this->cntr > 799) {
+    if (cntr > 799) {
 
         cntr = 0;
 
     }
+
+    cntr += 50;
+
+    this->info_bar->updateInfoBar(0, cntr);
 
 }
         
@@ -84,10 +90,6 @@ void Game::renderScreen () {
 }
 
 bool Game::isRunning() {return this->running;}
-
-void Game::gameLoop(){
-
-}
 
 // deconstructor    
 Game::~Game () {
