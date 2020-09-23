@@ -18,7 +18,5 @@ Pacman
 3
 // height
 3
-// fullscreen
-false
-// square?
-true
+// gamemode?
+0

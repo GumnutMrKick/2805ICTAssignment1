@@ -16,7 +16,7 @@ using namespace std;
 
 
 // turns a single char into the appropriate id
-int InfoBarManager::charToSpriteId (const char given_char){
+int InfoBarManager::charToSpriteId (const char given_char) {
     
     int intifiedchar = ((int)given_char);
 
@@ -30,7 +30,7 @@ int InfoBarManager::charToSpriteId (const char given_char){
     // check for number
     if ((intifiedchar >= 47) && (intifiedchar <= 57)) {
 
-        return (intifiedchar - 20);
+        return (intifiedchar - 21);
 
     }
     
@@ -47,10 +47,7 @@ int InfoBarManager::charToSpriteId (const char given_char){
 }
 
 // turns a string into a array of ints
-int* InfoBarManager::stringToSpriteIds (string str) {
-
-    // make the array
-    int ids[str.length()];
+int* InfoBarManager::stringToSpriteIds (string str, int* ids) {
 
     // transform it's chars into ids
     for (int x = 0; x < str.length(); x++) {
@@ -59,9 +56,6 @@ int* InfoBarManager::stringToSpriteIds (string str) {
 
     }
 
-    // return the id
-    return ids;
-
 }
 
 // calculates the correct start place of the info
@@ -69,13 +63,13 @@ int InfoBarManager::calculateStartPoint (string align, const int length) {
 
     if (align == "center") {
 
-        return ((this->info_space_width/2) - ((length*16)/2));
+        return ((this->info_space_width/2) - ((length * 16) / 2));
 
     }
 
     if (align == "right") {
 
-        return (this->info_space_width - ((length*16)/2));
+        return (this->info_space_width - (length * 16));
 
     }
     
@@ -88,7 +82,7 @@ void InfoBarManager::renderInfo (int* info, const int x, const int y, const int 
 
     this->display_manager->addRenderTask(info[start_point], x, y);
 
-    if (start_point < end_point) this->renderInfo(info, (x + 16), y, end_point, (start_point + 1));
+    if (start_point < (end_point - 1)) this->renderInfo(info, (x + 16), y, end_point, (start_point + 1));
 
 }
 
@@ -150,21 +144,24 @@ void InfoBarManager::renderInfoBar () {
 
     // assemble the score string
     score_str = score_str_front + score_str_back;
-    // get it's sprite ids
-    int* score_ids = this->stringToSpriteIds(score_str);
 
-    // get state ids
-    int* state_ids = this->stringToSpriteIds(this->state);
+    // make the arrays
+    int score_ids[score_str.length()];
+    int state_ids[score_str.length()];
+    int namco_ids[1] = {37}; // this is a weird sprite that has been custom made
 
-    // get namco id
-    int namco_ids[1] = {37};
+    // get the sprite ids
+    this->stringToSpriteIds(score_str, score_ids);
+    this->stringToSpriteIds(this->state, state_ids);
 
     int* infos[] = {
-                        score_ids,
-                        state_ids,
-                        namco_ids
-                    };
 
+        score_ids,
+        state_ids,
+        namco_ids
+
+    };
+    
     int lengths[] = {
                         score_str.length(),
                         this->state.length(),

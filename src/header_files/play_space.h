@@ -17,11 +17,14 @@ class GameBlock {
     private:
 
         // properties
-        DisplayManager *display_manager;
+        static DisplayManager *display_manager;
         char* type;
         int id, x, y;
 
     public:
+
+        // get display manager
+        static void getDisplayManager ();
 
         // constructor
         GameBlock (const int id, const int x, const int y, const char* type = "wall");

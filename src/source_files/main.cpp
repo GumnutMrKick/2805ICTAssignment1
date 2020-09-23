@@ -85,9 +85,7 @@ int main(int argc, char *argv[]) {
 
     // if the opening of the file was successful, extract the inputs
     if (config->config_file) {
-
-        cout << "config successfully gotten from the config file" << endl;
-        
+       
         // copy out the configs
         up = config->returnNewConfig();
         left = config->returnNewConfig();
@@ -103,6 +101,8 @@ int main(int argc, char *argv[]) {
         segments_tall = config->getIntConfig();
 
         gamemode = config->getIntConfig();
+
+        cout << "config successfully gotten from the config file" << endl;
 
     // otherwise give error msg and assign defualt values
     } else {
@@ -125,21 +125,6 @@ int main(int argc, char *argv[]) {
         gamemode = 0;
 
     }
-
-    cout << "loaded variables: " << endl;
-
-    cout << "up: " << up << endl;
-    cout << "left: " << left << endl;
-    cout << "down: " << down << endl;
-    cout << "right: " << right << endl;
-    cout << "FPS: " << FPS << endl;
-    cout << "title: " << title << endl;
-    cout << "x_pos: " << x_pos << endl;
-    cout << "y_pos: " << y_pos << endl;
-    cout << "segments_wide: " << segments_wide << endl;
-    cout << "segments_tall: " << segments_tall << endl;
-    cout << "gamemode: " << gamemode << endl;
-
 
     // variables for capping the frame rate
     const int frame_delay = 1000 / FPS;

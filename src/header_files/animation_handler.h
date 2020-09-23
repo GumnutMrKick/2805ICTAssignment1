@@ -45,7 +45,7 @@ class Animation {
     private:
         // properties
         // display manager
-        DisplayManager *display_manager;
+        static DisplayManager *display_manager;
         // loop holder - 1 : start, 2 : current position
         pair <AnimationNode *, AnimationNode *> animation_loop;
 
@@ -53,6 +53,9 @@ class Animation {
         void addSprite (const int sprite_id);
 
     public:
+
+        // get display manager
+        static void getDisplayManager ();
 
         // constructor
         Animation (int* sprites, const int length, const int loop_back = 0);

@@ -19,10 +19,6 @@ using namespace std;
 #ifndef game_H
 #define game_H
 
-int info_bar_addition = 1;
-
-int cntr = 0;
-
 class Game {
 
     private:
@@ -34,7 +30,7 @@ class Game {
         InfoBarManager *info_bar = nullptr;
         Control_bindings *bindings_manager = nullptr;
         bool running = false;
-        int score = 0;
+        int player_score = 0;
         string state;
        
     public:

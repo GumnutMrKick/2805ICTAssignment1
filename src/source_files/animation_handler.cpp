@@ -12,6 +12,9 @@ using namespace std;
 // include self
 #include "../header_files/animation_handler.h"
 
+// generate the Animation display manager static instance indicator
+DisplayManager *Animation::display_manager = 0;
+
 // constructor
 AnimationNode::AnimationNode (const int sprite_id) {
 
@@ -52,6 +55,13 @@ int AnimationNode::getSpriteID () {
 void Animation::addSprite (const int sprite_id) {
 
     this->animation_loop.second->createNextNode(sprite_id);
+
+}
+
+void Animation::getDisplayManager () {
+
+    // texture managaer initialisation for GameBlock
+    display_manager = display_manager->getInstance();
 
 }
 

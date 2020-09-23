@@ -11,6 +11,13 @@ using namespace std;
 // include self
 #include "../header_files/display_manager.h"
 
+// file global properties
+// square sprite sheet properties
+const string square_sprite_sheet_file_path = "rescource_files/square_sprite_sheet.png";
+
+// hexagon sprite sheet properties
+const string hexagon_sprite_sheet_file_path = "rescource_files/hexagon_sprite_sheet.png";
+
 // generate display manager's static instance indicator
 DisplayManager *DisplayManager::instance = 0;
 
@@ -140,14 +147,12 @@ void DisplayManager::squareInitialisation () {
         this->sprite_locations[59] = genSquareSheetSprite(3, 8); // ghost respawn
 
     // pick-ups
-
         this->sprite_locations[60] = genSquareSheetSprite(8, 1); // pellet
         this->sprite_locations[61] = genSquareSheetSprite(10, 4); // power pellet
 
     // ghosts
 
         // blinky
-
             this->sprite_locations[62] = genSquareSheetSprite(4, 4); // blinky up 1
             this->sprite_locations[63] = genSquareSheetSprite(5, 4); // blinky up 2
             this->sprite_locations[64] = genSquareSheetSprite(0, 4); // blinky right 1
@@ -244,15 +249,10 @@ int DisplayManager::renderTask(const SDL_Rect* sprite, const SDL_Rect* location)
 DisplayManager::DisplayManager (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
     const int segments_wide, const int segments_tall) {
 
-    // initialiseation of game window and other required content
-    int flags = SDL_WINDOW_FULLSCREEN;
-
     // -------------------- initialisation --------------------
 
-    cout << "hello width " << ((segments_wide * 13) * 16) << " tall " << ((segments_tall * 11) * 16);
-
     // game window initialisation
-    this->window = SDL_CreateWindow(window_title, x_pos, y_pos, ((segments_wide * 13) * 16), ((segments_tall * 11) * 16), flags);
+    this->window = SDL_CreateWindow(window_title, x_pos, y_pos, ((segments_wide * 13) * 16), ((segments_tall * 11) * 16), false);
     
     // renderer initialisation
     this->renderer = SDL_CreateRenderer(window, -1, 0);

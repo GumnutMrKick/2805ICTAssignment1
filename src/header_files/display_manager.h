@@ -11,16 +11,6 @@ using namespace std;
 #ifndef display_manager_H
 #define display_manager_H
 
-// file global properties
-// general
-const int sprite_count = 123;
-
-// square sprite sheet properties
-const string square_sprite_sheet_file_path = "rescource_files/square_sprite_sheet.png";
-
-// hexagon sprite sheet properties
-const string hexagon_sprite_sheet_file_path = "rescource_files/hexagon_sprite_sheet.png";
-
 // render task data structure
 struct RenderTask {
 
@@ -48,7 +38,8 @@ class DisplayManager {
 
         // sprite_sheet holder
         SDL_Texture* sprite_sheet = nullptr;
-        SDL_Rect sprite_locations[sprite_count];
+        SDL_Rect sprite_locations[123]; // this is the maxium number of sprites
+        // I know this is bad practice but I don't have time to fix it right now
         
         // window holder
         SDL_Window *window = nullptr;

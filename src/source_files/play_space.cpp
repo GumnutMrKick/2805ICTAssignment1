@@ -15,6 +15,9 @@ using namespace std;
 // generate the playspace's static instance indicator
 PlaySpace *PlaySpace::instance = 0;
 
+// generate the GameBlock display manager static instance indicator
+DisplayManager *GameBlock::display_manager = 0;
+
 // the map segments with a ghost spawn in it [#][y][x]
 int spawn_map_segments[10][11][13] = {
 
@@ -103,10 +106,17 @@ int map_segments[10][11][13] = {
     
 };
 
+void GameBlock::getDisplayManager () {
+
+    // texture managaer initialisation for GameBlock
+    display_manager = display_manager->getInstance();
+
+}
+
 // constructor
 GameBlock::GameBlock (const int id, const int x, const int y, const char* type) {
 
-
+    
 
 }
 
@@ -119,7 +129,7 @@ void GameBlock::addToRenderQueue () {
 
 // returns the result of a check to see if the type is
 // equal to a given string
-bool checkIf (const char *str) {
+bool GameBlock::checkIf (const char *str) {
 
 
 
@@ -128,8 +138,8 @@ bool checkIf (const char *str) {
 // constructor
 PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int segments_tall) {
 
-    // texture managaer initialisation
-    this->display_manager = display_manager->getInstance();
+    // texture managaer initialisation for GameBlock
+    GameBlock::getDisplayManager();
 
 }
 

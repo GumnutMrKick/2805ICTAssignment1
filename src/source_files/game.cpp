@@ -20,19 +20,24 @@ using namespace std;
 // import info bar manager file
 #include "../header_files/info_bar_manager.h"
 
+// file global properties
+// general
+int info_bar_addition = 1;
+int cntr = 0;
+
 // constructor
 Game::Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
     const int segments_wide, const int segments_tall) {
     
     // initialisation
     // texture managaer initialisation
-    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + this->info_bar_addition));
+    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + info_bar_addition));
     // play space initialisation
     this->play_space = play_space->getInstance(gamemode, segments_wide, segments_tall);
     // entity manager initialisation
     this->entity_manager = new EntityManager(0);
     // info bar manager initialisation
-    this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((info_bar_addition * 16)));
+    this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((info_bar_addition * 16) * 11));
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
@@ -64,8 +69,19 @@ void Game::handleGameEvents() {  //const char* event) {
         
 void Game::update () {
 
+
+
+    // -------------------- update --------------------
+
+
+
+
+
+
+    // -------------------- update --------------------
+
     cntr++;
-    // cout << this->cntr << endl;
+    cout << cntr << endl;
 
     this->display_manager->addRenderTask(1, cntr, 200);
     this->display_manager->addRenderTask(4, 500, 500);
@@ -78,7 +94,17 @@ void Game::update () {
 
     cntr += 50;
 
+    // -------------------- render --------------------
+
+    // render entities
+
+
+    // render map
+
+
+    // update and render the info bar
     this->info_bar->updateInfoBar(0, cntr);
+    this->info_bar->renderInfoBar();
 
 }
         
