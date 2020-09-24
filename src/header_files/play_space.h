@@ -19,7 +19,7 @@ class GameBlock {
         // properties
         static DisplayManager *display_manager;
         char* type;
-        int id, x, y;
+        int sprite_id, x, y;
 
     public:
 
@@ -27,16 +27,25 @@ class GameBlock {
         static void getDisplayManager ();
 
         // constructor
-        GameBlock (const int id, const int x, const int y, const char* type = "wall");
+        GameBlock (const int sprite_id, const int x, const int y, char* type = "wall");
+
+        // change the properties of the game block
+        void changeGameBlockProps (const int sprite_id = 58, char* type = "empty");
         
         // adds this play space block to the render queue
         void addToRenderQueue ();
 
         // returns the result of a check to see if the type is
         // equal to a given string
-        bool checkIf(const char *str);
+        bool checkIf(char *str);
 
 };
+
+// seeds random number generation
+void seedRanGen();
+
+// generates a random number with respect (inclusively) to a range
+int genRanNumberInRange(const int min, const int max);
 
 class PlaySpace {
 
@@ -45,22 +54,24 @@ class PlaySpace {
         // properties
         int width, height;
 
-        GameBlock **game_board;
+        GameBlock ***game_board;
 
         // constructor
         PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
-        // plugs the exits on the outskirts of the board
-        void plugSquareBoardLeaks ();
+        // randomly generate the map
+        // left to right, top to bottom
+        void ranGenMapLayout (int** layout, const int x, const int y);
 
-        // intialises the game board for the square game
-        void squareInitialisation ();
-        
-        // plugs the exits on the outskirts of the board
-        void plugHexagonBoardLeaks ();
+        // loads an individual segment into the gameboard
+        void readSegmentToPlaySpace (int segment[11][13], const int x, const int y);
 
-        // intialises the game board for the hexagon game
-        void hexagonInitialisation ();
+        // reads the different maps to a game borad
+        // left to right, top to bottom
+        void readAllSegmentsToPlaySpace (int** layout, const int x, const int y);
+
+        // plugs the exits on the outskirts of the board
+        void plugBoardLeaks (const int x, const int y);
 
     public:
 

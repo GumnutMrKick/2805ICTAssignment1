@@ -106,6 +106,23 @@ int map_segments[10][11][13] = {
     
 };
 
+const int maps = 3, spawns = 3;
+
+
+// seeds random number generation
+void seedRanGen() {
+
+    srand((unsigned) time(0));
+
+}
+
+// generates a random number with respect (inclusively) to a range
+int genRanNumberInRange(const int min, const int max) {
+
+    return (int) (min + (rand() % ((max - min) + 1)));
+
+}
+
 void GameBlock::getDisplayManager () {
 
     // texture managaer initialisation for GameBlock
@@ -114,24 +131,35 @@ void GameBlock::getDisplayManager () {
 }
 
 // constructor
-GameBlock::GameBlock (const int id, const int x, const int y, const char* type) {
+GameBlock::GameBlock (const int sprite_id, const int x, const int y, char* type) {
 
-    
+    this->sprite_id = sprite_id;
+    this->x = x;
+    this->y = y;
+    this->type = type;
+
+}
+
+// change the properties of the game block
+void GameBlock::changeGameBlockProps (const int sprite_id, char* type) {
+
+    this->sprite_id = sprite_id;
+    this->type = type;
 
 }
 
 // adds this play space block to the render queue
 void GameBlock::addToRenderQueue () {
 
-
+    this->display_manager->addRenderTask(this->sprite_id, this->x, this->y);
 
 }
 
 // returns the result of a check to see if the type is
 // equal to a given string
-bool GameBlock::checkIf (const char *str) {
+bool GameBlock::checkIf (char *str) {
 
-
+    return ((this->type == str) ? true : false);
 
 }
 
@@ -140,50 +168,160 @@ PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int seg
 
     // texture managaer initialisation for GameBlock
     GameBlock::getDisplayManager();
+    
+    // seeds random number generation
+    seedRanGen();
+
+    // initialise the game board properties
+    this->width = (segments_wide * 13);
+    this->height = (segments_tall * 11);
+
+    // initialise the game board
+    this->game_board = new GameBlock**[this->height];
+
+    for (int x = 0; x < this->height; x++) {
+
+        this->game_board[x] = new GameBlock*[this->width];
+
+    }
+
+    // start the initialisation the map layout variable
+    int* layout[segments_tall];
+
+    // randomly generate the map layout
+    this->ranGenMapLayout(layout, segments_wide, segments_tall);
+
+    // write the layout to the game board
+    this->readAllSegmentsToPlaySpace(layout, segments_wide, segments_tall);
+
+    // plug the outskirt leaks in the game board
+    this->plugBoardLeaks(segments_wide, segments_tall);
+
+}
+
+// randomly generate the map
+// left to right, top to bottom
+void PlaySpace::ranGenMapLayout(int** layout, const int x, const int y) {
+
+    // cycles y - columns
+    for (int a = 0; a < y; a++) {
+
+        // initialise the row
+        layout[a] = new int[x];
+
+        // cycle x - rows
+        for (int b = 0; b < x; b++) {
+
+            // assign random map
+            layout[a][b] = genRanNumberInRange(0, maps);
+
+        }
+
+    }
+
+    // randomly select spawn location
+    layout[genRanNumberInRange(0, (y - 1))][genRanNumberInRange(0, (x - 1))] = genRanNumberInRange(100, (100 + spawns));
+
+}
+
+
+// loads an individual segment into the gameboard
+void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const int y) {
+
+    // // cycles y - columns
+    // for (int a = 0; a < y; a++) {
+
+    //     // cycle x - rows
+    //     for (int b = 0; b < x; b++) {
+
+    //         // assign random map
+    //         layout[a][b] = genRanNumberInRange(0, maps);
+
+    //     }
+
+    // }
+
+}
+
+// reads the different maps to a game borad
+// left to right, top to bottom
+void PlaySpace::readAllSegmentsToPlaySpace (int** layout, const int x, const int y) {
+
+    // cycles y - columns
+    for (int a = 0; a < y; a++) {
+
+        // cycle x - rows
+        for (int b = 0; b < x; b++) {
+
+            this->readSegmentToPlaySpace(((layout[a][b] >= 100) ? spawn_map_segments[(layout[a][b] - 100)] : map_segments[layout[a][b]]), b, a);
+            
+        }
+
+    }
 
 }
 
 // plugs the exits on the outskirts of the board
-void PlaySpace::plugSquareBoardLeaks () {
+void PlaySpace::plugBoardLeaks (const int x, const int y) {
 
+    //  y      x    stand in's
+    int a = 0, b = 0;
 
+    // plug left side
+    for (; a < y; a++) {
 
-}
+        this->game_board[a][((b * 11) + 5)]->changeGameBlockProps(57, "wall");
 
-// intialises the game board for the square game
-void PlaySpace::squareInitialisation () {
+    }
 
+    // plug right side
+    a = 0;
+    b = (x - 1);
 
+    for (; a < y; a++) {
 
-}
-        
-// plugs the exits on the outskirts of the board
-void PlaySpace::plugHexagonBoardLeaks () {
+        this->game_board[a][((b * 11) + 5)]->changeGameBlockProps(57, "wall");
 
+    }
 
+    // plug top side
+    a = 0;
+    b = 0;
 
-}
+    for (; b < x; b++) {
 
-// intialises the game board for the hexagon game
-void PlaySpace::hexagonInitialisation () {
+        this->game_board[((a * 13) + 6)][b]->changeGameBlockProps(57, "wall");
 
+    }
 
+    // plug bottom side
+    a = (y - 1);
+    b = 0;
+    
+    for (; b < x; b++) {
+
+        this->game_board[((a * 13) + 6)][b]->changeGameBlockProps(57, "wall");
+
+    }
 
 }
 
 // gets the static instance of the singleton class
 PlaySpace *PlaySpace::getInstance (const int gamemode, const int segments_wide, const int segments_tall) {
 
+    if (!instance) instance = new PlaySpace(gamemode, segments_wide, segments_tall);
 
-
-}
-
-// triggers all the game blocks to add themselves to the render queue
-void PlaySpace::renderPlaySpace () {
-
-
+    return instance;
 
 }
+
+// // triggers all the game blocks to add themselves to the render queue
+// void PlaySpace::renderPlaySpace (GameBlock** ) {
+
+//     // this->game_board
+//     //replace me with the above line later
+
+// }
 
 // checks for a pellet at x, y and returns the result,
 // if found the pellet is removed
