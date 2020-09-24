@@ -370,15 +370,15 @@ void PlaySpace::renderPlaySpace () {
 
 // checks for a pellet at x, y and returns the result,
 // if found the pellet is removed
-int checkForPellet (const int x, const int y) {
+bool checkForPellet (const int x, const int y) {
 
-
+    return (this->game_board[x][y]->checkIf("pellet"));  
 
 }
 
 // checks for a wall at x, y and returns the result
 bool isWall (const int x, const int y) {
 
-
+    return (this->game_board[x][y]->checkIf("wall"));
 
 }
