@@ -12,6 +12,12 @@ using namespace std;
 #ifndef play_space_H
 #define play_space_H
 
+// seeds random number generation
+void seedRanGen();
+
+// generates a random number with respect (inclusively) to a range
+int genRanNumberInRange(const int min, const int max);
+
 class GameBlock {
 
     private:
@@ -27,7 +33,7 @@ class GameBlock {
         static void getDisplayManager ();
 
         // constructor
-        GameBlock (const int sprite_id, const int x, const int y, char* type = "wall");
+        GameBlock (const int sprite_id, const int x, const int y, char* type);
 
         // change the properties of the game block
         void changeGameBlockProps (const int sprite_id = 58, char* type = "empty");
@@ -41,12 +47,6 @@ class GameBlock {
 
 };
 
-// seeds random number generation
-void seedRanGen();
-
-// generates a random number with respect (inclusively) to a range
-int genRanNumberInRange(const int min, const int max);
-
 class PlaySpace {
 
     private:
@@ -55,9 +55,6 @@ class PlaySpace {
         int width, height;
 
         GameBlock ***game_board;
-
-        // constructor
-        PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
         // randomly generate the map
         // left to right, top to bottom
@@ -72,6 +69,9 @@ class PlaySpace {
 
         // plugs the exits on the outskirts of the board
         void plugBoardLeaks (const int x, const int y);
+
+        // constructor
+        PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
     public:
 

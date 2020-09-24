@@ -139,7 +139,7 @@ void DisplayManager::squareInitialisation () {
         this->sprite_locations[51] = genSquareSheetSprite(13, 4); // internal bottom right wall
         this->sprite_locations[52] = genSquareSheetSprite(12, 4); // internal bottom left wall
         this->sprite_locations[53] = genSquareSheetSprite(12, 3); // internal top left wall
-        this->sprite_locations[54] = genSquareSheetSprite(11, 4); // internal horizontal wall
+        this->sprite_locations[54] = genSquareSheetSprite(11, 6); // internal horizontal wall
         this->sprite_locations[55] = genSquareSheetSprite(13, 7); // internal vertical wall
         this->sprite_locations[56] = genSquareSheetSprite(0, 8); // internal horizontal door
         this->sprite_locations[57] = genSquareSheetSprite(2, 8); // internal end cap wall
@@ -147,7 +147,7 @@ void DisplayManager::squareInitialisation () {
         this->sprite_locations[59] = genSquareSheetSprite(3, 8); // ghost respawn
 
     // pick-ups
-        this->sprite_locations[60] = genSquareSheetSprite(8, 1); // pellet
+        this->sprite_locations[60] = genSquareSheetSprite(1, 8); // pellet
         this->sprite_locations[61] = genSquareSheetSprite(10, 4); // power pellet
 
     // ghosts

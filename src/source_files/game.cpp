@@ -81,10 +81,6 @@ void Game::update () {
     // -------------------- update --------------------
 
     cntr++;
-    cout << cntr << endl;
-
-    this->display_manager->addRenderTask(1, cntr, 200);
-    this->display_manager->addRenderTask(4, 500, 500);
 
     if (cntr > 799) {
 
@@ -100,7 +96,7 @@ void Game::update () {
 
 
     // render map
-
+    this->play_space->renderPlaySpace();
 
     // update and render the info bar
     this->info_bar->updateInfoBar(0, cntr);

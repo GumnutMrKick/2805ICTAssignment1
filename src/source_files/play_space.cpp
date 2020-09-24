@@ -38,10 +38,10 @@ int spawn_map_segments[10][11][13] = {
     {{ 58, 48, 38, 38, 38, 43, 58, 46, 38, 38, 38, 39, 58 },
     {  48, 43, 60, 60, 60, 60, 60, 60, 60, 60, 60, 46, 39 },
     {  47, 60, 60, 57, 53, 54, 54, 54, 50, 57, 60, 60, 41 },
-    {  47, 60, 53, 55, 55, 59, 59, 59, 55, 53, 59, 60, 41 },
+    {  47, 60, 53, 50, 55, 59, 59, 59, 55, 53, 50, 60, 41 },
     {  43, 60, 55, 55, 52, 54, 56, 54, 51, 55, 55, 60, 46 },
     {  58, 60, 55, 55, 58, 58, 58, 58, 58, 55, 55, 60, 58 },
-    {  40, 60, 55, 55, 58, 53, 54, 59, 58, 55, 55, 60, 49 },
+    {  40, 60, 55, 55, 58, 53, 54, 50, 58, 55, 55, 60, 49 },
     {  47, 60, 52, 51, 58, 52, 54, 51, 58, 52, 51, 60, 41 },
     {  47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41 },
     {  45, 40, 49, 40, 49, 40, 58, 49, 40, 49, 40, 49, 42 },
@@ -52,13 +52,13 @@ int spawn_map_segments[10][11][13] = {
     {  58, 47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41, 58 },
     {  48, 43, 60, 57, 54, 57, 60, 57, 54, 57, 60, 46, 39 },
     {  47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41 },
-    {  43, 60, 59, 54, 54, 57, 58, 57, 54, 54, 59, 60, 46 },
+    {  43, 60, 48, 54, 54, 57, 58, 57, 54, 54, 50, 60, 46 },
     {  58, 60, 55, 58, 58, 58, 58, 58, 58, 58, 55, 60, 58 },
     {  40, 60, 55, 58, 53, 54, 56, 54, 50, 58, 55, 60, 49 },
-    {  47, 60, 57, 58, 55, 59, 59, 59, 55, 58, 55, 60, 41 },
+    {  47, 60, 57, 58, 55, 59, 59, 59, 55, 58, 57, 60, 41 },
     {  47, 60, 58, 58, 52, 54, 54, 54, 51, 58, 58, 60, 41 },
-    {  45, 44, 47, 58, 58, 58, 58, 58, 58, 58, 49, 44, 42 },
-    {  58, 58, 45, 44, 44, 47, 58, 49, 44, 44, 42, 58, 58 }},
+    {  45, 44, 40, 58, 58, 58, 58, 58, 58, 58, 49, 44, 42 },
+    {  58, 58, 45, 44, 44, 40, 58, 49, 44, 44, 42, 58, 58 }},
     
 };
 
@@ -82,32 +82,31 @@ int map_segments[10][11][13] = {
     {{ 58, 48, 38, 38, 38, 43, 58, 46, 38, 38, 38, 39, 58 },
     {  48, 43, 60, 60, 60, 60, 60, 60, 60, 60, 60, 46, 39 },
     {  47, 60, 60, 57, 60, 53, 54, 50, 60, 57, 60, 60, 41 },
-    {  47, 60, 53, 59, 60, 55, 57, 55, 60, 53, 59, 60, 41 },
-    {  43, 60, 55, 55, 60, 52, 56, 51, 60, 55, 55, 60, 46 },
+    {  47, 60, 53, 50, 60, 55, 57, 55, 60, 53, 50, 60, 41 },
+    {  43, 60, 55, 55, 60, 52, 54, 51, 60, 55, 55, 60, 46 },
     {  58, 60, 55, 55, 60, 60, 61, 60, 60, 55, 55, 60, 58 },
-    {  40, 60, 55, 55, 60, 53, 54, 59, 60, 55, 55, 60, 49 },
+    {  40, 60, 55, 55, 60, 53, 54, 50, 60, 55, 55, 60, 49 },
     {  47, 60, 52, 51, 60, 52, 54, 51, 60, 52, 51, 60, 41 },
     {  47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41 },
     {  45, 40, 49, 40, 49, 40, 58, 49, 40, 49, 40, 49, 42 },
     {  58, 45, 42, 45, 42, 47, 58, 41, 45, 42, 45, 42, 58 }},
 
-    // oooooohhhhhhhhhh
+    // mustache face??
     {{ 58, 48, 38, 38, 38, 43, 58, 46, 38, 38, 38, 39, 58 },
     {  58, 47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41, 58 },
     {  48, 43, 60, 57, 54, 57, 60, 57, 54, 57, 60, 46, 39 },
     {  47, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 41 },
-    {  43, 60, 59, 54, 54, 57, 60, 57, 54, 54, 59, 60, 46 },
+    {  43, 60, 53, 54, 54, 57, 60, 57, 54, 54, 50, 60, 46 },
     {  58, 60, 55, 60, 60, 60, 61, 60, 60, 60, 55, 60, 58 },
     {  40, 60, 55, 60, 57, 54, 54, 54, 57, 60, 55, 60, 49 },
     {  47, 60, 57, 60, 60, 60, 60, 60, 60, 60, 57, 60, 41 },
     {  47, 60, 60, 60, 57, 54, 54, 54, 57, 60, 60, 60, 41 },
-    {  45, 44, 47, 60, 60, 60, 60, 60, 60, 60, 49, 44, 42 },
-    {  58, 58, 45, 44, 44, 47, 58, 49, 44, 44, 42, 58, 58 }},
+    {  45, 44, 40, 60, 60, 60, 60, 60, 60, 60, 49, 44, 42 },
+    {  58, 58, 45, 44, 44, 40, 58, 49, 44, 44, 42, 58, 58 }},
     
 };
 
 const int maps = 3, spawns = 3;
-
 
 // seeds random number generation
 void seedRanGen() {
@@ -163,6 +162,147 @@ bool GameBlock::checkIf (char *str) {
 
 }
 
+// randomly generate the map
+// left to right, top to bottom
+void PlaySpace::ranGenMapLayout(int** layout, const int x, const int y) {
+
+    // cycles y - columns
+    for (int a = 0; a < y; a++) {
+
+        // initialise the row
+        layout[a] = new int[x];
+
+        // cycle x - rows
+        for (int b = 0; b < x; b++) {
+
+            // assign random map
+            layout[a][b] = genRanNumberInRange(0, (maps - 1));
+
+        }
+
+    }
+
+    // randomly select spawn location
+    layout[genRanNumberInRange(0, (y - 1))][genRanNumberInRange(0, (x - 1))] = genRanNumberInRange(100, (100 + (spawns - 1)));
+
+}
+
+// loads an individual segment into the gameboard
+void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const int y) {
+
+    //  y position on board        x position on board
+    int index_y = (y * 11), index_x = (x * 13);
+    //  y position on screen       x position on screen
+    int block_y = (y * (16 * 11)), block_x = (x * (16 * 13)), block_x_return = block_x, id;
+    char* str;
+
+    // cycles y - columns
+    for (int a = 0; a < 11; a++) {
+
+        block_x = block_x_return;
+
+        // cycle x - rows
+        for (int b = 0; b < 13; b++) {
+
+            id = segment[a][b];
+
+            switch (id) {
+                case (58):
+                    str = "empty";
+                break;
+
+                case (59):
+                    str = "respawn";
+                break;
+
+                case (60):
+                    str = "pellet";
+                break;
+                case (61):
+                    str = "power";
+                break;
+                default:
+                    str = "wall";
+                break;
+            }
+
+            this->game_board[(index_y + a)][(index_x + b)] = new GameBlock(id, block_x, block_y, str);
+
+            // increment the x value by 1 sprite
+            block_x += 16;
+
+        }
+
+        // increment the y value by 1 sprite
+        block_y += 16;
+
+    }
+
+}
+
+// reads the different maps to a game borad
+// left to right, top to bottom
+void PlaySpace::readAllSegmentsToPlaySpace (int** layout, const int x, const int y) {
+
+    // cycles y - columns
+    for (int a = 0; a < y; a++) {
+
+        // cycle x - rows
+        for (int b = 0; b < x; b++) {
+
+            this->readSegmentToPlaySpace(((layout[a][b] >= 100) ? spawn_map_segments[(layout[a][b] - 100)] : map_segments[layout[a][b]]), b, a);
+            
+        }
+
+    }
+
+}
+
+// plugs the exits on the outskirts of the board
+void PlaySpace::plugBoardLeaks (const int x, const int y) {
+
+    //  y      x    stand in's
+    int a = 0, b = 0;
+
+    // plug left side
+    for (; a < y; a++) {
+
+        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, "wall");
+
+    }
+
+    // plug right side
+    a = 0;
+    b = ((x * 13) - 1);
+
+    for (; a < y; a++) {
+
+        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, "wall");
+
+    }
+
+    // plug top side
+    a = 0;
+    b = 0;
+
+    for (; b < x; b++) {
+
+        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, "wall");
+
+    }
+
+    // plug bottom side
+    a = ((y * 11) - 1);
+    b = 0;
+    
+    for (; b < x; b++) {
+
+        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, "wall");
+
+    }
+
+}
+
 // constructor
 PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int segments_tall) {
 
@@ -197,112 +337,8 @@ PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int seg
     // plug the outskirt leaks in the game board
     this->plugBoardLeaks(segments_wide, segments_tall);
 
-}
-
-// randomly generate the map
-// left to right, top to bottom
-void PlaySpace::ranGenMapLayout(int** layout, const int x, const int y) {
-
-    // cycles y - columns
-    for (int a = 0; a < y; a++) {
-
-        // initialise the row
-        layout[a] = new int[x];
-
-        // cycle x - rows
-        for (int b = 0; b < x; b++) {
-
-            // assign random map
-            layout[a][b] = genRanNumberInRange(0, maps);
-
-        }
-
-    }
-
-    // randomly select spawn location
-    layout[genRanNumberInRange(0, (y - 1))][genRanNumberInRange(0, (x - 1))] = genRanNumberInRange(100, (100 + spawns));
-
-}
-
-
-// loads an individual segment into the gameboard
-void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const int y) {
-
-    // // cycles y - columns
-    // for (int a = 0; a < y; a++) {
-
-    //     // cycle x - rows
-    //     for (int b = 0; b < x; b++) {
-
-    //         // assign random map
-    //         layout[a][b] = genRanNumberInRange(0, maps);
-
-    //     }
-
-    // }
-
-}
-
-// reads the different maps to a game borad
-// left to right, top to bottom
-void PlaySpace::readAllSegmentsToPlaySpace (int** layout, const int x, const int y) {
-
-    // cycles y - columns
-    for (int a = 0; a < y; a++) {
-
-        // cycle x - rows
-        for (int b = 0; b < x; b++) {
-
-            this->readSegmentToPlaySpace(((layout[a][b] >= 100) ? spawn_map_segments[(layout[a][b] - 100)] : map_segments[layout[a][b]]), b, a);
-            
-        }
-
-    }
-
-}
-
-// plugs the exits on the outskirts of the board
-void PlaySpace::plugBoardLeaks (const int x, const int y) {
-
-    //  y      x    stand in's
-    int a = 0, b = 0;
-
-    // plug left side
-    for (; a < y; a++) {
-
-        this->game_board[a][((b * 11) + 5)]->changeGameBlockProps(57, "wall");
-
-    }
-
-    // plug right side
-    a = 0;
-    b = (x - 1);
-
-    for (; a < y; a++) {
-
-        this->game_board[a][((b * 11) + 5)]->changeGameBlockProps(57, "wall");
-
-    }
-
-    // plug top side
-    a = 0;
-    b = 0;
-
-    for (; b < x; b++) {
-
-        this->game_board[((a * 13) + 6)][b]->changeGameBlockProps(57, "wall");
-
-    }
-
-    // plug bottom side
-    a = (y - 1);
-    b = 0;
-    
-    for (; b < x; b++) {
-
-        this->game_board[((a * 13) + 6)][b]->changeGameBlockProps(57, "wall");
-
-    }
+    // notify the console of the result
+    cout << "play space : " << ((this->game_board != nullptr) ? "OK" : "error") << endl;
 
 }
 
@@ -315,13 +351,22 @@ PlaySpace *PlaySpace::getInstance (const int gamemode, const int segments_wide, 
 
 }
 
-// // triggers all the game blocks to add themselves to the render queue
-// void PlaySpace::renderPlaySpace (GameBlock** ) {
+// triggers all the game blocks to add themselves to the render queue
+void PlaySpace::renderPlaySpace () {
 
-//     // this->game_board
-//     //replace me with the above line later
+    // cycles y - columns
+    for (int a = 0; a < this->height; a++) {
 
-// }
+        // cycle x - rows
+        for (int b = 0; b < this->width; b++) {
+
+            this->game_board[a][b]->addToRenderQueue();
+            
+        }
+
+    }
+
+}
 
 // checks for a pellet at x, y and returns the result,
 // if found the pellet is removed
