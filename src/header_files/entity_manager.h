@@ -46,7 +46,6 @@ class Entity {
         // general variables to run the basic animation /movement
         // rendering of any entity
         Location entity_location;
-        static int frame;
         int movement_frame, animation_frame, propulsion;
 
         // loads the animations of the entity
@@ -67,13 +66,21 @@ class Entity {
         // returns the current state of the entity
         string getCurrentState ();
 
-        // runs the update process of the entity
-        virtual void entityUpdate(string state) = 0;
+        // updates the entities properties
+        void entityUpdate(const int frame);
 
-        void updateAnimationHandler (string state);
+        // decides the next move that will be taken by the
+        // entity
+        virtual string resolveEntityState() = 0;
+
+        // updates the entites location properties
+        virtual void entityMovementUpdate () = 0;
+
+        // updates the entites animation settings
+        void entityAnimationUpdate (string state);
 
         // runs the rendering process of the entity
-        void basicEntityRender();
+        void entityRender ();
 
 };
 
@@ -86,9 +93,15 @@ class Enigma : public Entity {
         // constructor
         Enigma (const int gamemode);
 
+        // sets the state of the run bool variable
         void setRun (const bool state);
 
-        void entityUpdate(string state);
+        // decides the next move that will be taken
+        // by the entity
+        string resolveEntityState();
+
+        // updates the entites location properties
+        void entityMovementUpdate ();
 
 };
 
@@ -101,7 +114,14 @@ class Player : public Entity {
     public:
 
         // constructor
-        Player ();
+        Player (const int game_mode);
+
+        // decides the next move that will be taken
+        // by the entity
+        string resolveEntityState();
+
+        // updates the entites location properties
+        void entityMovementUpdate ();
 
 };
 
@@ -114,7 +134,14 @@ class Ghost : public Entity {
     public:
 
         // constructor
-        Ghost ();
+        Ghost (const int game_mode, string ghost_name);
+
+        // decides the next move that will be taken
+        // by the entity
+        string resolveEntityState();
+
+        // updates the entites location properties
+        void entityMovementUpdate ();
 
 };
 
@@ -126,6 +153,7 @@ class EntityManager {
         Enigma* enigma;
         Player* player;
         Ghost* ghosts[4];
+        int frame;
 
         // these functions contain the animation information
         // for all the active entities (they will be defined

@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string>
 #include <utility>
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 // include my stuff
 // import display manager file

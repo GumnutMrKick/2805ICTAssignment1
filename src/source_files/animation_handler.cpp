@@ -1,8 +1,10 @@
 // esential includes
 #include <stdio.h>
 #include <string>
-#include <cstring>
 #include <utility>
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 // include my stuff
 // import display manager file
@@ -163,8 +165,8 @@ AnimationHandler::AnimationHandler (vector < pair < string, Animation* > > anima
     // set length
     this->length = length;
 
-    // allocate the animations memory
-    this->animations(animations);
+    // get the animation information
+    copy(animations.begin(), animations.end(), back_inserter(this->animations));
 
 
     cout << "this->length " << this->length << "this->animations " << this->animations[0].first << " wtf " << this-> animations[0].second->getSpriteID() << endl;
