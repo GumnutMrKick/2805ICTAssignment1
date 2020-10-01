@@ -18,6 +18,8 @@ void seedRanGen();
 // generates a random number with respect (inclusively) to a range
 int genRanNumberInRange(const int min, const int max);
 
+// is a class which when used in a 2d array will contain the contents
+// of the game map which is displayed on the screen
 class GameBlock {
 
     private:
@@ -83,6 +85,9 @@ class PlaySpace {
 
         // triggers all the game blocks to add themselves to the render queue
         void renderPlaySpace ();
+
+
+
 
         // checks for a pellet at x, y and returns the result,
         // if found the pellet is removed

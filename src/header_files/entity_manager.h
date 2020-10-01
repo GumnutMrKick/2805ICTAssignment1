@@ -4,6 +4,7 @@
 #include <math.h>
 #include <ctime>
 #include <utility>
+#include <vector>
 
 // include my stuff
 // import display manager file
@@ -18,35 +19,76 @@ using namespace std;
 #ifndef entity_manager_H
 #define entity_manager_H
 
+// render task data structure
+struct Location {
+
+    int x, y;
+
+};
+
+// generates a valid version of the render task struct
+Location generateLocationHolder(const int x, const int y);
+
+// is the abstract class which all higher order entities inherit
 class Entity {
 
     private:
 
         // properties
-        // the state of the entity
-        string state;
-        int frame;
-        const int movement_cap = 60, propulsion = 16;
-
+        AnimationHandler* animation_handler;
 
     public:
 
-        // constructor
-        Entity ();
+        // properties
+        // the state of the entity
+        string state;
+        
+        // general variables to run the basic animation /movement
+        // rendering of any entity
+        Location entity_location;
+        static int frame;
+        int movement_frame, animation_frame, propulsion;
+
+        // loads the animations of the entity
+        void loadAnimations(pair < vector < pair < string, Animation* > >, int > loaded_animations);
+
+        // the basic initialisation required by any form of entity
+        void basicEntityInitialisation (const int gamemode, const int x, const int y, const int propulsion);
+
+        // changes the current location of the entity
+        void changeCurrentLocation (const int x, const int y);
+
+        // returns the current location of the entity
+        Location getCurrentLocation ();
+        
+        // changes the current state of the entity
+        void changeCurrentState (string str);
+
+        // returns the current state of the entity
+        string getCurrentState ();
+
+        // runs the update process of the entity
+        virtual void entityUpdate(string state) = 0;
+
+        void updateAnimationHandler (string state);
+
+        // runs the rendering process of the entity
+        void basicEntityRender();
 
 };
 
 class Enigma : public Entity {
-
     private:
-        // properties
-
-        
+        bool run;
 
     public:
 
         // constructor
-        Enigma ();
+        Enigma (const int gamemode);
+
+        void setRun (const bool state);
+
+        void entityUpdate(string state);
 
 };
 
@@ -81,17 +123,32 @@ class EntityManager {
     private:
 
         // properties
-        Enigma enigma;
-        Player player;
-        Ghost ghosts[4];
+        Enigma* enigma;
+        Player* player;
+        Ghost* ghosts[4];
 
-
-
+        // these functions contain the animation information
+        // for all the active entities (they will be defined
+        // at the bottom of the cpp file for readability)
+        void supplyEnigmaAnimations ();
+        void supplyPlayerAnimations ();
+        void supplyBlinkyAnimations ();
+        void supplyPinkyAnimations ();
+        void supplyInkyAnimations ();
+        void supplyClydeAnimations ();
+        // this function calls the above functions
+        void supplyEntityAnimations ();
 
     public:
 
         // constructor
         EntityManager (const int game_mode);
+
+        // preforms the nessary updates to the game's active entities
+        void updateEntities();
+
+        // renders the game's active entities
+        void renderEntities();
 
 };
 
@@ -152,22 +209,7 @@ class EntityManager {
 
 // };
 
-// // this class stores the int value location of something
-// // on the map for the map
-// class MapLocation {
 
-// Public:
-
-// int x, y;
-
-// MapLocation(const int location_x = 0, const int location_y = 0) {
-
-// this->x = location_x;
-// this->y = location_y;
-
-// }
-
-// };
 
 // // this class stores the float value location of something
 // // on the map

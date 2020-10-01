@@ -42,7 +42,7 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos, const in
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
     cout << "entity manager : " << ((this->entity_manager) ? "OK" : "error") << endl;
-    cout << "info bar manager : " << ((true) ? "OK" : "error") << endl;
+    cout << "info bar manager : " << ((this->info_bar) ? "OK" : "error") << endl;
 
     this->running = true;
 
@@ -80,6 +80,9 @@ void Game::update () {
 
     // -------------------- update --------------------
 
+    // update entities
+    this->entity_manager->updateEntities();
+
     cntr++;
 
     if (cntr > 799) {
@@ -93,7 +96,7 @@ void Game::update () {
     // -------------------- render --------------------
 
     // render entities
-
+    this->entity_manager->renderEntities();
 
     // render map
     this->play_space->renderPlaySpace();

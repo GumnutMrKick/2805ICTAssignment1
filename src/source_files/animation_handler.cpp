@@ -1,6 +1,7 @@
 // esential includes
 #include <stdio.h>
 #include <string>
+#include <cstring>
 #include <utility>
 
 // include my stuff
@@ -60,16 +61,13 @@ void Animation::addSprite (const int sprite_id) {
 
 void Animation::getDisplayManager () {
 
-    // texture managaer initialisation for GameBlock
+    // texture managaer initialisation for Animation
     display_manager = display_manager->getInstance();
 
 }
 
 // constructor
 Animation::Animation (int* sprites, const int length, const int loop_back) {
-
-    // get the instace of the display manager
-    this->display_manager = display_manager->getInstance();
 
     // create first sprite
     AnimationNode *loop_node = new AnimationNode(sprites[0]);
@@ -138,7 +136,7 @@ int AnimationHandler::getAnimationIndex (string state) {
         }
 
     }
-
+    cout << this->animations[0].first <<endl;
     // announce that the index could not be found
     cout << "there was an error finding the animation index" << endl;
     return 0;
@@ -152,47 +150,49 @@ void AnimationHandler::startNewAnimation (string state) {
     this->current_animation = state;
     this->current_animation_index = this->getAnimationIndex(state);
 
-    // reset frame counter
-    this->frame = 0;
-
     // reset the animation
-    this->animations[this->current_animation_index].second.resetLoop();
+    this->animations[this->current_animation_index].second->resetLoop();
 
 }
 
 //constructor
-AnimationHandler::AnimationHandler (pair <string, Animation>* animations, const int length) {
+AnimationHandler::AnimationHandler (vector < pair < string, Animation* > > animations, const int length) {
+
+    cout << "length " << length << "asdfasdfasdfanimations " << animations[0].first << animations[0].second->getSpriteID() << endl;
 
     // set length
     this->length = length;
-    // set animations
-    this->animations = animations;
+
+    // allocate the animations memory
+    this->animations(animations);
+
+
+    cout << "this->length " << this->length << "this->animations " << this->animations[0].first << " wtf " << this-> animations[0].second->getSpriteID() << endl;
+
 
 }
 
-// handles the next frame of the game, rendering the frames,
-// it should given the circumstances
-void AnimationHandler::update (string state, const int x, const int y) {
+// handles the change to the next frame of an animation,
+// or the change to a new animation entirely
+void AnimationHandler::update (string state) {
 
     // if this is a new animation, start it
     if (this->current_animation != state) {
 
         startNewAnimation(state);
 
-    }
+    } else {
 
-    // if the target number of frames have passed, change to the
-    // next setting of the animation
-    if (this->frame == this->target) {
-
-        this->animations[this->current_animation_index].second.nextSprite();
-        this->frame = 0;
+        this->animations[this->current_animation_index].second->nextSprite();
 
     }
 
-    // render the current setting of the animation and increase the
-    // frame count
-    this->animations[this->current_animation_index].second.renderSprite(x, y);
-    this->frame++;
+}
+
+// render the entities current apperance based on the
+// setting of the current animation
+void AnimationHandler::render (const int x, const int y) {
+
+    this->animations[this->current_animation_index].second->renderSprite(x, y);
 
 }

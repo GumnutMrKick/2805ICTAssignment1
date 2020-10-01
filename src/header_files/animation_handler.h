@@ -79,10 +79,9 @@ class AnimationHandler {
     private:
 
         // properties
-        int frame, current_animation_index, length;
-        const int target = 5;
+        int current_animation_index, length;
         string current_animation;
-        pair <string, Animation>* animations;
+        vector< pair < string, Animation* > > animations;
 
         // gets the index of the animation that contains
         // a given string
@@ -94,11 +93,15 @@ class AnimationHandler {
     public:
 
         //constructor
-        AnimationHandler (pair <string, Animation>* animations, const int length);
+        AnimationHandler (vector< pair < string, Animation* > > animations, const int length);
 
-        // handles the next frame of the game, rendering the frames,
-        // it should given the circumstances
-        void update(string state, const int x, const int y);
+        // handles the change to the next frame of an animation,
+        // or the change to a new animation entirely
+        void update(string state);
+
+        // render the entities current apperance based on the
+        // setting of the current animation
+        void render(const int x, const int y);
 
 };
 
