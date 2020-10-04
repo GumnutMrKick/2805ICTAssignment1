@@ -7,19 +7,16 @@ class Control_bindings {
 
         // properties
         // commands
-        const char* up;
-        const char* left;
-        const char* down;
-        const char* right;
+        int up, right, down, left;
 
     public:
     
         // constructor
-        Control_bindings (const char* up, const char* left,
-                            const char* down, const char* right);
+        Control_bindings (const int up, const int left,
+                            const int down, const int right);
         
         // SDL keycode to code command
-        const char * SDLToCommand (const char * keycode);
+        int SDLToCommand (const int keycode);
         
         // deconstructor    
         ~Control_bindings ();

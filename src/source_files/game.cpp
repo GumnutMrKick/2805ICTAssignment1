@@ -52,17 +52,31 @@ void Game::handleGameEvents() {  //const char* event) {
 
     SDL_Event event;
 
-	SDL_PollEvent(&event);
+	while (SDL_PollEvent(&event)) {
 
-	switch (event.type) {
-	
-        case SDL_QUIT :
-            this->running = false;
+        switch (event.type) {
+        
+            case SDL_KEYDOWN :
+
+                this->entity_manager->updateInput(event.key.keysym.sym);
+
             break;
-	
-        default:
-		    break;
-	
+
+            case SDL_QUIT :
+
+                cout << "the sdl quit event has been called";
+                this->running = false;
+            
+            break;
+        
+            default:
+
+                cout << "an unhandled event type has been raised";
+
+            break;
+        
+        }
+
     }
 
 }

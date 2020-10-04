@@ -38,7 +38,6 @@ class Entity {
         AnimationHandler* animation_handler;
 
     public:
-
         // properties
         // the state of the entity
         string state;
@@ -153,7 +152,7 @@ class EntityManager {
         Enigma* enigma;
         Player* player;
         Ghost* ghosts[4];
-        int frame;
+        int frame, playerMove;
 
         // increases a given number with respect to
         // it's ghost number
@@ -172,10 +171,17 @@ class EntityManager {
         // this function calls the above functions
         void supplyEntityAnimations ();
 
+        // this function generates the next move that
+        // should be taken by the entity to reach a given place
+        int calculateMove(Location current_location, Location desired_location);
+
     public:
 
         // constructor
         EntityManager (const int game_mode);
+
+        // a function used to take in user input
+        void updateInput(const int code);
 
         // preforms the nessary updates to the game's active entities
         void updateEntities();

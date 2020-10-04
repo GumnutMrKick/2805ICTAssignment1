@@ -66,10 +66,10 @@ int main(int argc, char *argv[]) {
     // -------------------- file config input --------------------
 
     // things to be gathered from the config file
-    string up;
-    string left;
-    string down;
-    string right;
+    int up;
+    int left;
+    int down;
+    int right;
     
     int FPS;
 
@@ -87,10 +87,10 @@ int main(int argc, char *argv[]) {
     if (config->config_file) {
        
         // copy out the configs
-        up = config->returnNewConfig();
-        left = config->returnNewConfig();
-        down = config->returnNewConfig();
-        right = config->returnNewConfig();
+        up = config->getIntConfig();
+        left = config->getIntConfig();
+        down = config->getIntConfig();
+        right = config->getIntConfig();
 
         FPS = config->getIntConfig();
         title = config->returnNewConfig();
@@ -109,10 +109,10 @@ int main(int argc, char *argv[]) {
 
         cout << "Error getting config file input loading defualt values" << endl;
     
-        up = "SDLK_UP";
-        left = "SDLK_LEFT";
-        down = "SDLK_DOWN";
-        right = "SLDK_RIGHT";
+        up = 1073741906;
+        left = 1073741904;
+        down = 1073741905;
+        right = 1073741903;
 
         FPS = 60;
         title = "Pacman";
