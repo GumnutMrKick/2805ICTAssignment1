@@ -13,10 +13,10 @@ using namespace std;
 
 // file global properties
 // square sprite sheet properties
-const string square_sprite_sheet_file_path = "rescource_files/square_sprite_sheet.png";
+const string square_sprite_sheet_file_path = "resource_files/square_sprite_sheet.png";
 
 // hexagon sprite sheet properties
-const string hexagon_sprite_sheet_file_path = "rescource_files/hexagon_sprite_sheet.png";
+const string hexagon_sprite_sheet_file_path = "resource_files/hexagon_sprite_sheet.png";
 
 // generate display manager's static instance indicator
 DisplayManager *DisplayManager::instance = 0;
@@ -304,6 +304,7 @@ void DisplayManager::renderTasks () {
 
         // load in the task and sprite
         tmp_task = this->render_stack.top();
+        
         const SDL_Rect *tmp_sprite = &this->sprite_locations[tmp_task.sprite_id];
         
         // set sprite render location
@@ -312,7 +313,8 @@ void DisplayManager::renderTasks () {
     	//Render to screen
 	    if (this->renderTask(tmp_sprite, &window_location) < 0) {
 
-            cout << "render task failed" << endl;
+            cout << "render task failed: ";
+            printf("wwtf %s\n", SDL_GetError());
 
         }
 

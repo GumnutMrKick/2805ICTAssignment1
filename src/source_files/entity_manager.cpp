@@ -31,7 +31,6 @@ Location generateLocationHolder(const int x, const int y) {
 // loads the animations of the entity
 void Entity::loadAnimations(pair < vector < pair < string, Animation* > > , int > loaded_animations) {
 
-    cout << "animations " << loaded_animations.first[0].first << endl;
     // initiailise the animation handler for the basic entity
     this->animation_handler = new AnimationHandler(loaded_animations.first, loaded_animations.second);
 
@@ -86,25 +85,24 @@ string Entity::getCurrentState () {
 
 // updates the entities properties
 void Entity::entityUpdate (const int frame) {
-cout << "wtf"<< endl;
+
     if ((frame % this->animation_frame) == 0) {
 
         this->entityAnimationUpdate(this->state);
 
     }
-cout << "wtf2"<< endl;
+
     if ((frame % this->movement_frame) == 0) {
         
         this->entityMovementUpdate();
 
     }
-cout << "wtf3"<< endl;
+
 }
 
 void Entity::entityAnimationUpdate (string state) {
-cout << "fuck" << endl;
+
     this->animation_handler->update(state);
-    cout << "behold, I don't get past here";
 
 }
 
@@ -234,42 +232,30 @@ EntityManager::EntityManager (const int game_mode) {
 // preforms the nessary updates to the game's active entities
 void EntityManager::updateEntities() {
 
-    cout << "I got here1" << endl;
 
 
-    // get the player the user inputs
+    // get player the user inputs
+
+
+
 
     // resolve updates
     this->enigma->resolveEntityState();
-    cout << "I got here2" << endl;
-
     this->player->resolveEntityState();
-    cout << "I got here3" << endl;
-
     this->ghosts[0]->resolveEntityState();
-    cout << "I got herewdfawsdfas4" << endl;
-
     this->ghosts[1]->resolveEntityState();
-    cout << "I got here5" << endl;
     this->ghosts[2]->resolveEntityState();
-    cout << "I got here6" << endl;
     this->ghosts[3]->resolveEntityState();
 
-    cout << "I got here7" << endl;
 
     //deliver updates
     this->enigma->entityUpdate(this->frame);
-    cout << "I got here8" << endl;
     // this->player->entityUpdate(this->frame);
-    cout << "I got here9" << endl;
     // this->ghosts[0]->entityUpdate(this->frame);
-    cout << "I got here10" << endl;
     // this->ghosts[1]->entityUpdate(this->frame);
-    cout << "I got here11" << endl;
     // this->ghosts[2]->entityUpdate(this->frame);
-   cout << "I got here12" << endl;
     // this->ghosts[3]->entityUpdate(this->frame);
-cout << "I got here13" << endl;
+
     if (this->frame == 60) {
 
         this->frame = 0;

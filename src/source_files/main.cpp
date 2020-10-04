@@ -28,7 +28,7 @@ class FileInput {
 
         FileInput () {
             
-            config_file.open("rescource_files/config.txt");
+            config_file.open("resource_files/config.txt");
 
         }
 

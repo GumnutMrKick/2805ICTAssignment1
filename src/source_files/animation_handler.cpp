@@ -128,10 +128,9 @@ void Animation::renderSprite (const int x, const int y) {
 // gets the index of the animation that contains
 // a given string
 int AnimationHandler::getAnimationIndex (string state) {
-    cout << "why" << endl;
 
     for (int x = 0; x < this->length; x++) {
-cout << "why" << x<< endl;
+
         if (this->animations[x].first == state) {
 
             return x;
@@ -139,9 +138,8 @@ cout << "why" << x<< endl;
         }
 
     }
-    cout << this->animations[0].first <<endl;
+
     // announce that the index could not be found
-    cout << "there was an error finding the animation index" << endl;
     return 0;
 
 }
@@ -149,23 +147,18 @@ cout << "why" << x<< endl;
 // changes the class to start playing a different animation
 void AnimationHandler::startNewAnimation (string state) {
 
-    cout << "almost there" << endl;
     // set new animation details
     this->current_animation = state;
-    cout << "almost there" << endl;
+
     this->current_animation_index = this->getAnimationIndex(state);
-    cout << "almost there" << endl;
 
     // reset the animation
     this->animations[this->current_animation_index].second->resetLoop();
-    cout << "almost there" << endl;
 
 }
 
 //constructor
 AnimationHandler::AnimationHandler (vector < pair < string, Animation* > > animations, const int length) {
-
-    cout << "length " << length << "asdfasdfasdfanimations " << animations[0].first << animations[0].second->getSpriteID() << endl;
 
     // set length
     this->length = length;
@@ -173,25 +166,18 @@ AnimationHandler::AnimationHandler (vector < pair < string, Animation* > > anima
     // get the animation information
     copy(animations.begin(), animations.end(), back_inserter(this->animations));
 
-
-    cout << "this->length " << this->length << "this->animations " << this->animations[0].first << " wtf " << this-> animations[0].second->getSpriteID() << endl;
-
-
 }
 
 // handles the change to the next frame of an animation,
 // or the change to a new animation entirely
 void AnimationHandler::update (string state) {
-cout << "alright";
+
     // if this is a new animation, start it
-    cout << endl << "current " << this->current_animation << " state" << state << endl;
     if (this->current_animation != state) {
-cout << "alright? true" <<endl;
 
         this->startNewAnimation(state);
 
     } else {
-cout << "alright? false?";
 
         this->animations[this->current_animation_index].second->nextSprite();
 
