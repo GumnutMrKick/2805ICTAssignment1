@@ -16,7 +16,7 @@ LIBARY_FLAGS = -L"$(PACKAGES)\SDL2_32bit\lib" -L"$(PACKAGES)\SDL2_image_32bit\li
 # linker flags
 LINKER_FLAGS = -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
-# compiler flags
+# compiler flags I'll need to add -mwindows to remove the console from launching on run
 COMPILER_FLAGS = -std=c++17 $(INCLUDE_FLAGS) $(LIBARY_FLAGS) $(LINKER_FLAGS)
 
 # object compiler flags

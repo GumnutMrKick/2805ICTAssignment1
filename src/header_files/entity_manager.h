@@ -71,7 +71,7 @@ class Entity {
 
         // decides the next move that will be taken by the
         // entity
-        virtual string resolveEntityState() = 0;
+        virtual void resolveEntityState() = 0;
 
         // updates the entites location properties
         virtual void entityMovementUpdate () = 0;
@@ -98,7 +98,7 @@ class Enigma : public Entity {
 
         // decides the next move that will be taken
         // by the entity
-        string resolveEntityState();
+        void resolveEntityState();
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -118,7 +118,7 @@ class Player : public Entity {
 
         // decides the next move that will be taken
         // by the entity
-        string resolveEntityState();
+        void resolveEntityState();
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -138,7 +138,7 @@ class Ghost : public Entity {
 
         // decides the next move that will be taken
         // by the entity
-        string resolveEntityState();
+        void resolveEntityState();
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -155,15 +155,20 @@ class EntityManager {
         Ghost* ghosts[4];
         int frame;
 
+        // increases a given number with respect to
+        // it's ghost number
+        int incByGN (const int number, const int ghostNumber);
+
         // these functions contain the animation information
         // for all the active entities (they will be defined
         // at the bottom of the cpp file for readability)
+      
+        // supplies the enigma with their animations
         void supplyEnigmaAnimations ();
+        // supplies the player with their animations
         void supplyPlayerAnimations ();
-        void supplyBlinkyAnimations ();
-        void supplyPinkyAnimations ();
-        void supplyInkyAnimations ();
-        void supplyClydeAnimations ();
+        // supplies each ghost with their animations
+        void supplyGhostAnimations (const int gN);
         // this function calls the above functions
         void supplyEntityAnimations ();
 

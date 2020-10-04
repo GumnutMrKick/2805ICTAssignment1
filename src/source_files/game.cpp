@@ -80,8 +80,13 @@ void Game::update () {
 
     // -------------------- update --------------------
 
+    cout << "here 101" << endl;
+
     // update entities
     this->entity_manager->updateEntities();
+
+    cout << "here 102" << endl;
+
 
     cntr++;
 
@@ -94,9 +99,12 @@ void Game::update () {
     cntr += 50;
 
     // -------------------- render --------------------
-
+cout << "here 101" << endl;
     // render entities
     this->entity_manager->renderEntities();
+
+    cout << "here 103" << endl;
+
 
     // render map
     this->play_space->renderPlaySpace();

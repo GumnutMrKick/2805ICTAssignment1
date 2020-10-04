@@ -128,9 +128,10 @@ void Animation::renderSprite (const int x, const int y) {
 // gets the index of the animation that contains
 // a given string
 int AnimationHandler::getAnimationIndex (string state) {
+    cout << "why" << endl;
 
     for (int x = 0; x < this->length; x++) {
-
+cout << "why" << x<< endl;
         if (this->animations[x].first == state) {
 
             return x;
@@ -148,12 +149,16 @@ int AnimationHandler::getAnimationIndex (string state) {
 // changes the class to start playing a different animation
 void AnimationHandler::startNewAnimation (string state) {
 
+    cout << "almost there" << endl;
     // set new animation details
     this->current_animation = state;
+    cout << "almost there" << endl;
     this->current_animation_index = this->getAnimationIndex(state);
+    cout << "almost there" << endl;
 
     // reset the animation
     this->animations[this->current_animation_index].second->resetLoop();
+    cout << "almost there" << endl;
 
 }
 
@@ -177,13 +182,16 @@ AnimationHandler::AnimationHandler (vector < pair < string, Animation* > > anima
 // handles the change to the next frame of an animation,
 // or the change to a new animation entirely
 void AnimationHandler::update (string state) {
-
+cout << "alright";
     // if this is a new animation, start it
+    cout << endl << "current " << this->current_animation << " state" << state << endl;
     if (this->current_animation != state) {
+cout << "alright? true" <<endl;
 
-        startNewAnimation(state);
+        this->startNewAnimation(state);
 
     } else {
+cout << "alright? false?";
 
         this->animations[this->current_animation_index].second->nextSprite();
 
