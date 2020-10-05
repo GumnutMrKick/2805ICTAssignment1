@@ -48,6 +48,7 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos, const in
 
 }
 
+// gets the users keyboard inputs
 void Game::handleGameEvents() {  //const char* event) {
 
     SDL_Event event;
@@ -58,7 +59,7 @@ void Game::handleGameEvents() {  //const char* event) {
         
             case SDL_KEYDOWN :
 
-                this->entity_manager->updateInput(event.key.keysym.sym);
+                this->entity_manager->updateInput(this->bindings_manager->SDLToCommand(event.key.keysym.sym));
 
             break;
 
@@ -80,9 +81,10 @@ void Game::handleGameEvents() {  //const char* event) {
     }
 
 }
-        
-void Game::update () {
 
+// updates the games model and calls for all the components to
+// add themselves to the render queue
+void Game::update () {
 
 
     // -------------------- update --------------------
@@ -99,15 +101,6 @@ void Game::update () {
     this->entity_manager->updateEntities();
 
 
-    cntr++;
-
-    if (cntr > 799) {
-
-        cntr = 0;
-
-    }
-
-    cntr += 50;
 
     // -------------------- render --------------------
 

@@ -164,7 +164,7 @@ Player::Player (const int game_mode) {
     
 }
 
-// decides the next move that will be taken
+// decides the statenext move that will be taken
 // by the entity
 void Player::resolveEntityState() {
 
@@ -180,8 +180,13 @@ void Player::entityMovementUpdate() {
 }
 
 // constructor
-Ghost::Ghost (const int game_mode, string ghost_name) {
+Ghost::Ghost (const int game_mode, const int ghost_number, Location ghost_spawn) {
 
+    // initailise the properties
+    this->dead = false;
+    this->ghost_number = ghost_number;
+    
+    this->entity_location
 
 
 }
@@ -204,8 +209,13 @@ void Ghost::entityMovementUpdate () {
 // constructor
 EntityManager::EntityManager (const int game_mode) {
 
-    // initialise the display manager holder for the Animation class
+    // initialise the display manager instance holder
+    // for the Animation class
     Animation::getDisplayManager();
+
+    //initialise the playspace instance holder
+    this->play_space = PlaySpace::getInstance();
+
     // initialise the frame counter
     this->frame = 0;
 
@@ -216,18 +226,24 @@ EntityManager::EntityManager (const int game_mode) {
     this->player = new Player(game_mode);
     // ghosts
     // blinky
-    this->ghosts[0] = new Ghost(game_mode, "blinky");
+    this->ghosts[0] = new Ghost(game_mode, 0);
     // pinky
-    this->ghosts[1] = new Ghost(game_mode, "pinky");
+    this->ghosts[1] = new Ghost(game_mode, 1);
     // inky
-    this->ghosts[2] = new Ghost(game_mode, "inky");
+    this->ghosts[2] = new Ghost(game_mode, 2);
     // clyde
-    this->ghosts[3] = new Ghost(game_mode, "clyde");
+    this->ghosts[3] = new Ghost(game_mode, 3);
 
     this->supplyEntityAnimations();
 
 }
 
+// a function used to take in user input
+void EntityManager::updateInput (const int code) {
+
+    this->playerMove = code;
+
+}
 
 // preforms the nessary updates to the game's active entities
 void EntityManager::updateEntities() {

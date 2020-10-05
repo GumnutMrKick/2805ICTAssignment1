@@ -81,7 +81,7 @@ class PlaySpace {
         static PlaySpace *instance;
 
         // gets the static instance of the singleton class
-        static PlaySpace *getInstance (const int gamemode, const int segments_wide, const int segments_tall);
+        static PlaySpace *getInstance (const int gamemode = 0, const int segments_wide = 3, const int segments_tall = 3);
 
         // triggers all the game blocks to add themselves to the render queue
         void renderPlaySpace ();

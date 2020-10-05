@@ -66,19 +66,11 @@ int main(int argc, char *argv[]) {
     // -------------------- file config input --------------------
 
     // things to be gathered from the config file
-    int up;
-    int left;
-    int down;
-    int right;
-    
-    int FPS;
-
+    int up, left, down, right;
+    int x_pos, y_pos;
+    int segments_wide, segments_tall;
+    int FPS, gamemode;
     string title;
-    int x_pos;
-    int y_pos;
-    int segments_wide;
-    int segments_tall;
-    int gamemode;
 
     // gain input from the file
     FileInput *config = new FileInput();    
@@ -149,15 +141,15 @@ int main(int argc, char *argv[]) {
 
     // -------------------- key bindings --------------------
     // create key binder
-    Control_bindings bindings = Control_bindings(up.c_str(), left.c_str(), down.c_str(), right.c_str());
+    Control_bindings bindings = Control_bindings(up, left, down, right);
     
     // test key bindings
     cout << "---------- testing key bindings ----------" << endl;
     cout << "expected : recieved" << endl;
-    cout << "up : " << bindings.SDLToCommand(up.c_str()) << endl;
-    cout << "left : " << bindings.SDLToCommand(left.c_str()) << endl;
-    cout << "down : " << bindings.SDLToCommand(down.c_str()) << endl;
-    cout << "right : " << bindings.SDLToCommand(right.c_str()) << endl;
+    cout << "up : " << bindings.SDLToCommand(up) << endl;
+    cout << "left : " << bindings.SDLToCommand(left) << endl;
+    cout << "down : " << bindings.SDLToCommand(down) << endl;
+    cout << "right : " << bindings.SDLToCommand(right) << endl;
 
     // -------------------- game settings / creation --------------------
 
