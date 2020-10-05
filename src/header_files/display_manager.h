@@ -21,10 +21,18 @@ struct RenderTask {
 // generates a valid sprite clipping
 SDL_Rect genSquareSheetSprite (const int x, const int y, const int height = 0, const int width = 0);
 
-
 // generates a valid version of the render task struct
 RenderTask generateRenderTask(const int id, const int x, const int y);
 
+// render task data structure
+struct Location {
+
+    int x, y;
+
+};
+
+// generates a valid version of the render task struct
+Location generateLocationHolder(const int x, const int y);
 
 // a class that manages the sprite_sheet display for the game
 class DisplayManager {

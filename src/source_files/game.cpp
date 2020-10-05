@@ -27,15 +27,16 @@ int cntr = 0;
 
 // constructor
 Game::Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
-    const int segments_wide, const int segments_tall) {
+    const int segments_wide, const int segments_tall, Control_bindings &bindings) {
     
     // initialisation
+    this->bindings_manager = new Control_bindings(bindings);
     // texture managaer initialisation
     this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + info_bar_addition));
     // play space initialisation
     this->play_space = play_space->getInstance(gamemode, segments_wide, segments_tall);
     // entity manager initialisation
-    this->entity_manager = new EntityManager(0);
+    this->entity_manager = new EntityManager(gamemode);
     // info bar manager initialisation
     this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((info_bar_addition * 16) * 11));
 
@@ -59,7 +60,10 @@ void Game::handleGameEvents() {  //const char* event) {
         
             case SDL_KEYDOWN :
 
-                this->entity_manager->updateInput(this->bindings_manager->SDLToCommand(event.key.keysym.sym));
+                cout << endl << event.key.keysym.sym << endl << this->bindings_manager->SDLToCommand(event.key.keysym.sym) << endl;
+
+
+                //this->entity_manager->updateInput(this->bindings_manager->SDLToCommand(event.key.keysym.sym));
 
             break;
 
@@ -72,7 +76,7 @@ void Game::handleGameEvents() {  //const char* event) {
         
             default:
 
-                cout << "an unhandled event type has been raised";
+                //cout << "an unhandled event type has been raised";
 
             break;
         
@@ -96,18 +100,13 @@ void Game::update () {
 
     // -------------------- update --------------------
 
-
     // update entities
     this->entity_manager->updateEntities();
-
-
 
     // -------------------- render --------------------
 
     // render entities
     this->entity_manager->renderEntities();
-
-
 
     // render map
     this->play_space->renderPlaySpace();

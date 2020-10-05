@@ -19,16 +19,6 @@ using namespace std;
 #ifndef entity_manager_H
 #define entity_manager_H
 
-// render task data structure
-struct Location {
-
-    int x, y;
-
-};
-
-// generates a valid version of the render task struct
-Location generateLocationHolder(const int x, const int y);
-
 // is the abstract class which all higher order entities inherit
 class Entity {
 
@@ -90,13 +80,12 @@ class Enigma : public Entity {
     public:
 
         // constructor
-        Enigma (const int gamemode);
+        Enigma (const int gamemode, Location spawn);
 
         // sets the state of the run bool variable
         void setRun (const bool state);
 
-        // decides the next move that will be taken
-        // by the entity
+        // resolves the enigma's state
         void resolveEntityState();
 
         // updates the entites location properties
@@ -113,10 +102,10 @@ class Player : public Entity {
     public:
 
         // constructor
-        Player (const int game_mode);
+        Player (const int gamemode, Location spawn);
 
-        // decides the next move that will be taken
-        // by the entity
+        // resolves the players state deciding if the
+        // collisions have happened
         void resolveEntityState();
 
         // updates the entites location properties
@@ -128,17 +117,24 @@ class Ghost : public Entity {
 
     private:
         // properties
+        Location spawn;
         int ghost_number;
         bool dead;
 
     public:
 
         // constructor
-        Ghost (const int game_mode, const int ghost_number, Location ghost_spawn);
+        Ghost (const int gamemode, const int ghost_number, Location spawn);
+
+        // returns the death state of the ghost
+        bool getdeadstate();
+
+        // sets the death state of the ghost
+        void setdeadstate();
 
         // decides the next move that will be taken
         // by the entity
-        void resolveEntityState();
+        void resolveEntityState ();
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -177,12 +173,7 @@ class EntityManager {
 
         // this function generates the targeting for
         // the ghost path seeking
-        Location genGhostTarget (const int ghost_number, const int current_direction,
-            string ghost_state);
-
-        // this function generates the next move that
-        // should be taken by the entity to reach a given place
-        int calculateMove(Location current_location, Location desired_location);
+        Location genGhostTarget (const int ghost_number, string ghost_state);
 
     public:
 

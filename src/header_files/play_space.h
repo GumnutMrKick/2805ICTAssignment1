@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <ctime>
+#include <vector>
 
 // include my stuff
 // import display manager file
@@ -39,6 +40,9 @@ class GameBlock {
 
         // change the properties of the game block
         void changeGameBlockProps (const int sprite_id = 58, char* type = "empty");
+
+        // returns the real location of the game block
+        Location getLocation ();
         
         // adds this play space block to the render queue
         void addToRenderQueue ();
@@ -55,7 +59,7 @@ class PlaySpace {
 
         // properties
         int width, height;
-
+        vector <Location> ghost_spawns, player_spawns;
         GameBlock ***game_board;
 
         // randomly generate the map
@@ -72,6 +76,9 @@ class PlaySpace {
         // plugs the exits on the outskirts of the board
         void plugBoardLeaks (const int x, const int y);
 
+        // finds all the possible entity spawns on the map
+        void findAllSpawns ();
+
         // constructor
         PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
@@ -82,6 +89,13 @@ class PlaySpace {
 
         // gets the static instance of the singleton class
         static PlaySpace *getInstance (const int gamemode = 0, const int segments_wide = 3, const int segments_tall = 3);
+
+        // returns a random location for the player to spawn at
+        Location giveRanEntitySpawn (string entity);
+
+        // this function generates the next move that should be taken to
+        // get from one place to another
+        int calculateMove(Location current_location, Location desired_location, const int current_direction);
 
         // triggers all the game blocks to add themselves to the render queue
         void renderPlaySpace ();

@@ -50,6 +50,18 @@ RenderTask generateRenderTask(const int id, const int x, const int y) {
 
 }
 
+// generates a valid version of the render task struct
+Location generateLocationHolder(const int x, const int y) {
+
+    Location loc;
+
+    loc.x = x;
+    loc.y = y;
+
+    return loc;
+
+}
+
 // opens a texture through the use of a file path
 bool DisplayManager::openFile (const string path) {
 

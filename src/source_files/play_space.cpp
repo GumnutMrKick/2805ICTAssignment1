@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <ctime>
+#include <vector>
 
 // include my stuff
 // import display manager file
@@ -144,6 +145,12 @@ void GameBlock::changeGameBlockProps (const int sprite_id, char* type) {
 
     this->sprite_id = sprite_id;
     this->type = type;
+
+}
+
+Location GameBlock::getLocation () {
+
+    return generateLocationHolder(this->x, this->y);
 
 }
 
@@ -303,6 +310,32 @@ void PlaySpace::plugBoardLeaks (const int x, const int y) {
 
 }
 
+// finds all the possible entity spawns on the map
+void PlaySpace::findAllSpawns () {
+
+    // check all of the map
+    // y
+    for (int y = 0; y < this->height; y++) {
+
+        // x
+        for (int x = 0; x < this->width; x++) {
+
+            if (this->game_board[y][x]->checkIf("empty")) {
+
+                this->player_spawns.push_back(this->game_board[y][x]->getLocation());
+
+            } else if (this->game_board[y][x]->checkIf("respawn")) {
+
+                this->ghost_spawns.push_back(this->game_board[y][x]->getLocation());
+
+            }
+
+        }
+
+    }
+
+}
+
 // constructor
 PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int segments_tall) {
 
@@ -337,6 +370,9 @@ PlaySpace::PlaySpace (const int gamemode, const int segments_wide, const int seg
     // plug the outskirt leaks in the game board
     this->plugBoardLeaks(segments_wide, segments_tall);
 
+    // find possible entity spawns
+    this->findAllSpawns();
+
     // notify the console of the result
     cout << "play space : " << ((this->game_board != nullptr) ? "OK" : "error") << endl;
 
@@ -349,6 +385,28 @@ PlaySpace *PlaySpace::getInstance (const int gamemode, const int segments_wide, 
 
     return instance;
 
+}
+
+// returns a random location for the player to spawn at
+Location PlaySpace::giveRanEntitySpawn (string entity) {
+
+    // decide entity
+    if (entity != "player") {
+
+        return this->ghost_spawns[genRanNumberInRange(0, (this->ghost_spawns.size() - 1))];
+
+    } else {
+
+        return this->player_spawns[genRanNumberInRange(0, (this->player_spawns.size() - 1))];
+
+    }
+
+}
+
+// this function generates the next move that should be taken to
+// get from one place to another
+int calculateMove(Location current_location, Location desired_location, const int current_direction) {
+    
 }
 
 // triggers all the game blocks to add themselves to the render queue

@@ -147,9 +147,9 @@ int main(int argc, char *argv[]) {
     cout << "---------- testing key bindings ----------" << endl;
     cout << "expected : recieved" << endl;
     cout << "up : " << bindings.SDLToCommand(up) << endl;
-    cout << "left : " << bindings.SDLToCommand(left) << endl;
-    cout << "down : " << bindings.SDLToCommand(down) << endl;
     cout << "right : " << bindings.SDLToCommand(right) << endl;
+    cout << "down : " << bindings.SDLToCommand(down) << endl;
+    cout << "left : " << bindings.SDLToCommand(left) << endl;
 
     // -------------------- game settings / creation --------------------
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
     // can loaded in to get the users desired control bindings
 
 
-    Game *game = new Game(title.c_str(), x_pos, y_pos, gamemode, segments_wide, segments_tall);
+    Game *game = new Game(title.c_str(), x_pos, y_pos, gamemode, segments_wide, segments_tall, bindings);
 
     // -------------------- game loop creation and running --------------------
 

@@ -16,17 +16,6 @@ using namespace std;
 // include self
 #include "../header_files/entity_manager.h"
 
-// generates a valid version of the render task struct
-Location generateLocationHolder(const int x, const int y) {
-
-    Location loc;
-
-    loc.x = x;
-    loc.y = y;
-
-    return loc;
-
-}
 
 // loads the animations of the entity
 void Entity::loadAnimations(pair < vector < pair < string, Animation* > > , int > loaded_animations) {
@@ -86,15 +75,19 @@ string Entity::getCurrentState () {
 // updates the entities properties
 void Entity::entityUpdate (const int frame) {
 
-    if ((frame % this->animation_frame) == 0) {
+    if (frame != 0) {
 
-        this->entityAnimationUpdate(this->state);
+        if ((frame % this->animation_frame) == 0) {
 
-    }
+            this->entityAnimationUpdate(this->state);
 
-    if ((frame % this->movement_frame) == 0) {
-        
-        this->entityMovementUpdate();
+        }
+
+        if ((frame % this->movement_frame) == 0) {
+            
+            this->entityMovementUpdate();
+
+        }
 
     }
 
@@ -114,13 +107,18 @@ void Entity::entityRender() {
 }
 
 // constructor
-Enigma::Enigma (const int gamemode) {
+Enigma::Enigma (const int gamemode, Location spawn) {
 
     this->run = false;
-    this->state = "run";
+    this->state = "";
+
+    // this should probably be moved into the basic entity
+    int propulsion;
+
+    propulsion = ((gamemode < 2) ?  16 : 2);
 
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, -16,  80, 16);
+    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y, propulsion);
 
 }
 
@@ -144,7 +142,7 @@ void Enigma::entityMovementUpdate () {
 
     Location current_location = this->getCurrentLocation();
 
-    if ((!this->run) || !( true )) { //current_location.x <)) {
+    if (!this->run) { 
 
         this->changeCurrentLocation((current_location.x + this->propulsion), current_location.y);
 
@@ -158,8 +156,18 @@ void Enigma::entityMovementUpdate () {
 }
 
 // constructor
-Player::Player (const int game_mode) {
+Player::Player (const int gamemode, Location spawn) {
 
+
+
+
+    // this should probably be moved into the basic entity
+    int propulsion;
+
+    propulsion = ((gamemode < 2) ?  16 : 2);
+
+    // initialise basic components
+    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y, propulsion);
 
     
 }
@@ -180,16 +188,27 @@ void Player::entityMovementUpdate() {
 }
 
 // constructor
-Ghost::Ghost (const int game_mode, const int ghost_number, Location ghost_spawn) {
+Ghost::Ghost (const int gamemode, const int ghost_number, Location ghost_spawn) {
 
     // initailise the properties
     this->dead = false;
     this->ghost_number = ghost_number;
-    
-    this->entity_location
+    this->spawn = ghost_spawn;
 
+    // this should probably be moved into the basic entity
+    int propulsion;
+
+    propulsion = ((gamemode < 2) ?  16 : 2);
+
+    // initialise basic components
+    this->basicEntityInitialisation(gamemode, this->spawn.x,  this->spawn.y, propulsion);
 
 }
+
+
+
+
+
 
 // decides the next move that will be taken
 // by the entity
@@ -201,6 +220,22 @@ void Ghost::resolveEntityState() {
 
 // updates the entites location properties
 void Ghost::entityMovementUpdate () {
+
+
+
+}
+
+// this function generates the targeting for
+// the ghost path seeking
+Location EntityManager::genGhostTarget (const int ghost_number, string ghost_state) {
+
+
+
+}
+
+// this function generates the targeting for
+// the ghost path seeking
+Location genGhostTarget (const int ghost_number, string ghost_state) {
 
 
 
@@ -221,20 +256,24 @@ EntityManager::EntityManager (const int game_mode) {
 
     // initialise the active entities
     // enigma
-    this->enigma = new Enigma(game_mode);
+    this->enigma = new Enigma(game_mode, generateLocationHolder(0, 0));
     // player
-    this->player = new Player(game_mode);
-    // ghosts
-    // blinky
-    this->ghosts[0] = new Ghost(game_mode, 0);
-    // pinky
-    this->ghosts[1] = new Ghost(game_mode, 1);
-    // inky
-    this->ghosts[2] = new Ghost(game_mode, 2);
-    // clyde
-    this->ghosts[3] = new Ghost(game_mode, 3);
+    this->player = new Player(game_mode, this->play_space->giveRanEntitySpawn("player"));
+    // // ghosts
+    // // blinky
+    this->ghosts[0] = new Ghost(game_mode, 0, this->play_space->giveRanEntitySpawn("ghost"));
+    // // pinky
+    this->ghosts[1] = new Ghost(game_mode, 1, this->play_space->giveRanEntitySpawn("ghost"));
+    // // inky
+    this->ghosts[2] = new Ghost(game_mode, 2, this->play_space->giveRanEntitySpawn("ghost"));
+    // // clyde
+    this->ghosts[3] = new Ghost(game_mode, 3, this->play_space->giveRanEntitySpawn("ghost"));
 
+    // give entities their animations
     this->supplyEntityAnimations();
+
+    // set a starting animation for all of the entities
+    this->enigma->entityAnimationUpdate("run");
 
 }
 
@@ -257,11 +296,11 @@ void EntityManager::updateEntities() {
 
     // resolve updates
     this->enigma->resolveEntityState();
-    this->player->resolveEntityState();
-    this->ghosts[0]->resolveEntityState();
-    this->ghosts[1]->resolveEntityState();
-    this->ghosts[2]->resolveEntityState();
-    this->ghosts[3]->resolveEntityState();
+    // this->player->resolveEntityState();
+    // this->ghosts[0]->resolveEntityState();
+    // this->ghosts[1]->resolveEntityState();
+    // this->ghosts[2]->resolveEntityState();
+    // this->ghosts[3]->resolveEntityState();
 
 
     //deliver updates
@@ -547,10 +586,10 @@ void EntityManager::supplyGhostAnimations (const int gN) {
 void EntityManager::supplyEntityAnimations () {
 
     this->supplyEnigmaAnimations();
-    this->supplyPlayerAnimations();
-    this->supplyGhostAnimations(0);
-    this->supplyGhostAnimations(1);
-    this->supplyGhostAnimations(2);
-    this->supplyGhostAnimations(3);
+    // this->supplyPlayerAnimations();
+    // this->supplyGhostAnimations(0);
+    // this->supplyGhostAnimations(1);
+    // this->supplyGhostAnimations(2);
+    // this->supplyGhostAnimations(3);
 
 }

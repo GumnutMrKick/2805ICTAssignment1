@@ -189,6 +189,8 @@ void AnimationHandler::update (string state) {
 // setting of the current animation
 void AnimationHandler::render (const int x, const int y) {
 
+    this->animations[this->current_animation_index].second->getSpriteID();
+
     this->animations[this->current_animation_index].second->renderSprite(x, y);
 
 }

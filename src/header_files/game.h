@@ -37,7 +37,7 @@ class Game {
     
         // constructor
         Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
-            const int segments_wide, const int segments_tall);
+            const int segments_wide, const int segments_tall, Control_bindings &bindings);
         
         // is used to handle game events
         void handleGameEvents();  //const char* event);
