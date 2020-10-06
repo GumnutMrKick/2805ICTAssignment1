@@ -25,7 +25,7 @@ class InfoBarManager {
         int charToSpriteId (const char given_char);
 
         // turns a string into a array of ints
-        int* stringToSpriteIds (string str, int* ids);
+        void stringToSpriteIds (string str, int* ids);
 
         // calculates the correct start place of the info
         int calculateStartPoint (string align, const int length);

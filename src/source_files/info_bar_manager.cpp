@@ -47,10 +47,10 @@ int InfoBarManager::charToSpriteId (const char given_char) {
 }
 
 // turns a string into a array of ints
-int* InfoBarManager::stringToSpriteIds (string str, int* ids) {
+void InfoBarManager::stringToSpriteIds (string str, int* ids) {
 
     // transform it's chars into ids
-    for (int x = 0; x < str.length(); x++) {
+    for (int x = 0; x < (int) str.length(); x++) {
 
         ids[x] = this->charToSpriteId(str.at(x));
 
@@ -136,7 +136,7 @@ void InfoBarManager::renderInfoBar () {
 
     // pad the start of the score with zeros until the
     // number is seven digits long
-    for (int x = 0; x < (7 - score_str_back.length()); x++) {
+    for (int x = 0; x < (7 - (int) score_str_back.length()); x++) {
 
         score_str_front = score_str_front + "0";
 
@@ -146,8 +146,8 @@ void InfoBarManager::renderInfoBar () {
     score_str = score_str_front + score_str_back;
 
     // make the arrays
-    int score_ids[score_str.length()];
-    int state_ids[score_str.length()];
+    int score_ids[(int) score_str.length()];
+    int state_ids[(int) score_str.length()];
     int namco_ids[1] = {37}; // this is a weird sprite that has been custom made
 
     // get the sprite ids
@@ -163,14 +163,14 @@ void InfoBarManager::renderInfoBar () {
     };
     
     int lengths[] = {
-                        score_str.length(),
-                        this->state.length(),
+                        (int) score_str.length(),
+                        (int) this->state.length(),
                         1
                     };
 
     int starts[] = {
-                        this->calculateStartPoint("left", score_str.length()),
-                        this->calculateStartPoint("center", this->state.length()),
+                        this->calculateStartPoint("left", (int) score_str.length()),
+                        this->calculateStartPoint("center", (int) this->state.length()),
                         this->calculateStartPoint("right", 7)
                     };
 

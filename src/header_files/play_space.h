@@ -39,7 +39,7 @@ class GameBlock {
         GameBlock (const int sprite_id, const int x, const int y, char* type);
 
         // change the properties of the game block
-        void changeGameBlockProps (const int sprite_id = 58, char* type = "empty");
+        void changeGameBlockProps (const int sprite_id = 58, char* type = (char*) "empty");
 
         // returns the real location of the game block
         Location getLocation ();
@@ -82,7 +82,7 @@ class PlaySpace {
         PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
     public:
-    
+
         int width, height;
 
         // instance holder for static singleton class

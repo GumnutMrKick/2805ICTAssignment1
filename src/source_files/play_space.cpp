@@ -215,21 +215,21 @@ void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const 
 
             switch (id) {
                 case (58):
-                    str = "empty";
+                    str = (char*) "empty";
                 break;
 
                 case (59):
-                    str = "respawn";
+                    str = (char*) "respawn";
                 break;
 
                 case (60):
-                    str = "pellet";
+                    str = (char*) "pellet";
                 break;
                 case (61):
-                    str = "power";
+                    str = (char*) "power";
                 break;
                 default:
-                    str = "wall";
+                    str = (char*) "wall";
                 break;
             }
 
@@ -274,7 +274,7 @@ void PlaySpace::plugBoardLeaks (const int x, const int y) {
     // plug left side
     for (; a < y; a++) {
 
-        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, "wall");
+        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, (char*) "wall");
 
     }
 
@@ -284,7 +284,7 @@ void PlaySpace::plugBoardLeaks (const int x, const int y) {
 
     for (; a < y; a++) {
 
-        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, "wall");
+        this->game_board[((a * 11) + 5)][b]->changeGameBlockProps(57, (char*) "wall");
 
     }
 
@@ -294,7 +294,7 @@ void PlaySpace::plugBoardLeaks (const int x, const int y) {
 
     for (; b < x; b++) {
 
-        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, "wall");
+        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, (char*) "wall");
 
     }
 
@@ -304,7 +304,7 @@ void PlaySpace::plugBoardLeaks (const int x, const int y) {
     
     for (; b < x; b++) {
 
-        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, "wall");
+        this->game_board[a][((b * 13) + 6)]->changeGameBlockProps(57, (char*) "wall");
 
     }
 
@@ -320,11 +320,11 @@ void PlaySpace::findAllSpawns () {
         // x
         for (int x = 0; x < this->width; x++) {
 
-            if (this->game_board[y][x]->checkIf("empty")) {
+            if (this->game_board[y][x]->checkIf((char*) "empty")) {
 
                 this->player_spawns.push_back(this->game_board[y][x]->getLocation());
 
-            } else if (this->game_board[y][x]->checkIf("respawn")) {
+            } else if (this->game_board[y][x]->checkIf((char*) "respawn")) {
 
                 this->ghost_spawns.push_back(this->game_board[y][x]->getLocation());
 
@@ -424,13 +424,13 @@ void PlaySpace::renderPlaySpace () {
 // if found the pellet is removed
 bool PlaySpace::checkForPellet (const int x, const int y) {
 
-    return (this->game_board[x][y]->checkIf("pellet"));  
+    return (this->game_board[x][y]->checkIf((char*) "pellet"));  
 
 }
 
 // checks for a wall at x, y and returns the result
 bool PlaySpace::isWall (const int x, const int y) {
 
-    return (this->game_board[y][x]->checkIf("wall"));
+    return (this->game_board[y][x]->checkIf((char*) "wall"));
 
 }

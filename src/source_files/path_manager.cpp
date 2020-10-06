@@ -1,5 +1,6 @@
 // esential includes
 #include <stdio.h>
+#include <stdlib.h>
 #include <bits/stdc++.h>
 #include <utility>
 
@@ -103,10 +104,10 @@ bool PathManager::isEnd (const int x, const int y) {
 // with respect to the destination using distance formula
 float PathManager::calculateHuristic (const int x, const int y) {
 
-    int a = (x - this->destination_location.x);
-    int b = (y - this->destination_location.y);
+    int a = abs((x - this->destination_location.x));
+    int b = abs((y - this->destination_location.y));
 
-    return (double) sqrt((x * x) + (y * y));
+    return (double) sqrt((a * a) + (b * b));
 
 }
 
@@ -217,7 +218,7 @@ int PathManager::findNextMoveDirection(const int x, const int y) {
     // else keep going down the path
     } else {
 
-        this->findNextMoveDirection(this->path_board[y][x]->parent.second, this->path_board[y][x]->parent.first);
+        return this->findNextMoveDirection(this->path_board[y][x]->parent.second, this->path_board[y][x]->parent.first);
     
     }
 
