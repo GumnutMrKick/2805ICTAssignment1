@@ -437,6 +437,6 @@ bool PlaySpace::checkForPellet (const int x, const int y) {
 // checks for a wall at x, y and returns the result
 bool PlaySpace::isWall (const int x, const int y) {
 
-    return (this->game_board[x][y]->checkIf("wall"));
+    return (this->game_board[y][x]->checkIf("wall"));
 
 }
