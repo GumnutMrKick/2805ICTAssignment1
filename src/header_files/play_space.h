@@ -58,7 +58,6 @@ class PlaySpace {
     private:
 
         // properties
-        int width, height;
         vector <Location> ghost_spawns, player_spawns;
         GameBlock ***game_board;
 
@@ -83,6 +82,8 @@ class PlaySpace {
         PlaySpace (const int gamemode, const int segments_wide, const int segments_tall);
 
     public:
+    
+        int width, height;
 
         // instance holder for static singleton class
         static PlaySpace *instance;
@@ -93,15 +94,8 @@ class PlaySpace {
         // returns a random location for the player to spawn at
         Location giveRanEntitySpawn (string entity);
 
-        // this function generates the next move that should be taken to
-        // get from one place to another
-        int calculateMove(Location current_location, Location desired_location, const int current_direction);
-
         // triggers all the game blocks to add themselves to the render queue
         void renderPlaySpace ();
-
-
-
 
         // checks for a pellet at x, y and returns the result,
         // if found the pellet is removed

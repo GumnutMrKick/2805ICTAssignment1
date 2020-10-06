@@ -82,12 +82,6 @@ class PathManager {
         // to get to it's destination
         int calculateNextMove(Location current_location, Location destination_location, const int current_direction);
 
-
-
-
-
-
-
 };
 
 #endif

@@ -13,6 +13,8 @@
 #include "../header_files/play_space.h"
 // import animation handler file
 #include "../header_files/animation_handler.h"
+// import path manager file
+#include "../header_files/path_manager.h"
 
 using namespace std;
 
@@ -152,7 +154,10 @@ class EntityManager {
         int frame, playerMove;
 
         // playspace instance
-        PlaySpace *play_space;
+        PlaySpace *play_space = nullptr;
+
+        // path manager instance
+        PathManager *path_manager = nullptr;
 
         // increases a given number with respect to
         // it's ghost number

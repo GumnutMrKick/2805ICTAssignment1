@@ -8,8 +8,14 @@
 
 
 // include my stuff
+// import display manager file
+#include "../header_files/display_manager.h"
 // import play space file
 #include "../header_files/play_space.h"
+// import animation handler file
+#include "../header_files/animation_handler.h"
+// import path manager file
+#include "../header_files/path_manager.h"
 
 using namespace std;
 
@@ -250,6 +256,9 @@ EntityManager::EntityManager (const int game_mode) {
 
     //initialise the playspace instance holder
     this->play_space = PlaySpace::getInstance();
+
+    //initialise the path manager instance holder
+    this->path_manager = new PathManager(this->play_space->width, this->play_space->height);
 
     // initialise the frame counter
     this->frame = 0;

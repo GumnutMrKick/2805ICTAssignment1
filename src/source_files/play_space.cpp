@@ -403,12 +403,6 @@ Location PlaySpace::giveRanEntitySpawn (string entity) {
 
 }
 
-// this function generates the next move that should be taken to
-// get from one place to another
-int calculateMove(Location current_location, Location desired_location, const int current_direction) {
-    
-}
-
 // triggers all the game blocks to add themselves to the render queue
 void PlaySpace::renderPlaySpace () {
 
