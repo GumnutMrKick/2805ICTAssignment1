@@ -101,6 +101,9 @@ class PlaySpace {
         // if found the pellet is removed
         bool checkForPellet (const int x, const int y);
 
+        // checks for an empty space at x, y and returns the result
+        bool checkForEmpty (const int x, const int y);
+
         // checks for a wall at x, y and returns the result
         bool isWall (const int x, const int y);
 

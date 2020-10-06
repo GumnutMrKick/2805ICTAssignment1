@@ -37,7 +37,7 @@ class Entity {
         // general variables to run the basic animation /movement
         // rendering of any entity
         Location entity_location;
-        int movement_frame, animation_frame, propulsion;
+        int movement_frame, animation_frame, propulsion, direction;
 
         // loads the animations of the entity
         void loadAnimations(pair < vector < pair < string, Animation* > >, int > loaded_animations);
@@ -62,7 +62,7 @@ class Entity {
 
         // decides the next move that will be taken by the
         // entity
-        virtual void resolveEntityState() = 0;
+        virtual void resolveEntityState(const int direction = 0) = 0;
 
         // updates the entites location properties
         virtual void entityMovementUpdate () = 0;
@@ -88,7 +88,7 @@ class Enigma : public Entity {
         void setRun (const bool state);
 
         // resolves the enigma's state
-        void resolveEntityState();
+        void resolveEntityState(const int direction = 0);
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -99,19 +99,23 @@ class Player : public Entity {
 
     private:
         // properties
-        
+        bool dead, change;
+
+        PlaySpace *play_space;
 
     public:
 
         // constructor
         Player (const int gamemode, Location spawn);
 
-        // resolves the players state deciding if the
-        // collisions have happened
-        void resolveEntityState();
+        // resolves the players state
+        void resolveEntityState(const int direction = 0);
 
         // updates the entites location properties
         void entityMovementUpdate ();
+
+
+
 
 };
 
@@ -123,20 +127,22 @@ class Ghost : public Entity {
         int ghost_number;
         bool dead;
 
+        PlaySpace *play_space;
+
     public:
 
         // constructor
         Ghost (const int gamemode, const int ghost_number, Location spawn);
 
         // returns the death state of the ghost
-        bool getdeadstate();
+        bool getdeadstate ();
 
         // sets the death state of the ghost
-        void setdeadstate();
+        void setdeadstate (bool state);
 
         // decides the next move that will be taken
         // by the entity
-        void resolveEntityState ();
+        void resolveEntityState (const int direction = 0);
 
         // updates the entites location properties
         void entityMovementUpdate ();
@@ -151,7 +157,8 @@ class EntityManager {
         Enigma* enigma;
         Player* player;
         Ghost* ghosts[4];
-        int frame, playerMove;
+        int frame, playerMove, power_duration;
+        bool ghost_eaten, pellet_eaten, power_eaten;
 
         // playspace instance
         PlaySpace *play_space = nullptr;

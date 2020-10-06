@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <bits/stdc++.h>
 #include <utility>
+#include <vector>
 
 // include my stuff
 // import play space manager file
@@ -38,8 +39,9 @@ class PathManager {
 
         // properties
         int width, height, chossen_direction;
-        bool is_found, **extended_board;
-        PathNode*** path_board;
+        bool is_found;
+        vector <vector <bool>> extended_board;
+        vector <vector <PathNode*>> path_board;
 
         PlaySpace *play_space = nullptr;
 
