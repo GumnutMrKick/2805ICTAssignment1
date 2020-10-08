@@ -28,8 +28,9 @@ int Control_bindings :: SDLToCommand (const int keycode) {
     if (keycode == this->down) return 2;
     if (keycode == this->left) return 3;
 
+    //return -1;
     return -1;
-
+    
 }
         
 // deconstructor    

@@ -60,10 +60,8 @@ void Game::handleGameEvents() {  //const char* event) {
         
             case SDL_KEYDOWN :
 
-                cout << endl << event.key.keysym.sym << endl << this->bindings_manager->SDLToCommand(event.key.keysym.sym) << endl;
-
-
-                //this->entity_manager->updateInput(this->bindings_manager->SDLToCommand(event.key.keysym.sym));
+                int direction = this->bindings_manager->SDLToCommand(event.key.keysym.sym);
+                if (direction != (-1)) this->entity_manager->updateInput(direction);
 
             break;
 
@@ -72,12 +70,6 @@ void Game::handleGameEvents() {  //const char* event) {
                 cout << "the sdl quit event has been called";
                 this->running = false;
             
-            break;
-        
-            default:
-
-                //cout << "an unhandled event type has been raised";
-
             break;
         
         }
@@ -99,7 +91,6 @@ void Game::update () {
 
 
     // -------------------- update --------------------
-
     // update entities
     this->entity_manager->updateEntities();
 

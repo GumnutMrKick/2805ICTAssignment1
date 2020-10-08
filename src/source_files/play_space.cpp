@@ -424,6 +424,8 @@ void PlaySpace::renderPlaySpace () {
 // if found the pellet is removed
 bool PlaySpace::checkForPellet (const int x, const int y) {
 
+    cout << "location has pellet" << endl;
+
     return (this->game_board[y][x]->checkIf((char*) "pellet"));  
 
 }
@@ -431,6 +433,7 @@ bool PlaySpace::checkForPellet (const int x, const int y) {
 // checks for an empty space at x, y and returns the result
 bool PlaySpace::checkForEmpty (const int x, const int y) {
 
+    cout << "location is empty" << endl;
     return (this->game_board[y][x]->checkIf((char*) "empty"));  
 
 }
