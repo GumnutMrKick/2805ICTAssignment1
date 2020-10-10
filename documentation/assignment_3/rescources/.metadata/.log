@@ -23,3 +23,45 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.papyrus.infra.properties 4 0 2020-10-10 20:24:44.510
+!MESSAGE The plugin org.eclipse.papyrus.designer.ucm.properties[1072] contributed an invalid extension for org.eclipse.papyrus.infra.properties.contexts
+!STACK 0
+java.io.IOException: java.lang.NullPointerException
+	at org.eclipse.papyrus.infra.emf.utils.EMFHelper.loadEMFModel(EMFHelper.java:380)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.loadEMFModel(ConfigurationManager.java:183)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.addContext(ConfigurationManager.java:524)
+	at org.eclipse.papyrus.infra.properties.internal.ContextExtensionPoint.processContext(ContextExtensionPoint.java:93)
+	at org.eclipse.papyrus.infra.properties.internal.ContextExtensionPoint.<init>(ContextExtensionPoint.java:62)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.start(ConfigurationManager.java:169)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.getInstance(ConfigurationManager.java:143)
+	at org.eclipse.papyrus.views.properties.Activator$1.run(Activator.java:75)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: java.lang.NullPointerException
+	at org.eclipse.papyrus.infra.properties.catalog.PropertiesCatalog.createResource(PropertiesCatalog.java:51)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.createResource(ResourceSetImpl.java:434)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.demandCreateResource(ResourceSetImpl.java:243)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getResource(ResourceSetImpl.java:400)
+	at org.eclipse.papyrus.infra.emf.utils.EMFHelper.loadEMFModel(EMFHelper.java:373)
+	... 8 more
+
+!ENTRY org.eclipse.papyrus.infra.properties 4 0 2020-10-10 20:24:44.516
+!MESSAGE The plugin org.eclipse.papyrus.designer.ucm.properties[1072] contributed an invalid extension for org.eclipse.papyrus.infra.properties.contexts
+!STACK 0
+java.io.IOException: java.lang.NullPointerException
+	at org.eclipse.papyrus.infra.emf.utils.EMFHelper.loadEMFModel(EMFHelper.java:380)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.loadEMFModel(ConfigurationManager.java:183)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.addContext(ConfigurationManager.java:524)
+	at org.eclipse.papyrus.infra.properties.internal.ContextExtensionPoint.processContext(ContextExtensionPoint.java:93)
+	at org.eclipse.papyrus.infra.properties.internal.ContextExtensionPoint.<init>(ContextExtensionPoint.java:62)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.start(ConfigurationManager.java:169)
+	at org.eclipse.papyrus.views.properties.runtime.ConfigurationManager.getInstance(ConfigurationManager.java:143)
+	at org.eclipse.papyrus.views.properties.Activator$1.run(Activator.java:75)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: java.lang.NullPointerException
+	at org.eclipse.papyrus.infra.properties.catalog.PropertiesCatalog.createResource(PropertiesCatalog.java:51)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.createResource(ResourceSetImpl.java:434)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.demandCreateResource(ResourceSetImpl.java:243)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getResource(ResourceSetImpl.java:400)
+	at org.eclipse.papyrus.infra.emf.utils.EMFHelper.loadEMFModel(EMFHelper.java:373)
+	... 8 more

@@ -444,8 +444,7 @@ double EntityManager::scaleScore (const int score) {
     // generate the scaler, it's equation is to find the ammount of time that has passed
     // since game start as a percentage of 5 minutes, this will then
     // be taken away from 1 giving the scaler
-    float x, score_scaler; 
-    x = (float) score;
+    float score_scaler; 
     score_scaler = (float)  ((float) 1 - (float) this->tick_cntr / 18000);
     // don't let it go below .5
     if (score_scaler < 0.5) score_scaler = 0.5;

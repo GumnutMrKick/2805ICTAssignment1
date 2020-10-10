@@ -15,8 +15,8 @@ Pacman
 // y_pos
 20
 // width
-2
+4
 // height
-2
+4
 // gamemode?
 0
