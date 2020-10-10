@@ -214,11 +214,16 @@ void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const 
             id = segment[a][b];
 
             switch (id) {
+               
+                case (56):
+                    str = (char*) "respawnwall";
+                break;
+               
                 case (58):
                     str = (char*) "empty";
                 break;
 
-                case ((59 || 56)):
+                case (59):
                     str = (char*) "respawn";
                 break;
 

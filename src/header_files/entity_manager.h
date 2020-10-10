@@ -77,26 +77,6 @@ class Entity {
 
 };
 
-class Enigma : public Entity {
-    private:
-        bool run;
-
-    public:
-
-        // constructor
-        Enigma (const int gamemode, Location spawn);
-
-        // sets the state of the run bool variable
-        void setRun (const bool state);
-
-        // resolves the enigma's state
-        void resolveEntityState(const int direction = 0);
-
-        // updates the entites location properties
-        void entityMovementUpdate ();
-
-};
-
 class Player : public Entity {
 
     private:
@@ -156,7 +136,6 @@ class EntityManager {
     private:
 
         // properties
-        Enigma* enigma;
         Player* player;
         Ghost* ghosts[4];
         int frame, playerMove;
@@ -184,8 +163,6 @@ class EntityManager {
         // for all the active entities (they will be defined
         // at the bottom of the cpp file for readability)
       
-        // supplies the enigma with their animations
-        void supplyEnigmaAnimations ();
         // supplies the player with their animations
         void supplyPlayerAnimations ();
         // supplies each ghost with their animations

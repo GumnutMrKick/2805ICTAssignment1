@@ -117,55 +117,6 @@ void Entity::entityRender() {
 
 }
 
-// constructor this is an
-Enigma::Enigma (const int gamemode, Location spawn) {
-
-    this->run = false;
-    this->state = "";
-
-    // this should probably be moved into the basic entity
-    int propulsion;
-
-    propulsion = ((gamemode < 2) ?  16 : 2);
-
-    // initialise basic components
-    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y);
-
-}
-
-// sets the state of the run bool variable
-void Enigma::setRun(const bool state) {
-
-    this->run = state;
-
-}
-
-// decides the next move that will be taken
-// by the entity
-void Enigma::resolveEntityState(const int direction) {
-
-    this->state = "run";
-
-}
-
-// updates the entites location properties
-void Enigma::entityMovementUpdate () {
-
-    Location current_location = this->getCurrentLocation();
-
-    if (!this->run) { 
-
-        this->changeCurrentLocation((current_location.x + this->propulsion), current_location.y);
-
-    } else {
-
-        Location current_location = this->getCurrentLocation();
-        this->changeCurrentLocation(-16, current_location.y);
-
-    }
-
-}
-
 // constructor
 Player::Player (const int gamemode, Location spawn) {
 
@@ -208,7 +159,7 @@ void Player::entityMovementUpdate() {
 
         map_x = (int) ((this->entity_location.x - (this->entity_location.x % 16)) / 16);
         map_y = (int) ((this->entity_location.y - (this->entity_location.y % 16)) / 16);
-        cout << "gonna move ";
+
         switch(this->direction) {
 
             case (0) :
@@ -216,7 +167,6 @@ void Player::entityMovementUpdate() {
                 x_change = 0;
                 y_change = -1;
                 animation_state = "up";
-        cout << "up" << endl;
 
             break;
 
@@ -225,7 +175,6 @@ void Player::entityMovementUpdate() {
                 x_change = 1;
                 y_change = 0;
                 animation_state = "right";
-        cout << "right" << endl;
 
             break;
 
@@ -234,7 +183,6 @@ void Player::entityMovementUpdate() {
                 x_change = 0;
                 y_change = 1;
                 animation_state = "down";
-        cout << "down" << endl;
 
             break;
 
@@ -243,7 +191,6 @@ void Player::entityMovementUpdate() {
                 x_change = -1;
                 y_change = 0;
                 animation_state = "left";
-        cout << "left" << endl;
 
             break;
 
@@ -259,8 +206,6 @@ void Player::entityMovementUpdate() {
         int new_y = this->entity_location.y;
 
         if (this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
-
-            cout << "is wall can't move" << endl;
 
             x_change = 0;
             y_change = 0;
@@ -350,7 +295,7 @@ void Ghost::entityMovementUpdate () {
         // get current map coords
         int map_x, map_y;
 
-        cout << "I'm trying to go this way" << this->direction<< endl;
+        cout << this->ghost_number <<" I'm trying to go this way" << this->direction<< endl;
 
         map_x = (int) ((this->entity_location.x - (this->entity_location.x % 16)) / 16);
         map_y = (int) ((this->entity_location.y - (this->entity_location.y % 16)) / 16);
@@ -538,14 +483,11 @@ EntityManager::EntityManager (const int game_mode, const int segments_wide, cons
     this->frame = 0;
 
     // initialise the active entities
-    // enigma
-    // this->enigma = new Enigma(game_mode, generateLocationHolder(0, 0));
-    
-    cout << "hello1" << endl;
     // player
     this->player = new Player(game_mode, this->play_space->giveRanEntitySpawn("player"));
-    cout << "hello2" << endl;
-    
+
+    cout << this->play_space->giveRanEntitySpawn("ghost").x << endl;
+
     // ghosts
     // blinky
     this->ghosts[0] = new Ghost(game_mode, 0, this->play_space->giveRanEntitySpawn("ghost"));
@@ -555,28 +497,22 @@ EntityManager::EntityManager (const int game_mode, const int segments_wide, cons
     this->ghosts[2] = new Ghost(game_mode, 2, this->play_space->giveRanEntitySpawn("ghost"));
     // clyde
     this->ghosts[3] = new Ghost(game_mode, 3, this->play_space->giveRanEntitySpawn("ghost"));
-    cout << "hello3" << endl;
 
     // give entities their animations
     this->supplyEntityAnimations();
-    cout << "hello4" << endl;
 
     // set a starting animation for all of the entities
-    //this->enigma->entityAnimationUpdate("run");
     this->player->entityAnimationUpdate("nothing");
-    this->ghosts[0]->entityAnimationUpdate("left");
-    this->ghosts[1]->entityAnimationUpdate("left");
-    this->ghosts[2]->entityAnimationUpdate("left");
-    this->ghosts[3]->entityAnimationUpdate("left");
-    cout << "hello5" << endl;
+    this->ghosts[0]->entityAnimationUpdate("up");
+    this->ghosts[1]->entityAnimationUpdate("up");
+    this->ghosts[2]->entityAnimationUpdate("up");
+    this->ghosts[3]->entityAnimationUpdate("up");
 
     // info bar manager initialisation
     this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((1 * 16) * 11));
     cout << "info bar manager : " << ((this->info_bar) ? "OK" : "error") << endl;
     // take start time
     this->game_start = SDL_GetTicks();
-    cout << "hello6" << endl;
-
 
 }
 
@@ -584,7 +520,6 @@ EntityManager::EntityManager (const int game_mode, const int segments_wide, cons
 void EntityManager::updateInput (const int code) {
 
     this->playerMove = code;
-    cout << "taking in input " << code << endl;
 
 }
 
@@ -609,8 +544,6 @@ void EntityManager::updateEntities() {
     clyde_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[3]->getCurrentLocation()), this->ghosts[3]->direction);
 
     // resolve updates
-    //this->enigma->resolveEntityState();
-    if (this->playerMove != -1)cout << "about to give" <<this->playerMove << endl;
     this->player->resolveEntityState(this->playerMove);
     this->ghosts[0]->resolveEntityState(blinky_move);
     this->ghosts[1]->resolveEntityState(pinky_move);
@@ -618,7 +551,6 @@ void EntityManager::updateEntities() {
     this->ghosts[3]->resolveEntityState(clyde_move);
 
     //deliver updates
-    //this->enigma->entityUpdate(this->frame);
     this->player->entityUpdate(this->frame);
     this->ghosts[0]->entityUpdate(this->frame);
     this->ghosts[1]->entityUpdate(this->frame);
@@ -686,7 +618,6 @@ void EntityManager::updateEntities() {
 // renders the game's active entities
 void EntityManager::renderEntities() {
 
-    //this->enigma->entityRender();
     this->player->entityRender();
     this->ghosts[0]->entityRender();
     this->ghosts[1]->entityRender();
@@ -698,33 +629,6 @@ void EntityManager::renderEntities() {
 // these functions contain the animation information
 // for all the active entities (they will be defined
 // at the bottom of the cpp file for readability)
-void EntityManager::supplyEnigmaAnimations () {
-    
-    // initialise the animations variable
-    pair < vector < pair < string, Animation* > >, int > enigma_animations;
-
-    // set number of animations
-    enigma_animations.second = 1;
-
-    // create Animations
-
-    // create animation 1 - run
-    // initialise the animation holder
-    pair < string, Animation* > run_animation;
-    // set animation name
-    run_animation.first = "run";
-    // create the sprite_ids array
-    int* sprite_ids_1 = new int[2] {116, 117};
-    // create Animation object
-    run_animation.second = new Animation(sprite_ids_1, 2);
-    // push back animation 1 - run
-    enigma_animations.first.push_back(run_animation);
-
-    // load all of the animations into the handler
-    this->enigma->loadAnimations(enigma_animations);
-
-} 
-
 void EntityManager::supplyPlayerAnimations () {
 
     // initialise the animations variable
@@ -945,7 +849,6 @@ void EntityManager::supplyGhostAnimations (const int gN) {
 // this function calls the above functions
 void EntityManager::supplyEntityAnimations () {
 
-    //this->supplyEnigmaAnimations();
     this->supplyPlayerAnimations();
     this->supplyGhostAnimations(0);
     this->supplyGhostAnimations(1);
