@@ -32,20 +32,19 @@ class Entity {
         AnimationHandler* animation_handler;
 
     public:
-        // properties
-        // the state of the entity
+        // properties that need to stay public for the inherited classes
+        // general variables to run the basic animation / movement
+        // and rendering of any entity
         string state;
-        
-        // general variables to run the basic animation /movement
-        // rendering of any entity
-        Location entity_location;
-        int movement_frame, animation_frame, propulsion, direction;
+        Location entity_location, spawn;
+        int propulsion, direction;
+        bool dead, change;
 
         // loads the animations of the entity
         void loadAnimations(pair < vector < pair < string, Animation* > >, int > loaded_animations);
 
         // the basic initialisation required by any form of entity
-        void basicEntityInitialisation (const int gamemode, const int x, const int y);
+        void basicEntityInitialisation (const int gamemode, Location spawn);
 
         // changes the current location of the entity
         void changeCurrentLocation (const int x, const int y);
@@ -59,36 +58,43 @@ class Entity {
         // returns the current state of the entity
         string getCurrentState ();
 
-        // updates the entities properties
-        void entityUpdate(const int frame);
-
         // decides the next move that will be taken by the
         // entity
-        virtual void resolveEntityState(const int direction = 0) = 0;
+        virtual void resolveEntityState (const int direction = 0) = 0;
 
         // updates the entites location properties
         virtual void entityMovementUpdate () = 0;
 
         // updates the entites animation settings
-        void entityAnimationUpdate (string state);
+        void entityAnimationUpdate ();
+
 
         // runs the rendering process of the entity
         void entityRender ();
 
+        // sets the dead bool to given state
+        void setDeadState (bool state);
+
+        // returns the state of the dead bool property
+        bool isDead ();
+
+        // respawns the entity at it's spawn
+        void respawn ();
+
+        // transitions the entity into the death state
+        virtual void die () = 0;
+
 };
 
 class Player : public Entity {
-
-    private:
+        
         // properties
-        bool dead, change;
-
-        PlaySpace *play_space;
+        PlaySpace *play_space; 
 
     public:
 
         // constructor
-        Player (const int gamemode, Location spawn);
+        Player (const int game_mode, Location spawn);
 
         // resolves the players state
         void resolveEntityState(const int direction = 0);
@@ -96,8 +102,8 @@ class Player : public Entity {
         // updates the entites location properties
         void entityMovementUpdate ();
 
-
-
+        // transitions the player into the death state
+        void die ();
 
 };
 
@@ -105,22 +111,15 @@ class Ghost : public Entity {
 
     private:
         // properties
-        Location spawn;
         int ghost_number;
-        bool dead, change;
-
-        PlaySpace *play_space;
+        bool scared;
+        PlaySpace *play_space; 
 
     public:
 
+
         // constructor
         Ghost (const int gamemode, const int ghost_number, Location spawn);
-
-        // returns the death state of the ghost
-        bool getdeadstate ();
-
-        // sets the death state of the ghost
-        void setdeadstate (bool state);
 
         // decides the next move that will be taken
         // by the entity
@@ -128,6 +127,12 @@ class Ghost : public Entity {
 
         // updates the entites location properties
         void entityMovementUpdate ();
+
+        // transitions the ghost into the death state
+        void die ();
+
+        // changes the value of the ghosts scared flag
+        void setScared (bool state);
 
 };
 
@@ -138,16 +143,16 @@ class EntityManager {
         // properties
         Player* player;
         Ghost* ghosts[4];
-        int frame, playerMove;
-        const int power_duration = 1000;
-
+        int frame, movement_frame, animation_frame, player_move, lives = 3;
+        const int respawn_tick_duration = 500, invulnrability_tick_duration = 2000;
+        bool player_invulnrable;
+        Uint32 tick_cntr, invulnrability_over, player_respawn, blinky_respawn, pinky_respawn, inky_respawn, clyde_respawn;
+        
         //info bar properties
         bool ghost_eaten, pellet_eaten, power_eaten;
         InfoBarManager *info_bar = nullptr;
-        double score_scaler;
         const int score_pellet = 100, score_ghost = 1000, score_power = 500;
         int player_score = 0;
-        Uint32 game_start, invulnrability_start;
 
         // playspace instance
         PlaySpace *play_space = nullptr;
@@ -176,11 +181,11 @@ class EntityManager {
 
         // this function generates the targeting for
         // the ghost path seeking
-        Location genGhostTarget (const int ghost_number, string ghost_state);
+        Location genGhostTarget (const int ghost_number);
 
         // adjusts the score depending on how far into
         // the game the score was obtained
-        double scaleScore (const int score, const Uint32 time_difference = 0);
+        double scaleScore (const int score);
 
     public:
 
@@ -191,7 +196,7 @@ class EntityManager {
         void updateInput(const int code);
 
         // preforms the nessary updates to the game's active entities
-        void updateEntities();
+        int updateEntities();
 
         // renders the game's active entities
         void renderEntities();

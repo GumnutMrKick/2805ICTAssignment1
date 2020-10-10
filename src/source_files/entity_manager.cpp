@@ -6,7 +6,6 @@
 #include <utility>
 #include <vector>
 
-
 // include my stuff
 // import display manager file
 #include "../header_files/display_manager.h"
@@ -24,7 +23,6 @@ using namespace std;
 // include self
 #include "../header_files/entity_manager.h"
 
-
 // loads the animations of the entity
 void Entity::loadAnimations(pair < vector < pair < string, Animation* > > , int > loaded_animations) {
 
@@ -34,23 +32,21 @@ void Entity::loadAnimations(pair < vector < pair < string, Animation* > > , int 
 }
 
 // the basic initialisation required by any form of entity
-void Entity::basicEntityInitialisation (const int gamemode, const int x, const int y) {
+void Entity::basicEntityInitialisation (const int game_mode, Location spawn) {
 
     // initialise the entities location
-    this->entity_location.x = x;
-    this->entity_location.y = y;
+    this->spawn = spawn;
+    this->entity_location.x = spawn.x;
+    this->entity_location.y = spawn.y;
  
-    // initialise the frame counter and animation timer 
-    this->animation_frame = 10;
-
-    // change movement frame based on gamemode
-    this->movement_frame = ((gamemode < 2) ?  40 : 4);
-
     // set propulsion
-    this->propulsion = ((gamemode < 2) ?  16 : 1);
+    this->propulsion = ((game_mode < 2) ?  16 : 1);
 
-    // set entity direction to left for initialisation
+    // set entity direction to up for initialisation
     this->direction = 0;
+
+    // initialise death flag
+    this->dead = false;
 
 }
 
@@ -83,30 +79,9 @@ string Entity::getCurrentState () {
 
 }
 
-// updates the entities properties
-void Entity::entityUpdate (const int frame) {
+void Entity::entityAnimationUpdate () {
 
-    if (frame != 0) {
-
-        if ((frame % this->animation_frame) == 0) {
-
-            this->entityAnimationUpdate(this->state);
-
-        }
-
-        if ((frame % this->movement_frame) == 0) {
-            
-            this->entityMovementUpdate();
-
-        }
-
-    }
-
-}
-
-void Entity::entityAnimationUpdate (string state) {
-
-    this->animation_handler->update(state);
+    this->animation_handler->update(this->state);
 
 }
 
@@ -117,22 +92,44 @@ void Entity::entityRender() {
 
 }
 
+// sets the dead bool to given state
+void Entity::setDeadState (bool state) {
+
+    this->dead = state;
+
+}
+
+// returns the state of the dead bool property
+bool Entity::isDead () {
+
+    return this->dead;
+
+}
+
+//respawns the entity at it's spawn
+void Entity::respawn () {
+
+    this->setDeadState(false);
+    this->changeCurrentLocation(this->spawn.x, this->spawn.y);
+    this->direction = 0;
+    this->changeCurrentState("up");
+
+}
+
 // constructor
 Player::Player (const int gamemode, Location spawn) {
 
+    // get the playspace instance
     this->play_space = PlaySpace::getInstance();
 
-    this->dead = false;
-
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y);
+    this->basicEntityInitialisation(gamemode, spawn);
     
 }
 
 // decides the statenext move that will be taken
 // by the entity
 void Player::resolveEntityState(const int direction) {
-
 
     // if the given direction is different
     if ((direction != -1) && (this->direction != direction)) {
@@ -202,66 +199,59 @@ void Player::entityMovementUpdate() {
 
         }
         
+        // initialise new value holders
         int new_x = this->entity_location.x;
         int new_y = this->entity_location.y;
 
-        if (this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
+        // set the new state value
+        this->state = animation_state;
 
-            x_change = 0;
-            y_change = 0;
-
-        }   else {
+        if (!this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
 
             if (this->change) {
 
                 new_x -= (this->entity_location.x % 16);
                 new_y -= (this->entity_location.y % 16);
 
-                this->entityAnimationUpdate(animation_state);
+                this->entityAnimationUpdate();
                 this->change = false;
 
             }
 
+            new_x += (x_change * this->propulsion);
+            new_y += (y_change * this->propulsion);
+
+            this->changeCurrentLocation(new_x, new_y);
+
         }
 
-
-        new_x += (x_change * this->propulsion);
-        new_y += (y_change * this->propulsion);
-
-        this->state = animation_state;
-
-        this->changeCurrentLocation(new_x, new_y);
-
     }
+
+}
+
+// transitions the player into the death state
+void Player::die () {
+
+    this->setDeadState(true);
+    this->state = "death";
+    this->entityAnimationUpdate();
 
 }
 
 // constructor
 Ghost::Ghost (const int gamemode, const int ghost_number, Location ghost_spawn) {
 
+    // get the playspace instance
     this->play_space = PlaySpace::getInstance();
 
     // initailise the properties
-    this->dead = false;
     this->ghost_number = ghost_number;
-    this->spawn = ghost_spawn;
 
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, this->spawn.x,  this->spawn.y);
+    this->basicEntityInitialisation(gamemode, ghost_spawn);
 
-}
-
-// returns the death state of the ghost
-bool Ghost::getdeadstate () {
-
-    return this->dead;
-
-}
-
-// sets the death state of the ghost
-void Ghost::setdeadstate (bool state) {
-
-    this->dead = state;
+    // intialise scared flag
+    this->scared = false;
 
 }
 
@@ -269,117 +259,116 @@ void Ghost::setdeadstate (bool state) {
 // by the entity
 void Ghost::resolveEntityState(const int direction) {
 
-// if the given direction is different
-    if ((direction != -1) && (this->direction != direction)) {
+    // if the given direction is the same leave
+    if (this->direction == direction) return;
 
-
-        this->change = true;
-        this->direction = direction;
-
-    } else if (direction == -1) {
-
-        this->direction = (this->direction % 3);
-
-    }
+    this->change = true;
+    this->direction = direction;
 
 }
 
 // updates the entites location properties
 void Ghost::entityMovementUpdate () {
 
-    if (!this->dead) {
+    string animation_state;
+    int x_change, y_change;
 
-        string animation_state;
-        int x_change, y_change;
+    // get current map coords
+    int map_x, map_y;
 
-        // get current map coords
-        int map_x, map_y;
+    map_x = (int) ((this->entity_location.x - (this->entity_location.x % 16)) / 16);
+    map_y = (int) ((this->entity_location.y - (this->entity_location.y % 16)) / 16);
 
-        cout << this->ghost_number <<" I'm trying to go this way" << this->direction<< endl;
+    switch(this->direction) {
 
-        map_x = (int) ((this->entity_location.x - (this->entity_location.x % 16)) / 16);
-        map_y = (int) ((this->entity_location.y - (this->entity_location.y % 16)) / 16);
-        cout << "gonna move ";
-        switch(this->direction) {
-
-            case (0) :
-
-                x_change = 0;
-                y_change = -1;
-                animation_state = "up";
-        cout << "up" << endl;
-
-            break;
-
-            case (1) :
-
-                x_change = 1;
-                y_change = 0;
-                animation_state = "right";
-        cout << "right" << endl;
-
-            break;
-
-            case (2) :
-
-                x_change = 0;
-                y_change = 1;
-                animation_state = "down";
-        cout << "down" << endl;
-
-            break;
-
-            case (3) :
-
-                x_change = -1;
-                y_change = 0;
-                animation_state = "left";
-        cout << "left" << endl;
-
-            break;
-
-            default :
-
-                x_change = 0;
-                y_change = 0;
-                animation_state = "nothing";
-
-        }
-        
-        int new_x = this->entity_location.x;
-        int new_y = this->entity_location.y;
-
-        cout << "checking " << (map_x + x_change) << " " << (map_y + y_change) << endl << this->play_space->isWall((map_x + x_change), (map_y + y_change));
-        if (this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
-
-            cout << "is wall can't move" << endl;
+        case (0) :
 
             x_change = 0;
+            y_change = -1;
+            animation_state = "up";
+
+        break;
+
+        case (1) :
+
+            x_change = 1;
             y_change = 0;
+            animation_state = "right";
 
-        }   else {
+        break;
 
-            if (this->change) {
+        case (2) :
 
-                new_x -= (this->entity_location.x % 16);
-                new_y -= (this->entity_location.y % 16);
+            x_change = 0;
+            y_change = 1;
+            animation_state = "down";
 
-                this->entityAnimationUpdate(animation_state);
-                this->change = false;
+        break;
 
-            }
+        case (3) :
+
+            x_change = -1;
+            y_change = 0;
+            animation_state = "left";
+
+        break;
+
+    }
+    
+    // initialise new value holders
+    int new_x = this->entity_location.x;
+    int new_y = this->entity_location.y;
+
+    // set the new state value
+    // if dead add the dead prefix
+    if (this->isDead()) {
+
+        string add_back = "dead";
+        add_back = add_back.append(animation_state);
+        animation_state = add_back;
+
+    }    
+    
+    // if scared change state to scared, else set calculated state
+    this->state = (((!this->isDead()) && this->scared) ? "scared" : animation_state);
+
+    if (!this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
+
+        if (this->change) {
+
+            new_x -= (this->entity_location.x % 16);
+            new_y -= (this->entity_location.y % 16);
+
+            this->entityAnimationUpdate();
+
+            this->change = false;
 
         }
-
 
         new_x += (x_change * this->propulsion);
         new_y += (y_change * this->propulsion);
 
-        this->state = animation_state;
-
         this->changeCurrentLocation(new_x, new_y);
 
     }
+
+}
+
+// transitions the ghost into the death state
+void Ghost::die () {
+
+    this->setDeadState(true);
+    this->state = "deadup";
+    this->entityAnimationUpdate();
+
+}
+
+// changes the value of the ghosts scared flag
+void Ghost::setScared (bool state) {
+
+    this->scared = state;
+    this->state = ((state) ? "scared" : "up");
+    this->entityAnimationUpdate();
 
 }
 
@@ -389,15 +378,14 @@ Location EntityManager::convertLocationToMap (Location entity_location) {
 
     entity_location.x = ((entity_location.x - (entity_location.x % 16)) / 16);
     entity_location.y = ((entity_location.y - (entity_location.y % 16)) / 16);
+   
     return entity_location;
 
 }
 
 // this function generates the targeting for
 // the ghost path seeking
-Location EntityManager::genGhostTarget (const int ghost_number, string ghost_state) {
-
-    if(ghost_state == "dead") return this->play_space->giveRanEntitySpawn("ghost");
+Location EntityManager::genGhostTarget (const int ghost_number) {
 
     // get the location of pacman
     Location target = this->convertLocationToMap(this->player->getCurrentLocation());
@@ -451,43 +439,59 @@ Location EntityManager::genGhostTarget (const int ghost_number, string ghost_sta
 
 // adjusts the score depending on how far into
 // the game the score was obtained
-double EntityManager::scaleScore (const int score, const Uint32 time_difference) {
+double EntityManager::scaleScore (const int score) {
 
-    // if the scaler has not yet been generated, then generate it
-    // it's equation is to find the ammount of time that has passed
+    // generate the scaler, it's equation is to find the ammount of time that has passed
     // since game start as a percentage of 5 minutes, this will then
     // be taken away from 1 giving the scaler
-    if (this->score_scaler == 0) this->score_scaler = (double) (1 - (time_difference / 300000));
-    
+    float x, score_scaler; 
+    x = (float) score;
+    score_scaler = (float)  ((float) 1 - (float) this->tick_cntr / 18000);
     // don't let it go below .5
-    if (this->score_scaler < 0.5) this->score_scaler = 0.5;
+    if (score_scaler < 0.5) score_scaler = 0.5;
 
-    return ((int) (score * this->score_scaler));
+    return ((int) (score * score_scaler));
 
 }
 
 // constructor
 EntityManager::EntityManager (const int game_mode, const int segments_wide, const int segments_tall) {
 
-    // initialise the display manager instance holder
+
+    // ----- initialise the entity manager properties and flags -----
+    // initialise the display manager instance
     // for the Animation class
     Animation::getDisplayManager();
-
-    //initialise the playspace instance holder
+    
+    // get the playspace instance
     this->play_space = PlaySpace::getInstance();
 
     //initialise the path manager instance holder
     this->path_manager = new PathManager(this->play_space->width, this->play_space->height);
 
-    // initialise the frame counter
-    this->frame = 0;
+    // initialise the tick counter
+    this->tick_cntr = 0;
 
-    // initialise the active entities
+    // initialise event timers, and timer 
+    this->frame = 0;
+    this->animation_frame = 10;
+    this->movement_frame = ((game_mode < 2) ?  40 : 4);
+    this->pellet_eaten = false;
+    this->ghost_eaten = false;
+    this->power_eaten = false;
+
+    // initialise cooldowns
+    this->player_invulnrable = false;
+    this->invulnrability_over = 0;
+    this->player_respawn = 0;
+    this->blinky_respawn = 0;
+    this->pinky_respawn = 0;
+    this->inky_respawn = 0;
+    this->clyde_respawn = 0;
+
+    // ----- initialise the active entities -----
     // player
     this->player = new Player(game_mode, this->play_space->giveRanEntitySpawn("player"));
-
-    cout << this->play_space->giveRanEntitySpawn("ghost").x << endl;
-
     // ghosts
     // blinky
     this->ghosts[0] = new Ghost(game_mode, 0, this->play_space->giveRanEntitySpawn("ghost"));
@@ -501,61 +505,237 @@ EntityManager::EntityManager (const int game_mode, const int segments_wide, cons
     // give entities their animations
     this->supplyEntityAnimations();
 
-    // set a starting animation for all of the entities
-    this->player->entityAnimationUpdate("nothing");
-    this->ghosts[0]->entityAnimationUpdate("up");
-    this->ghosts[1]->entityAnimationUpdate("up");
-    this->ghosts[2]->entityAnimationUpdate("up");
-    this->ghosts[3]->entityAnimationUpdate("up");
+    // set the initial animations
+    this->player->state = "nothing";
+    this->ghosts[0]->state = "up";
+    this->ghosts[1]->state = "up";
+    this->ghosts[2]->state = "up";
+    this->ghosts[3]->state = "up";
 
-    // info bar manager initialisation
+    // start the initial animations
+    this->player->entityAnimationUpdate();
+    this->ghosts[0]->entityAnimationUpdate();
+    this->ghosts[1]->entityAnimationUpdate();
+    this->ghosts[2]->entityAnimationUpdate();
+    this->ghosts[3]->entityAnimationUpdate();
+
+    // ----- info bar manager initialisation -----
     this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((1 * 16) * 11));
     cout << "info bar manager : " << ((this->info_bar) ? "OK" : "error") << endl;
-    // take start time
-    this->game_start = SDL_GetTicks();
 
 }
 
 // a function used to take in user input
 void EntityManager::updateInput (const int code) {
 
-    this->playerMove = code;
+    if ((code >= 0) && (code <= 3))this->player_move = code;
 
 }
 
 // preforms the nessary updates to the game's active entities
-void EntityManager::updateEntities() {
+int EntityManager::updateEntities() {
 
-    string state;
-    int blinky_move, pinky_move, inky_move, clyde_move;
+    if (this->frame != 0) {
 
-    // generate ghost moves
-    // blinky using path finding
-    blinky_move = this->path_manager->calculateNextMove(this->convertLocationToMap(this->ghosts[0]->getCurrentLocation()),
-        this->genGhostTarget(0, ((this->ghosts[0]->getdeadstate()) ? "dead" : "")), this->ghosts[0]->direction);
+        // time for a movement update
+        if ((frame % this->movement_frame) == 0) {
 
-    // pinky with random choices
-    pinky_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[1]->getCurrentLocation()), this->ghosts[1]->direction);
-    
-    // inky with random choices
-    inky_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[2]->getCurrentLocation()), this->ghosts[2]->direction);
+            // ----- check cool downs -----
+            // is invul over
+            if ((this->player_invulnrable) && (this->tick_cntr >= this->invulnrability_over)) {
+                
+                this->player_invulnrable = false;
 
-    // clyde with random choices
-    clyde_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[3]->getCurrentLocation()), this->ghosts[3]->direction);
+                // remove scared flag for ghosts
+                for (int x = 0; x < 4; x++) this->ghosts[x]->setScared(false);
 
-    // resolve updates
-    this->player->resolveEntityState(this->playerMove);
-    this->ghosts[0]->resolveEntityState(blinky_move);
-    this->ghosts[1]->resolveEntityState(pinky_move);
-    this->ghosts[2]->resolveEntityState(inky_move);
-    this->ghosts[3]->resolveEntityState(clyde_move);
+            }
 
-    //deliver updates
-    this->player->entityUpdate(this->frame);
-    this->ghosts[0]->entityUpdate(this->frame);
-    this->ghosts[1]->entityUpdate(this->frame);
-    this->ghosts[2]->entityUpdate(this->frame);
-    this->ghosts[3]->entityUpdate(this->frame);
+            // should the player be respawned
+            if ((this->player->isDead()) && (this->tick_cntr >= this->player_respawn)) {
+
+                if (this->lives != 0) {
+
+                    this->player->respawn();
+                    this->lives--;
+
+                } else {
+                    
+                    return -1;
+                    
+                }
+                
+            }
+
+            // should blinky be respawned
+            if ((this->ghosts[0]->isDead()) && (this->tick_cntr >= this->blinky_respawn)) this->ghosts[0]->respawn();
+            
+            // should pinky be respawned
+            if ((this->ghosts[1]->isDead()) && (this->tick_cntr >= this->pinky_respawn)) this->ghosts[1]->respawn();
+            
+            // should inky be respawned
+            if ((this->ghosts[2]->isDead()) && (this->tick_cntr >= this->inky_respawn)) this->ghosts[2]->respawn();
+            
+            // should clyde be respawned
+            if ((this->ghosts[3]->isDead()) && (this->tick_cntr >= this->clyde_respawn)) this->ghosts[3]->respawn();
+
+            // ----- resolve entity updates and run them -----
+            // resolve player update
+            if (!this->player->isDead()) {
+
+                this->player->resolveEntityState(this->player_move);
+                this->player->entityMovementUpdate();
+
+            }
+
+            // resolve blinky update
+            if (this-ghosts[0]->isDead()){
+            
+                this->ghosts[0]->resolveEntityState(
+                    this->path_manager->randomlyChooseNextMove(
+                        this->convertLocationToMap(this->ghosts[0]->getCurrentLocation()),
+                        this->ghosts[0]->direction
+                    )
+                );
+
+            } else {
+
+                this->ghosts[0]->resolveEntityState(
+                    this->path_manager->calculateNextMove(
+                        this->convertLocationToMap(this->ghosts[0]->getCurrentLocation()),
+                        this->genGhostTarget(0),
+                        this->ghosts[0]->direction
+                    )
+                );
+            
+            }
+            this->ghosts[0]->entityMovementUpdate();
+
+            // resolve pinky update
+            this->ghosts[1]->resolveEntityState(
+                this->path_manager->randomlyChooseNextMove(
+                    this->convertLocationToMap(this->ghosts[1]->getCurrentLocation()),
+                    this->ghosts[1]->direction
+                )
+            );
+            this->ghosts[1]->entityMovementUpdate();
+
+            // resolve inky update
+            this->ghosts[2]->resolveEntityState(
+                this->path_manager->randomlyChooseNextMove(
+                    this->convertLocationToMap(this->ghosts[2]->getCurrentLocation()),
+                    this->ghosts[2]->direction
+                )
+            );
+            this->ghosts[2]->entityMovementUpdate();
+
+            // resolve clyde update
+            this->ghosts[3]->resolveEntityState(
+                this->path_manager->randomlyChooseNextMove(
+                    this->convertLocationToMap(this->ghosts[3]->getCurrentLocation()),
+                    this->ghosts[3]->direction
+                )
+            );
+            this->ghosts[3]->entityMovementUpdate();
+
+            // ----- calculate collisions -----
+            if (!this->player->isDead()) {
+            
+                Location map_pacman = this->convertLocationToMap(this->player->getCurrentLocation());
+                
+                // pellets
+                this->pellet_eaten = this->play_space->checkForPellet(map_pacman.x, map_pacman.y);
+
+                // power pellets
+                this->power_eaten = this->play_space->checkForPowerPellet(map_pacman.x, map_pacman.y);
+
+                // apply powerup if applicable
+                if (this->power_eaten) {
+
+                    this->player_invulnrable = true;
+                    this->invulnrability_over = (this->tick_cntr + this->invulnrability_tick_duration);
+                    
+                    // set scared flag for ghosts
+                    for (int x = 0; x < 4; x++) this->ghosts[x]->setScared(true);
+
+                }
+
+                // ghosts
+                for (int x = 0; x < 4; x++) {
+
+                    if (!this->ghosts[x]->isDead()) {
+
+                        Location map_ghost = this->convertLocationToMap(this->ghosts[x]->getCurrentLocation());
+
+                        // if a collision has been made with pacman
+                        if ((map_pacman.x == map_ghost.x) && (map_pacman.y == map_ghost.y)) {
+
+                            // if the player is invulnrable kill the ghost
+                            if (this->player_invulnrable) {
+
+                                // kill the ghost
+                                this->ghosts[x]->die();
+
+                                // set the appropriate respawn timer
+                                if (x == 0) this->blinky_respawn = (this->tick_cntr + this->respawn_tick_duration);
+                                if (x == 1) this->pinky_respawn = (this->tick_cntr + this->respawn_tick_duration);
+                                if (x == 2) this->inky_respawn = (this->tick_cntr + this->respawn_tick_duration);
+                                if (x == 3) this->clyde_respawn = (this->tick_cntr + this->respawn_tick_duration);
+
+                                this->ghost_eaten = true;
+
+                            // otherwise kill the player 
+                            } else {
+
+                                this->player->die();
+                                this->player_respawn = (this->tick_cntr + this->respawn_tick_duration);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        // time for an animation update
+        if ((this->frame % this->animation_frame) == 0) {
+
+            // prompt entity animation updates
+            this->player->entityAnimationUpdate();
+            this->ghosts[0]->entityAnimationUpdate();
+            this->ghosts[1]->entityAnimationUpdate();
+            this->ghosts[2]->entityAnimationUpdate();
+            this->ghosts[3]->entityAnimationUpdate();
+
+        }
+
+    }
+
+    // ----- update and queue render of info bar -----
+    if (this->pellet_eaten) this->player_score += (int) this->scaleScore(this->score_pellet);
+    if (this->ghost_eaten) this->player_score += (int) this->scaleScore(this->score_ghost);
+    if (this->power_eaten) this->player_score += (int) this->scaleScore(this->score_power);
+
+    // get the player's state for the info bar
+    int info_bar_player_state;
+
+    if (this->player->isDead()) {
+
+        info_bar_player_state = 3;
+
+    } else info_bar_player_state = ((player_invulnrable)? 2 : 1);
+
+    //update and render
+    this->info_bar->updateInfoBar(info_bar_player_state, this->player_score);
+    this->info_bar->renderInfoBar();
+
+    // ----- update frame and tick counters -----
+    this->tick_cntr++;
 
     if (this->frame == 60) {
 
@@ -567,51 +747,12 @@ void EntityManager::updateEntities() {
 
     }
 
-    // ----- calculate collisions -----
-    
-    Location map_pacman = this->convertLocationToMap(this->player->getCurrentLocation());
-    
-    // pellets
-    this->pellet_eaten = this->play_space->checkForPellet(map_pacman.x, map_pacman.y);
-
-    // power pellets
-    this->power_eaten = this->play_space->checkForPowerPellet(map_pacman.x, map_pacman.y);
-
-    // ghosts
-    for (int x = 0; x < 4; x++) {
-
-        Location map_ghost = this->convertLocationToMap(this->ghosts[x]->getCurrentLocation());
-
-        if (((map_pacman.x == map_ghost.x) && (map_pacman.y == map_ghost.y))) {
-
-
-
-        }
-
-    }
-
-
-
-
-
-    
-    
-    // now all the updates are done, update and
-    // render the info bar
-    if (this->pellet_eaten) this->player_score += (int) this->scaleScore(this->score_pellet, (SDL_GetTicks() - this->game_start));
-    if (this->ghost_eaten) this->player_score += (int) this->scaleScore(this->score_ghost, (SDL_GetTicks() - this->game_start));
-    if (this->power_eaten) this->player_score += (int) this->scaleScore(this->score_power, (SDL_GetTicks() - this->game_start));
-
-    this->info_bar->updateInfoBar(0, this->player_score);
-    this->info_bar->renderInfoBar();
-
-    // reset the game enviroment movement and
-    // utility variables
-    this->score_scaler = 0;
-    this->playerMove = -1;
+    // ----- reset the game enviroment movement and utility variables -----
     this->pellet_eaten = false;
     this->ghost_eaten = false;
     this->power_eaten = false;
+
+    return 0;
 
 }
 
@@ -787,7 +928,7 @@ void EntityManager::supplyGhostAnimations (const int gN) {
     // set animation name
     scared_animation.first = "scared";
     // create the sprite_ids array
-    int* scared_sprite_ids = new int[4] {incByGN(94, gN), incByGN(95, gN), incByGN(96, gN), incByGN(97, gN)};
+    int* scared_sprite_ids = new int[4] {94, 95, 96, 97};
     // create Animation object
     scared_animation.second = new Animation(scared_sprite_ids, 4);
     // push back animation 5 - scared
@@ -799,7 +940,7 @@ void EntityManager::supplyGhostAnimations (const int gN) {
     // set animation name
     deadup_animation.first = "deadup";
     // create the sprite_ids array
-    int* deadup_sprite_ids = new int[2] {incByGN(98, gN), incByGN(98, gN)};
+    int* deadup_sprite_ids = new int[2] {98, 98};
     // create Animation object
     deadup_animation.second = new Animation(deadup_sprite_ids, 2);
     // push back animation 6 - deadup
@@ -809,9 +950,9 @@ void EntityManager::supplyGhostAnimations (const int gN) {
     // initialise the animation holder
     pair < string, Animation* > deadright_animation;
     // set animation name
-    deadup_animation.first = "deadright";
+    deadright_animation.first = "deadright";
     // create the sprite_ids array
-    int* deadright_sprite_ids = new int[2] {incByGN(99, gN), incByGN(99, gN)};
+    int* deadright_sprite_ids = new int[2] {99, 99};
     // create Animation object
     deadright_animation.second = new Animation(deadright_sprite_ids, 2);
     // push back animation 7 - deadright
@@ -823,7 +964,7 @@ void EntityManager::supplyGhostAnimations (const int gN) {
     // set animation name
     deaddown_animation.first = "deaddown";
     // create the sprite_ids array
-    int* deaddown_sprite_ids = new int[2] {incByGN(100, gN), incByGN(100, gN)};
+    int* deaddown_sprite_ids = new int[2] {100, 100};
     // create Animation object
     deaddown_animation.second = new Animation(deaddown_sprite_ids, 2);
     // push back animation 8 - deaddown
@@ -835,9 +976,9 @@ void EntityManager::supplyGhostAnimations (const int gN) {
     // set animation name
     deadleft_animation.first = "deadleft";
     // create the sprite_ids array
-    int* deadleft_sprite_ids = new int[2] {incByGN(101, gN), incByGN(101, gN)};
+    int* deadleft_sprite_ids = new int[2] {101, 101};
     // create Animation object
-    deadup_animation.second = new Animation(deadleft_sprite_ids, 2);
+    deadleft_animation.second = new Animation(deadleft_sprite_ids, 2);
     // push back animation 9 - deadleft
     ghost_animations.first.push_back(deadleft_animation);
 

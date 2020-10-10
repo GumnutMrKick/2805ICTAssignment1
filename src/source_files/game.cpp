@@ -85,7 +85,8 @@ void Game::update () {
 
     // -------------------- update --------------------
     // update entities
-    this->entity_manager->updateEntities();
+    // if a -1 was recieved the player ran out of lives and the game should end
+    if (this->entity_manager->updateEntities() == -1) this->running = false;
 
     // -------------------- render --------------------
 

@@ -94,7 +94,7 @@ bool PathManager::isStart (const int x, const int y) {
 
 }
 
-// finds if a given x and y is the x and y of the start
+// finds if a given x and y is the x and y of the end
 bool PathManager::isEnd (const int x, const int y) {
 
     if ((this->destination_location.x == x) && (this->destination_location.y == y)) {
@@ -200,10 +200,9 @@ int PathManager::findNextMoveDirection(const int x, const int y) {
 
     // if the next is the start, then figure out what the,
     // direction on the next move should be
-
     if (this->isStart(this->path_board[y][x]->parent.second, this->path_board[y][x]->parent.first)) {
 
-        int new_direction = this->choosen_direction;
+        int new_direction = this->current_direction;
 
         // using the second step find the next move direction
         // by finding it's direction relative to the start
@@ -238,109 +237,13 @@ int PathManager::findNextMoveDirection(const int x, const int y) {
 // returns the direction the entity should move into
 // to get to it's destination
 int PathManager::calculateNextMove(Location current_location, Location destination_location, const int current_direction) {
-    
-    cout << "I probably die in here" << endl;
 
     // copy over
     this->current_location = current_location;
     this->destination_location = destination_location;
-    this->choosen_direction = current_direction;
+    this->current_direction = current_direction;
 
-    pair <int, int> relative_left, relative_right;
-
-    switch (current_direction) {
-    
-        // if the direction is up
-        case (0) :
-
-            relative_left = make_pair(this->current_location.y, (this->current_location.x - 1));
-            relative_right = make_pair(this->current_location.y, (this->current_location.x + 1));
-
-        break;
-
-        // if the direction is right
-        case (1) :
-
-            relative_left = make_pair((this->current_location.y - 1), this->current_location.x);
-            relative_right = make_pair((this->current_location.y + 1), this->current_location.x);
-
-        break;
-
-        // if the direction is down
-        case (2) :
-
-            relative_left = make_pair(this->current_location.y, (this->current_location.x + 1));
-            relative_right = make_pair(this->current_location.y, (this->current_location.x - 1));
-
-        break;
-
-        // if the direction is left
-        case (3) :
-
-            relative_left = make_pair((this->current_location.y + 1), this->current_location.x);
-            relative_right = make_pair((this->current_location.y - 1), this->current_location.x);
-
-        break;
-    
-    }
-
-    // perform short circuit test
-    // if there are walls to the left and the right, it doesn't really
-    // matter what this whole function returns. if there is no choice that,
-    // can currently be made other then forwards then choose forwards
-    if (((this->play_space->isWall(relative_left.second, relative_left.first)) && (this->play_space->isWall(relative_right.second, relative_right.first)))) {
-
-        this->queue.insert(make_pair(0.0, make_pair(current_direction, make_pair(this->current_location.y, this->current_location.x))));
-
-        this->isEnd(this->current_location.x, this->current_location.y);
-
-        while (((!this->queue.empty()) && (!this->is_found))) {
-
-            // put the next position into the holder
-            this->holder = *this->queue.begin();
-
-            // remove it
-            this->queue.erase(this->queue.begin());
-
-            // mark it as extended
-            this->extended_board[holder.second.second.first][holder.second.second.second] = true;
-
-            // extend the path
-            this->extendPath();
-
-        }
-
-        if (!(this->path_board[this->destination_location.y][this->destination_location.x]->parent_cost)) {
-
-            this->findNextMoveDirection(this->destination_location.x, this->destination_location.y);
-        
-        } else {
-
-            this->choosen_direction = -1;
-
-        }
-
-    }
-
-    int toSend = this->choosen_direction;
-    
-    this->reinitialise();
-
-    cout << "proof" << endl;
-
-
-    return toSend;
-
-}
-
-// randomly chosses the next move that should be
-// taken by the ghost assuming that there is a decision
-// to be made
-int PathManager::randomlyChooseNextMove (Location current_location, const int current_direction) {
-
-    // copy over information
-    this->current_location = current_location;
-    this->choosen_direction = current_direction;
+    int new_direction;
 
     pair <int, int> relative_left, relative_right, relative_front;
 
@@ -388,31 +291,158 @@ int PathManager::randomlyChooseNextMove (Location current_location, const int cu
     // if there are walls to the left and the right, it doesn't really
     // matter what this whole function returns. if there is no choice that,
     // can currently be made other then forwards then choose forwards
-    if (((this->play_space->isWall(relative_left.second, relative_left.first)) && (this->play_space->isWall(relative_right.second, relative_right.first)))) {
+    if (this->play_space->isWall(relative_left.second, relative_left.first) && this->play_space->isWall(relative_right.second, relative_right.first)) {
+
+        // if forwards is also blocked give the command to turn around
+        if (this->play_space->isWall(relative_front.second, relative_front.first)) {
+
+            new_direction = ((this->current_direction + 2) % 4);
+
+        // else continue forward
+        } else {
+
+            new_direction = this->current_direction;
+
+        }
+
+    // if the short circuit is not the case however, calculate a path to the objective
+    } else {
+
+        this->queue.insert(make_pair(0.0, make_pair(this->current_direction, make_pair(this->current_location.y, this->current_location.x))));
+
+        this->isEnd(this->current_location.x, this->current_location.y);
+
+        while (((!this->queue.empty()) && (!this->is_found))) {
+
+            // put the next position into the holder
+            this->holder = *this->queue.begin();
+
+            // remove it
+            this->queue.erase(this->queue.begin());
+
+            // mark it as extended
+            this->extended_board[holder.second.second.first][holder.second.second.second] = true;
+
+            // extend the path
+            this->extendPath();
+
+        }
+
+        // if the calculations worked the destination should have a cost, 
+        // if it doesn't then the entity should be told to turn to the left
+        if (!(this->path_board[this->destination_location.y][this->destination_location.x]->parent_cost)) {
+
+            this->findNextMoveDirection(this->destination_location.x, this->destination_location.y);
+        
+        } else {
+
+            new_direction = ((this->current_direction + 3) % 4);
+
+        }
+    
+    }
+
+    // reinitialise for next time
+    this->reinitialise();
+
+    // return the choice
+    return new_direction;
+
+}
+
+// randomly chosses the next move that should be
+// taken by the ghost assuming that there is a decision
+// to be made
+int PathManager::randomlyChooseNextMove (Location current_location, const int current_direction) {
+
+    // copy over
+    this->current_location = current_location;
+    this->destination_location = destination_location;
+    this->current_direction = current_direction;
+
+    int new_direction;
+
+    pair <int, int> relative_left, relative_right, relative_front;
+
+    switch (current_direction) {
+    
+        // if the direction is up
+        case (0) :
+
+            relative_left = make_pair(this->current_location.y, (this->current_location.x - 1));
+            relative_front = make_pair((this->current_location.y - 1), this->current_location.x);
+            relative_right = make_pair(this->current_location.y, (this->current_location.x + 1));
+
+        break;
+
+        // if the direction is right
+        case (1) :
+
+            relative_left = make_pair((this->current_location.y - 1), this->current_location.x);
+            relative_front = make_pair(this->current_location.y, (this->current_location.x + 1));
+            relative_right = make_pair((this->current_location.y + 1), this->current_location.x);
+
+        break;
+
+        // if the direction is down
+        case (2) :
+
+            relative_left = make_pair(this->current_location.y, (this->current_location.x + 1));
+            relative_front = make_pair((this->current_location.y + 1), this->current_location.x);
+            relative_right = make_pair(this->current_location.y, (this->current_location.x - 1));
+
+        break;
+
+        // if the direction is left
+        case (3) :
+
+            relative_left = make_pair((this->current_location.y + 1), this->current_location.x);
+            relative_front = make_pair(this->current_location.y, (this->current_location.x - 1));
+            relative_right = make_pair((this->current_location.y - 1), this->current_location.x);
+
+        break;
+    
+    }
+
+    // perform short circuit test
+    // if there are walls to the left and the right, it doesn't really
+    // matter what this whole function returns. if there is no choice that,
+    // can currently be made other then forwards then choose forwards
+    if (this->play_space->isWall(relative_left.second, relative_left.first) && this->play_space->isWall(relative_right.second, relative_right.first)) {
+
+        // if forwards is also blocked give the command to turn around
+        if (this->play_space->isWall(relative_front.second, relative_front.first)) {
+
+            new_direction = ((this->current_direction + 2) % 4);
+
+        // else continue forward
+        } else {
+
+            new_direction = this->current_direction;
+
+        }
+
+    // if the short circuit is not the case however, calculate a path to the objective
+    } else {
 
         vector <int> choices;
 
-        if (this->play_space->isWall(relative_left.second, relative_left.first)) choices.push_back(3);
-        if (this->play_space->isWall(relative_front.second, relative_front.first)) choices.push_back(0);
-        if (this->play_space->isWall(relative_right.second, relative_right.first)) choices.push_back(1);
+        choices.clear();
+        if (!this->play_space->isWall(relative_left.second, relative_left.first)) choices.push_back(3);
+        if (!this->play_space->isWall(relative_front.second, relative_front.first)) choices.push_back(0);
+        if (!this->play_space->isWall(relative_right.second, relative_right.first)) choices.push_back(1);
 
         int choice = genRanNumberInRange(0, (choices.size() - 1));
 
-        this->choosen_direction += choices[choice];
 
-        this->choosen_direction = (choosen_direction % 3);
-
-    // else if forward is also blocked then the order to turn around should be given
-    } else if (this->play_space->isWall(relative_front.second, relative_front.first)) {
-
-        this->choosen_direction = -1;
+        new_direction = ((this->current_direction + choices[choice]) % 4);
 
     }
 
-    int toSent = this->choosen_direction;
-
+    // reinitialise for next time
     this->reinitialise();
 
-    return toSent;
+    // return the choice
+    return new_direction;
 
 }

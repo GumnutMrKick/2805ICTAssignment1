@@ -214,9 +214,9 @@ void DisplayManager::squareInitialisation () {
         // dead
 
             this->sprite_locations[98] = genSquareSheetSprite(11, 7); // dead up
-            this->sprite_locations[99] = genSquareSheetSprite(9, 6); // dead right
-            this->sprite_locations[100] = genSquareSheetSprite(12, 6); // dead down
-            this->sprite_locations[101] = genSquareSheetSprite(10, 6); // dead left
+            this->sprite_locations[99] = genSquareSheetSprite(9, 7); // dead right
+            this->sprite_locations[100] = genSquareSheetSprite(12, 7); // dead down
+            this->sprite_locations[101] = genSquareSheetSprite(10, 7); // dead left
 
     // player
 
@@ -279,12 +279,12 @@ DisplayManager::DisplayManager (const char* window_title, const int x_pos, const
 
     string path;
 
-    path = (gamemode == 0 || gamemode == 3) ? square_sprite_sheet_file_path : hexagon_sprite_sheet_file_path;
+    path = (gamemode != 1) ? square_sprite_sheet_file_path : hexagon_sprite_sheet_file_path;
 
     this->openFile(path);
 
     // run the appropriate initialisation
-    (gamemode == 0 || gamemode == 3) ? this->squareInitialisation() : this->hexagonInitialisation();
+    (gamemode != 1) ? this->squareInitialisation() : this->hexagonInitialisation();
 
 }
 
@@ -326,7 +326,7 @@ void DisplayManager::renderTasks () {
 	    if (this->renderTask(tmp_sprite, &window_location) < 0) {
 
             cout << "render task failed: ";
-            printf("wwtf %s\n", SDL_GetError());
+            printf("%s\n", SDL_GetError());
 
         }
 

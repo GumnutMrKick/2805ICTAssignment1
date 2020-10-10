@@ -7,7 +7,7 @@
 // right
 1073741903
 // fps
-60
+120
 // title
 Pacman
 // x_pos
@@ -15,8 +15,8 @@ Pacman
 // y_pos
 20
 // width
-3
+2
 // height
-3
+2
 // gamemode?
 0

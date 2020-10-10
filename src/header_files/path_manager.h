@@ -38,7 +38,7 @@ class PathManager {
     private:
 
         // properties
-        int width, height, choosen_direction;
+        int width, height, current_direction;
         bool is_found;
         vector <vector <bool>> extended_board;
         vector <vector <PathNode*>> path_board;
