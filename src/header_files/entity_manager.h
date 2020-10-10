@@ -15,6 +15,8 @@
 #include "../header_files/animation_handler.h"
 // import path manager file
 #include "../header_files/path_manager.h"
+// import info bar manager file
+#include "../header_files/info_bar_manager.h"
 
 using namespace std;
 
@@ -43,7 +45,7 @@ class Entity {
         void loadAnimations(pair < vector < pair < string, Animation* > >, int > loaded_animations);
 
         // the basic initialisation required by any form of entity
-        void basicEntityInitialisation (const int gamemode, const int x, const int y, const int propulsion);
+        void basicEntityInitialisation (const int gamemode, const int x, const int y);
 
         // changes the current location of the entity
         void changeCurrentLocation (const int x, const int y);
@@ -125,7 +127,7 @@ class Ghost : public Entity {
         // properties
         Location spawn;
         int ghost_number;
-        bool dead;
+        bool dead, change;
 
         PlaySpace *play_space;
 
@@ -157,8 +159,16 @@ class EntityManager {
         Enigma* enigma;
         Player* player;
         Ghost* ghosts[4];
-        int frame, playerMove, power_duration;
+        int frame, playerMove;
+        const int power_duration = 1000;
+
+        //info bar properties
         bool ghost_eaten, pellet_eaten, power_eaten;
+        InfoBarManager *info_bar = nullptr;
+        double score_scaler;
+        const int score_pellet = 100, score_ghost = 1000, score_power = 500;
+        int player_score = 0;
+        Uint32 game_start, invulnrability_start;
 
         // playspace instance
         PlaySpace *play_space = nullptr;
@@ -183,14 +193,22 @@ class EntityManager {
         // this function calls the above functions
         void supplyEntityAnimations ();
 
+        // converts a locatition made to work with the entity
+        // manager into one that can work the playspace
+        Location convertLocationToMap (Location entity_location);
+
         // this function generates the targeting for
         // the ghost path seeking
         Location genGhostTarget (const int ghost_number, string ghost_state);
 
+        // adjusts the score depending on how far into
+        // the game the score was obtained
+        double scaleScore (const int score, const Uint32 time_difference = 0);
+
     public:
 
         // constructor
-        EntityManager (const int game_mode);
+        EntityManager (const int game_mode, const int segments_wide, const int segments_tall);
 
         // a function used to take in user input
         void updateInput(const int code);

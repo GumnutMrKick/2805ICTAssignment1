@@ -101,6 +101,10 @@ class PlaySpace {
         // if found the pellet is removed
         bool checkForPellet (const int x, const int y);
 
+        // checks for a power pellet at x, y and returns the result,
+        // if found the power pellet is removed
+        bool checkForPowerPellet (const int x, const int y);
+
         // checks for an empty space at x, y and returns the result
         bool checkForEmpty (const int x, const int y);
 

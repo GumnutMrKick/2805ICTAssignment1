@@ -218,7 +218,7 @@ void PlaySpace::readSegmentToPlaySpace (int segment[11][13], const int x, const 
                     str = (char*) "empty";
                 break;
 
-                case (59):
+                case ((59 || 56)):
                     str = (char*) "respawn";
                 break;
 
@@ -424,16 +424,39 @@ void PlaySpace::renderPlaySpace () {
 // if found the pellet is removed
 bool PlaySpace::checkForPellet (const int x, const int y) {
 
-    cout << "location has pellet" << endl;
+    if (this->game_board[y][x]->checkIf((char*) "pellet")) {
 
-    return (this->game_board[y][x]->checkIf((char*) "pellet"));  
+        this->game_board[y][x]->changeGameBlockProps();
+        return true;
+
+    } else {
+
+        return false;  
+
+    }
+
+}
+
+// checks for a power pellet at x, y and returns the result,
+// if found the power pellet is removed
+bool PlaySpace::checkForPowerPellet (const int x, const int y) {
+
+    if (this->game_board[y][x]->checkIf((char*) "power")) {
+
+        this->game_board[y][x]->changeGameBlockProps();
+        return true;
+
+    } else {
+
+        return false;  
+
+    }
 
 }
 
 // checks for an empty space at x, y and returns the result
 bool PlaySpace::checkForEmpty (const int x, const int y) {
 
-    cout << "location is empty" << endl;
     return (this->game_board[y][x]->checkIf((char*) "empty"));  
 
 }

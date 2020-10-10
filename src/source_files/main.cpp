@@ -158,7 +158,6 @@ int main(int argc, char *argv[]) {
     // if I have time I'll go back and add a config file that
     // can loaded in to get the users desired control bindings
 
-
     Game *game = new Game(title.c_str(), x_pos, y_pos, gamemode, segments_wide, segments_tall, bindings);
 
     // -------------------- game loop creation and running --------------------

@@ -38,7 +38,7 @@ class PathManager {
     private:
 
         // properties
-        int width, height, chossen_direction;
+        int width, height, choosen_direction;
         bool is_found;
         vector <vector <bool>> extended_board;
         vector <vector <PathNode*>> path_board;
@@ -84,6 +84,11 @@ class PathManager {
         // returns the direction the entity should move into
         // to get to it's destination
         int calculateNextMove(Location current_location, Location destination_location, const int current_direction);
+
+        // randomly chosses the next move that should be
+        // taken by the ghost assuming that there is a decision
+        // to be made
+        int randomlyChooseNextMove (Location current_location, const int current_direction);
 
 };
 

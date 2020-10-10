@@ -16,6 +16,8 @@
 #include "../header_files/animation_handler.h"
 // import path manager file
 #include "../header_files/path_manager.h"
+// import info bar manager file
+#include "../header_files/info_bar_manager.h"
 
 using namespace std;
 
@@ -32,7 +34,7 @@ void Entity::loadAnimations(pair < vector < pair < string, Animation* > > , int 
 }
 
 // the basic initialisation required by any form of entity
-void Entity::basicEntityInitialisation (const int gamemode, const int x, const int y, const int propulsion) {
+void Entity::basicEntityInitialisation (const int gamemode, const int x, const int y) {
 
     // initialise the entities location
     this->entity_location.x = x;
@@ -42,13 +44,13 @@ void Entity::basicEntityInitialisation (const int gamemode, const int x, const i
     this->animation_frame = 10;
 
     // change movement frame based on gamemode
-    this->movement_frame = ((gamemode < 2) ?  60 : 4);
+    this->movement_frame = ((gamemode < 2) ?  40 : 4);
 
     // set propulsion
-    this->propulsion = propulsion;
+    this->propulsion = ((gamemode < 2) ?  16 : 1);
 
     // set entity direction to left for initialisation
-    this->direction = 3;
+    this->direction = 0;
 
 }
 
@@ -115,7 +117,7 @@ void Entity::entityRender() {
 
 }
 
-// constructor
+// constructor this is an
 Enigma::Enigma (const int gamemode, Location spawn) {
 
     this->run = false;
@@ -127,7 +129,7 @@ Enigma::Enigma (const int gamemode, Location spawn) {
     propulsion = ((gamemode < 2) ?  16 : 2);
 
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y, propulsion);
+    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y);
 
 }
 
@@ -171,14 +173,8 @@ Player::Player (const int gamemode, Location spawn) {
 
     this->dead = false;
 
-    // this should probably be moved into the basic entity
-    int propulsion;
-
-    propulsion = ((gamemode < 2) ?  16 : 2);
-
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y, propulsion);
-
+    this->basicEntityInitialisation(gamemode, spawn.x,  spawn.y);
     
 }
 
@@ -189,8 +185,6 @@ void Player::resolveEntityState(const int direction) {
 
     // if the given direction is different
     if ((direction != -1) && (this->direction != direction)) {
-
-        cout << "got adfadsfadsfadsfadfadfadirection " << direction << endl;
 
         this->change = true;
         this->direction = direction;
@@ -307,13 +301,8 @@ Ghost::Ghost (const int gamemode, const int ghost_number, Location ghost_spawn) 
     this->ghost_number = ghost_number;
     this->spawn = ghost_spawn;
 
-    // this should probably be moved into the basic entity
-    int propulsion;
-
-    propulsion = ((gamemode < 2) ?  16 : 2);
-
     // initialise basic components
-    this->basicEntityInitialisation(gamemode, this->spawn.x,  this->spawn.y, propulsion);
+    this->basicEntityInitialisation(gamemode, this->spawn.x,  this->spawn.y);
 
 }
 
@@ -335,14 +324,127 @@ void Ghost::setdeadstate (bool state) {
 // by the entity
 void Ghost::resolveEntityState(const int direction) {
 
+// if the given direction is different
+    if ((direction != -1) && (this->direction != direction)) {
 
+
+        this->change = true;
+        this->direction = direction;
+
+    } else if (direction == -1) {
+
+        this->direction = (this->direction % 3);
+
+    }
 
 }
 
 // updates the entites location properties
 void Ghost::entityMovementUpdate () {
 
+    if (!this->dead) {
 
+        string animation_state;
+        int x_change, y_change;
+
+        // get current map coords
+        int map_x, map_y;
+
+        cout << "I'm trying to go this way" << this->direction<< endl;
+
+        map_x = (int) ((this->entity_location.x - (this->entity_location.x % 16)) / 16);
+        map_y = (int) ((this->entity_location.y - (this->entity_location.y % 16)) / 16);
+        cout << "gonna move ";
+        switch(this->direction) {
+
+            case (0) :
+
+                x_change = 0;
+                y_change = -1;
+                animation_state = "up";
+        cout << "up" << endl;
+
+            break;
+
+            case (1) :
+
+                x_change = 1;
+                y_change = 0;
+                animation_state = "right";
+        cout << "right" << endl;
+
+            break;
+
+            case (2) :
+
+                x_change = 0;
+                y_change = 1;
+                animation_state = "down";
+        cout << "down" << endl;
+
+            break;
+
+            case (3) :
+
+                x_change = -1;
+                y_change = 0;
+                animation_state = "left";
+        cout << "left" << endl;
+
+            break;
+
+            default :
+
+                x_change = 0;
+                y_change = 0;
+                animation_state = "nothing";
+
+        }
+        
+        int new_x = this->entity_location.x;
+        int new_y = this->entity_location.y;
+
+        cout << "checking " << (map_x + x_change) << " " << (map_y + y_change) << endl << this->play_space->isWall((map_x + x_change), (map_y + y_change));
+        if (this->play_space->isWall((map_x + x_change), (map_y + y_change))) {
+
+            cout << "is wall can't move" << endl;
+
+            x_change = 0;
+            y_change = 0;
+
+        }   else {
+
+            if (this->change) {
+
+                new_x -= (this->entity_location.x % 16);
+                new_y -= (this->entity_location.y % 16);
+
+                this->entityAnimationUpdate(animation_state);
+                this->change = false;
+
+            }
+
+        }
+
+
+        new_x += (x_change * this->propulsion);
+        new_y += (y_change * this->propulsion);
+
+        this->state = animation_state;
+
+        this->changeCurrentLocation(new_x, new_y);
+
+    }
+
+}
+
+// converts a locatition made to work with the entity
+// manager into one that can work the playspace
+Location EntityManager::convertLocationToMap (Location entity_location) {
+
+    entity_location.x = ((entity_location.x - (entity_location.x % 16)) / 16);
+    entity_location.y = ((entity_location.y - (entity_location.y % 16)) / 16);
+    return entity_location;
 
 }
 
@@ -353,11 +455,7 @@ Location EntityManager::genGhostTarget (const int ghost_number, string ghost_sta
     if(ghost_state == "dead") return this->play_space->giveRanEntitySpawn("ghost");
 
     // get the location of pacman
-    Location target = this->player->getCurrentLocation();
-
-    // clean the input
-    target.x = ((target.x - (target.x % 16)) / 16);
-    target.y = ((target.y - (target.y % 16)) / 16);
+    Location target = this->convertLocationToMap(this->player->getCurrentLocation());
 
     int closest = -1;
 
@@ -396,10 +494,7 @@ Location EntityManager::genGhostTarget (const int ghost_number, string ghost_sta
 
         case (3) :
 
-            target = this->play_space->giveRanEntitySpawn("player");
-            // clean the input
-            target.x = ((target.x - (target.x % 16)) / 16);
-            target.y = ((target.y - (target.y % 16)) / 16);
+            target = this->convertLocationToMap(this->play_space->giveRanEntitySpawn("player"));
 
         break;
 
@@ -409,8 +504,25 @@ Location EntityManager::genGhostTarget (const int ghost_number, string ghost_sta
 
 }
 
+// adjusts the score depending on how far into
+// the game the score was obtained
+double EntityManager::scaleScore (const int score, const Uint32 time_difference) {
+
+    // if the scaler has not yet been generated, then generate it
+    // it's equation is to find the ammount of time that has passed
+    // since game start as a percentage of 5 minutes, this will then
+    // be taken away from 1 giving the scaler
+    if (this->score_scaler == 0) this->score_scaler = (double) (1 - (time_difference / 300000));
+    
+    // don't let it go below .5
+    if (this->score_scaler < 0.5) this->score_scaler = 0.5;
+
+    return ((int) (score * this->score_scaler));
+
+}
+
 // constructor
-EntityManager::EntityManager (const int game_mode) {
+EntityManager::EntityManager (const int game_mode, const int segments_wide, const int segments_tall) {
 
     // initialise the display manager instance holder
     // for the Animation class
@@ -427,10 +539,12 @@ EntityManager::EntityManager (const int game_mode) {
 
     // initialise the active entities
     // enigma
-    this->enigma = new Enigma(game_mode, generateLocationHolder(0, 0));
+    // this->enigma = new Enigma(game_mode, generateLocationHolder(0, 0));
     
+    cout << "hello1" << endl;
     // player
     this->player = new Player(game_mode, this->play_space->giveRanEntitySpawn("player"));
+    cout << "hello2" << endl;
     
     // ghosts
     // blinky
@@ -441,17 +555,28 @@ EntityManager::EntityManager (const int game_mode) {
     this->ghosts[2] = new Ghost(game_mode, 2, this->play_space->giveRanEntitySpawn("ghost"));
     // clyde
     this->ghosts[3] = new Ghost(game_mode, 3, this->play_space->giveRanEntitySpawn("ghost"));
+    cout << "hello3" << endl;
 
     // give entities their animations
     this->supplyEntityAnimations();
+    cout << "hello4" << endl;
 
     // set a starting animation for all of the entities
-    this->enigma->entityAnimationUpdate("run");
+    //this->enigma->entityAnimationUpdate("run");
     this->player->entityAnimationUpdate("nothing");
     this->ghosts[0]->entityAnimationUpdate("left");
     this->ghosts[1]->entityAnimationUpdate("left");
     this->ghosts[2]->entityAnimationUpdate("left");
     this->ghosts[3]->entityAnimationUpdate("left");
+    cout << "hello5" << endl;
+
+    // info bar manager initialisation
+    this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((1 * 16) * 11));
+    cout << "info bar manager : " << ((this->info_bar) ? "OK" : "error") << endl;
+    // take start time
+    this->game_start = SDL_GetTicks();
+    cout << "hello6" << endl;
+
 
 }
 
@@ -466,39 +591,25 @@ void EntityManager::updateInput (const int code) {
 // preforms the nessary updates to the game's active entities
 void EntityManager::updateEntities() {
 
-    // preform collision checks
-
-
-
-
-
     string state;
     int blinky_move, pinky_move, inky_move, clyde_move;
 
     // generate ghost moves
-    // blinky
-    state = ((this->ghosts[0]->getdeadstate()) ? "dead" : "");
-    blinky_move = this->path_manager->calculateNextMove(this->ghosts[0]->getCurrentLocation(),
-        this->genGhostTarget(0, state), this->ghosts[0]->direction);
+    // blinky using path finding
+    blinky_move = this->path_manager->calculateNextMove(this->convertLocationToMap(this->ghosts[0]->getCurrentLocation()),
+        this->genGhostTarget(0, ((this->ghosts[0]->getdeadstate()) ? "dead" : "")), this->ghosts[0]->direction);
 
-    // pinky
-    state = ((this->ghosts[1]->getdeadstate()) ? "dead" : "");
-    pinky_move = this->path_manager->calculateNextMove(this->ghosts[1]->getCurrentLocation(),
-        this->genGhostTarget(1, state), this->ghosts[1]->direction);
+    // pinky with random choices
+    pinky_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[1]->getCurrentLocation()), this->ghosts[1]->direction);
     
-    // inky
-    state = ((this->ghosts[2]->getdeadstate()) ? "dead" : "");
-    inky_move = this->path_manager->calculateNextMove(this->ghosts[2]->getCurrentLocation(),
-        this->genGhostTarget(2, state), this->ghosts[2]->direction);
+    // inky with random choices
+    inky_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[2]->getCurrentLocation()), this->ghosts[2]->direction);
 
-    // clyde
-    state = ((this->ghosts[3]->getdeadstate()) ? "dead" : "");
-    clyde_move = this->path_manager->calculateNextMove(this->ghosts[3]->getCurrentLocation(),
-        this->genGhostTarget(3, state), this->ghosts[3]->direction);
-    
+    // clyde with random choices
+    clyde_move = this->path_manager->randomlyChooseNextMove(this->convertLocationToMap(this->ghosts[3]->getCurrentLocation()), this->ghosts[3]->direction);
 
     // resolve updates
-    this->enigma->resolveEntityState();
+    //this->enigma->resolveEntityState();
     if (this->playerMove != -1)cout << "about to give" <<this->playerMove << endl;
     this->player->resolveEntityState(this->playerMove);
     this->ghosts[0]->resolveEntityState(blinky_move);
@@ -506,9 +617,8 @@ void EntityManager::updateEntities() {
     this->ghosts[2]->resolveEntityState(inky_move);
     this->ghosts[3]->resolveEntityState(clyde_move);
 
-
     //deliver updates
-    this->enigma->entityUpdate(this->frame);
+    //this->enigma->entityUpdate(this->frame);
     this->player->entityUpdate(this->frame);
     this->ghosts[0]->entityUpdate(this->frame);
     this->ghosts[1]->entityUpdate(this->frame);
@@ -525,14 +635,58 @@ void EntityManager::updateEntities() {
 
     }
 
+    // ----- calculate collisions -----
+    
+    Location map_pacman = this->convertLocationToMap(this->player->getCurrentLocation());
+    
+    // pellets
+    this->pellet_eaten = this->play_space->checkForPellet(map_pacman.x, map_pacman.y);
+
+    // power pellets
+    this->power_eaten = this->play_space->checkForPowerPellet(map_pacman.x, map_pacman.y);
+
+    // ghosts
+    for (int x = 0; x < 4; x++) {
+
+        Location map_ghost = this->convertLocationToMap(this->ghosts[x]->getCurrentLocation());
+
+        if (((map_pacman.x == map_ghost.x) && (map_pacman.y == map_ghost.y))) {
+
+
+
+        }
+
+    }
+
+
+
+
+
+    
+    
+    // now all the updates are done, update and
+    // render the info bar
+    if (this->pellet_eaten) this->player_score += (int) this->scaleScore(this->score_pellet, (SDL_GetTicks() - this->game_start));
+    if (this->ghost_eaten) this->player_score += (int) this->scaleScore(this->score_ghost, (SDL_GetTicks() - this->game_start));
+    if (this->power_eaten) this->player_score += (int) this->scaleScore(this->score_power, (SDL_GetTicks() - this->game_start));
+
+    this->info_bar->updateInfoBar(0, this->player_score);
+    this->info_bar->renderInfoBar();
+
+    // reset the game enviroment movement and
+    // utility variables
+    this->score_scaler = 0;
     this->playerMove = -1;
+    this->pellet_eaten = false;
+    this->ghost_eaten = false;
+    this->power_eaten = false;
 
 }
 
 // renders the game's active entities
 void EntityManager::renderEntities() {
 
-    this->enigma->entityRender();
+    //this->enigma->entityRender();
     this->player->entityRender();
     this->ghosts[0]->entityRender();
     this->ghosts[1]->entityRender();
@@ -791,7 +945,7 @@ void EntityManager::supplyGhostAnimations (const int gN) {
 // this function calls the above functions
 void EntityManager::supplyEntityAnimations () {
 
-    this->supplyEnigmaAnimations();
+    //this->supplyEnigmaAnimations();
     this->supplyPlayerAnimations();
     this->supplyGhostAnimations(0);
     this->supplyGhostAnimations(1);

@@ -7,8 +7,6 @@
 #include "../header_files/play_space.h"
 // import entity manager file
 #include "../header_files/entity_manager.h"
-// import info bar manager file
-#include "../header_files/info_bar_manager.h"
 
 // esential includes
 #include <iostream>
@@ -27,11 +25,12 @@ class Game {
         DisplayManager *display_manager = nullptr;
         PlaySpace *play_space = nullptr;
         EntityManager *entity_manager = nullptr;
-        InfoBarManager *info_bar = nullptr;
         Control_bindings *bindings_manager = nullptr;
         bool running = false;
-        int player_score = 0;
         string state;
+        
+        
+
        
     public:
     

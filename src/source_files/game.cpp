@@ -20,11 +20,6 @@ using namespace std;
 // import info bar manager file
 #include "../header_files/info_bar_manager.h"
 
-// file global properties
-// general
-int info_bar_addition = 1;
-int cntr = 0;
-
 // constructor
 Game::Game (const char* window_title, const int x_pos, const int y_pos, const int gamemode,
     const int segments_wide, const int segments_tall, Control_bindings &bindings) {
@@ -32,18 +27,15 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos, const in
     // initialisation
     this->bindings_manager = new Control_bindings(bindings);
     // texture managaer initialisation
-    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + info_bar_addition));
+    this->display_manager = display_manager->getInstance(window_title, x_pos, y_pos, gamemode, segments_wide, (segments_tall + 1));
     // play space initialisation
     this->play_space = play_space->getInstance(gamemode, segments_wide, segments_tall);
     // entity manager initialisation
-    this->entity_manager = new EntityManager(gamemode);
-    // info bar manager initialisation
-    this->info_bar = new InfoBarManager(segments_wide, segments_tall, ((info_bar_addition * 16) * 11));
+    this->entity_manager = new EntityManager(gamemode, segments_wide, segments_tall);
 
     // -------------------- errors? --------------------
     cout << "texture manager : " << ((this->display_manager) ? "OK" : "error") << endl;
     cout << "entity manager : " << ((this->entity_manager) ? "OK" : "error") << endl;
-    cout << "info bar manager : " << ((this->info_bar) ? "OK" : "error") << endl;
 
     this->running = true;
 
@@ -53,6 +45,7 @@ Game::Game (const char* window_title, const int x_pos, const int y_pos, const in
 void Game::handleGameEvents() {  //const char* event) {
 
     SDL_Event event;
+    int direction; 
 
 	while (SDL_PollEvent(&event)) {
 
@@ -60,7 +53,7 @@ void Game::handleGameEvents() {  //const char* event) {
         
             case SDL_KEYDOWN :
 
-                int direction = this->bindings_manager->SDLToCommand(event.key.keysym.sym);
+                direction = this->bindings_manager->SDLToCommand(event.key.keysym.sym);
                 if (direction != (-1)) this->entity_manager->updateInput(direction);
 
             break;
@@ -102,9 +95,10 @@ void Game::update () {
     // render map
     this->play_space->renderPlaySpace();
 
-    // update and render the info bar
-    this->info_bar->updateInfoBar(0, cntr);
-    this->info_bar->renderInfoBar();
+
+
+
+    
 
 }
         
